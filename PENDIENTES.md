@@ -86,3 +86,31 @@ Hoy vive en `droko1982.github.io/adventflorida/`. Con un dominio como
 - [ ] Fotos del equipo y de las actividades, en lugar de las ilustraciones SVG.
 - [ ] Calendario de eventos y campanas de evangelismo.
 - [ ] Horarios de culto de las iglesias aliadas por ciudad.
+
+## 7. Seccion del sabado — a confirmar con el equipo
+
+La seccion se escribio sobre una investigacion verificada, pero tres cosas
+prometen algo concreto y necesitan una persona real detras antes de darlas por
+buenas en nueve idiomas:
+
+- [ ] **Los horarios.** La linea de tiempo dice "media manana" y "final de la
+      manana" en lugar de una hora fija, precisamente para no publicar un horario
+      que no sea el de las iglesias a las que ustedes envian gente. Si quieren
+      poner horas concretas, hay que confirmarlas congregacion por congregacion.
+- [ ] **"Uno de nosotros te espera y entra contigo."** Aparece en `sab.g.lead` y
+      en `sab.e.2.d`. Hace falta alguien con nombre que se haya comprometido a
+      eso, por zona, antes de publicarlo.
+- [ ] **"Te enviamos a una congregacion en tu idioma."** Verificar que existe la
+      lista de iglesias por idioma y quien la mantiene.
+
+## 8. Idiomas: dos decisiones pendientes
+
+- [ ] **La bandera del ruso.** El selector usa 🇷🇺 para el ruso. Buena parte de
+      quienes leen en ruso en Florida son ucranianos, moldavos o centroasiaticos,
+      y desde 2022 una bandera de Estado puede leerse mal. Es una decision suya:
+      se puede dejar, cambiar por un icono neutro o quitar las banderas del ruso
+      y el ucraniano. Se cambia en `js/i18n.js`, en `FAM_LANGS`.
+- [ ] **El criollo haitiano es el idioma peor servido.** No existe *El Camino a
+      Cristo* en kreyol, ni television, ni radio, ni biblioteca de Elena White.
+      El sitio ya lo dice con honestidad y ofrece el frances, pero conviene tener
+      a alguien que pueda leer con esa persona en kreyol, que es lo que promete.

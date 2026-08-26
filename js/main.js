@@ -100,7 +100,13 @@
     if (bTitle && meta.book) bTitle.textContent = meta.book.title;
     if (bPdf && meta.book)   bPdf.setAttribute("href", meta.book.pdf);
     if (bRead && meta.book)  bRead.setAttribute("href", meta.book.read);
-    if (bLegal) bLegal.textContent = NO_PDF.indexOf(code) !== -1 ? t("book.legalAlt") : t("book.legal");
+    /* El criollo haitiano necesita un aviso propio: el libro no existe
+       en kreyol, asi que los botones llevan a la edicion francesa. */
+    if (bLegal) {
+      bLegal.textContent = code === "ht" ? t("book.legalHt")
+        : NO_PDF.indexOf(code) !== -1 ? t("book.legalAlt")
+        : t("book.legal");
+    }
 
     /* Boton de idioma */
     var flag = $("#langFlag"), lcode = $("#langCode");
@@ -111,6 +117,7 @@
     });
 
     renderVerse(0);
+    renderSabbath();
     store(LS_LANG, code);
   }
 
@@ -244,6 +251,76 @@
     });
   }
 
+  /* ---------------- Horas del sabado ---------------- */
+  var LS_CITY = "fam-city";
+  var sabbathTimer = null;
+
+  /* Locale para Intl. Si el idioma no tiene datos (puede pasar con el
+     creol), Intl lanza; en ese caso se cae al ingles. */
+  function intlLocale() {
+    var meta = langMeta(currentLang);
+    var tag = meta && meta.locale ? meta.locale.replace("_", "-") : "en-US";
+    try {
+      new Intl.DateTimeFormat(tag, { hour: "numeric" }).format(new Date());
+      return tag;
+    } catch (e) {
+      return "en-US";
+    }
+  }
+
+  function selectedCity() {
+    if (!window.FAM_SUNSET) return null;
+    return window.FAM_SUNSET.city(store(LS_CITY) || "delray");
+  }
+
+  function renderSabbath() {
+    var S = window.FAM_SUNSET;
+    if (!S) return;
+    var city = selectedCity();
+    var win = S.currentOrNextSabbath(city);
+    if (!win) return;
+
+    var loc = intlLocale();
+    var startT = $("#sabStartTime"), startD = $("#sabStartDay");
+    var endT   = $("#sabEndTime"),   endD   = $("#sabEndDay");
+    if (startT) startT.textContent = S.formatTime(win.start, city.tz, loc);
+    if (startD) startD.textContent = S.formatDate(win.start, city.tz, loc);
+    if (endT)   endT.textContent   = S.formatTime(win.end, city.tz, loc);
+    if (endD)   endD.textContent   = S.formatDate(win.end, city.tz, loc);
+
+    var status = $("#sabStatus"), label = $("#sabStatusText");
+    if (status && label) {
+      status.classList.toggle("is-active", win.active);
+      label.textContent = win.active ? t("sab.now") : t("sab.next");
+    }
+  }
+
+  function wireSabbath() {
+    var S = window.FAM_SUNSET;
+    var sel = $("#sabCity");
+    if (!S || !sel) return;
+
+    sel.innerHTML = "";
+    S.cities.forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c.id;
+      o.textContent = c.name;
+      sel.appendChild(o);
+    });
+    sel.value = (store(LS_CITY) || "delray");
+    if (!sel.value) sel.value = "delray";
+
+    sel.addEventListener("change", function () {
+      store(LS_CITY, sel.value);
+      renderSabbath();
+    });
+
+    renderSabbath();
+    /* Se refresca cada minuto: el estado cambia solo al ponerse el sol */
+    if (sabbathTimer) clearInterval(sabbathTimer);
+    sabbathTimer = setInterval(renderSabbath, 60000);
+  }
+
   /* ---------------- Donaciones ---------------- */
   function wireGiving() {
     var online = $("#giveOnline");
@@ -372,6 +449,7 @@
     wireWhatsApp();
     wirePrayerForm();
     wireGiving();
+    wireSabbath();
     wireVideo();
     wireReveal();
   });

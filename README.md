@@ -19,12 +19,27 @@ oracion y el libro *Steps to Christ* — en el idioma que hablan.
 | **Cristo** | El evangelio en 4 pasos + llamado a la decision |
 | **Steps to Christ** | Libro gratis: PDF por idioma, lectura online y copia impresa |
 | **Creencias** | 8 preguntas frecuentes de doctrina, con textos biblicos |
+| **El sabado** | Reloj del ocaso para 22 ciudades, el evangelio primero, linea de tiempo del dia, que esperar en tu primera visita y 5 preguntas sinceras |
 | **Estudios biblicos** | 4 series + 3 pasos para empezar |
 | **Ministerios** | 6 frentes de trabajo |
 | **Oracion** | Formulario que compone un mensaje de WhatsApp (sin backend) |
 | **Donaciones** | 501(c)(3): online, voluntariado y cheque por correo |
 | **Recursos** | 6 enlaces externos verificados |
 | **FAQ + contacto** | 6 preguntas y canales directos |
+
+## El sabado y el reloj del ocaso
+
+El sabado va de la puesta de sol del viernes a la del sabado, asi que la hora
+cambia cada semana y cada ciudad. `js/sabbath.js` la calcula en el navegador con
+el algoritmo NOAA: 22 ciudades de Florida, los dos husos horarios del estado
+(el Panhandle occidental va en hora central) y el horario de verano resuelto por
+`Intl`. Sin API y sin red.
+
+Coincide **exactamente** con las tablas del Observatorio Naval de EE. UU. y queda
+dentro de un minuto de la tabla oficial de la Florida Conference en sus seis
+ciudades. El contenido de la seccion salio de una investigacion con verificacion
+adversarial (158 afirmaciones confirmadas, 12 descartadas por erroneas); el
+resumen esta en [tools/research/](tools/research/).
 
 ## Nueve idiomas
 
@@ -49,7 +64,9 @@ css/styles.css      Sistema de diseno completo (tokens, componentes, responsive)
 js/i18n.js          EN · ES · FR
 js/i18n2.js         HT · PT · DE
 js/i18n3.js         NL · RU · UK
-js/main.js          Tema, idioma, versiculos, WhatsApp, video, reveal
+js/sabbath.js       Calculo del ocaso (NOAA) y ventana del sabado
+js/main.js          Tema, idioma, versiculos, WhatsApp, video, sabado, donaciones
+tools/              Herramientas de mantenimiento y pruebas (ver abajo)
 assets/             Iconos PWA, favicon SVG e imagen Open Graph
 manifest.json       PWA instalable
 sitemap.xml         9 URLs con hreflang cruzado
@@ -57,6 +74,33 @@ robots.txt
 ```
 
 Sin dependencias, sin build, sin framework. HTML + CSS + JS vanilla.
+
+## Herramientas
+
+```
+node tools/test-sunset.js                    comprueba el calculo del ocaso
+node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
+node tools/test-page.js                      carga la pagina en un DOM y la prueba entera
+node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
+```
+
+`test-page.js` necesita jsdom, que no es dependencia del sitio:
+`npm install --no-save jsdom`.
+
+Para anadir o cambiar textos, **no edites los tres `js/i18n*.js` a mano**: escribe
+un parche en `tools/patches/` y pasalo por `patch-i18n.js`. Asi es imposible que
+un idioma se quede atras.
+
+## Donaciones
+
+Todo lo que hay que tocar esta al principio de `js/main.js`:
+
+```js
+var GIVE = { online: "", zelle: "" };
+```
+
+Rellena un valor y su boton aparece solo. Mientras esten vacios, la pagina solo
+ofrece WhatsApp y cheque por correo, asi que nunca se muestra un boton roto.
 
 ## SEO
 
