@@ -20,13 +20,38 @@ verificaciones que dependen de informacion que solo tiene el equipo de la organi
 
 ## 2. Donaciones
 
-- [x] Enlace a B Charitable (perfil real de la organizacion).
-- [x] Donacion por cheque a la direccion postal.
-- [x] Voluntariado por WhatsApp.
-- [ ] **Anadir pasarela propia** si la tienen: PayPal, Zelle, Givelify o Stripe.
-      Se cambia en `index.html`, seccion `#donar`, boton `give.card.donate`.
-- [ ] Confirmar que la pagina de B Charitable acepta donaciones del publico general
-      (no solo solicitudes de subvencion desde fondos asesorados).
+**Hallazgo importante (2026-08-26):** la pagina de B Charitable
+(app.bcharitable.org/charities/833734) **NO permite donar al publico general**.
+Su unico boton es "Make a grant request", pensado para fondos asesorados por
+donantes (DAF). Por eso se retiro ese enlace del sitio: era un boton que no
+llevaba a ninguna parte util.
+
+Lo que funciona hoy en el sitio:
+
+- [x] Cheque por correo a la direccion del 501(c)(3).
+- [x] WhatsApp para preguntar como donar.
+- [x] Voluntariado (dar tiempo en vez de dinero).
+
+**Falta un solo dato para activar los botones de pago.** En `js/main.js`, arriba
+del todo, esta el objeto `GIVE`:
+
+```js
+var GIVE = {
+  online: "",   // enlace de PayPal / Givelify / Tithe.ly / Stripe
+  zelle:  ""    // correo o telefono registrado en Zelle
+};
+```
+
+Rellena un valor y su boton aparece solo. Mientras esten vacios, no se muestra
+ningun boton roto. No hay que tocar nada mas.
+
+- [ ] **PayPal**: pegar el enlace de donacion o `paypal.me` en `GIVE.online`.
+- [ ] **Zelle**: poner en `GIVE.zelle` el correo o telefono registrado. Zelle no
+      tiene enlace web; el sitio solo muestra el dato para copiarlo en el banco.
+      **Confirmar el dato exacto antes de publicarlo**: un error ahi manda el
+      dinero a un desconocido.
+- [ ] Opcional: dejar una nota para donantes con DAF que enlace a B Charitable,
+      etiquetada claramente como "solo fondos asesorados por donantes".
 
 ## 3. Steps to Christ
 

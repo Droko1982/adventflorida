@@ -1,0 +1,125 @@
+#!/usr/bin/env node
+/* =========================================================
+   patch-i18n.js — edita los diccionarios de los 9 idiomas
+   sin romper el formato de js/i18n*.js
+   Autor: Dr. Mauricio Rodriguez Herrera
+
+   Uso:
+     node tools/patch-i18n.js patches/mi-parche.json
+
+   Formato del parche:
+     { "en": { "clave": "valor", ... }, "es": { ... }, ... }
+
+   - Si la clave ya existe en ese idioma, se reemplaza su valor.
+   - Si no existe, se anade al final de ese diccionario.
+   - Falla si un idioma del parche no existe en los archivos.
+   ========================================================= */
+"use strict";
+
+const fs = require("fs");
+const path = require("path");
+
+const ROOT  = path.resolve(__dirname, "..");
+const FILES = ["js/i18n.js", "js/i18n2.js", "js/i18n3.js"].map(f => path.join(ROOT, f));
+
+const patchPath = process.argv[2];
+if (!patchPath) {
+  console.error("Uso: node tools/patch-i18n.js <archivo-de-parche.json>");
+  process.exit(1);
+}
+const patch = JSON.parse(fs.readFileSync(patchPath, "utf8"));
+
+/* Escapa una clave para usarla dentro de una expresion regular */
+function rxKey(k) {
+  return k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/* Escapa un valor para insertarlo como literal JS entre comillas dobles */
+function jsString(v) {
+  return '"' + String(v)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n") + '"';
+}
+
+/* Localiza el bloque `window.FAM_I18N.<code> = { ... };` dentro del texto */
+function findDict(src, code) {
+  const head = new RegExp("window\\.FAM_I18N\\." + code + "\\s*=\\s*\\{");
+  const m = head.exec(src);
+  if (!m) return null;
+
+  const open = m.index + m[0].length - 1;   // posicion de la '{'
+  let depth = 0, inStr = false, quote = "", esc = false;
+
+  for (let i = open; i < src.length; i++) {
+    const ch = src[i];
+    if (inStr) {
+      if (esc) { esc = false; continue; }
+      if (ch === "\\") { esc = true; continue; }
+      if (ch === quote) inStr = false;
+      continue;
+    }
+    if (ch === '"' || ch === "'") { inStr = true; quote = ch; continue; }
+    if (ch === "{") depth++;
+    else if (ch === "}") {
+      depth--;
+      if (depth === 0) return { start: open, end: i };   // end = posicion de la '}'
+    }
+  }
+  return null;
+}
+
+const seen = new Set();
+let totalUpdated = 0, totalAdded = 0;
+
+for (const file of FILES) {
+  let src = fs.readFileSync(file, "utf8");
+  let touched = false;
+
+  for (const code of Object.keys(patch)) {
+    const dict = findDict(src, code);
+    if (!dict) continue;
+    seen.add(code);
+
+    let body = src.slice(dict.start, dict.end + 1);
+    let updated = 0, added = 0;
+    const pending = [];
+
+    for (const [key, value] of Object.entries(patch[code])) {
+      const rx = new RegExp('"' + rxKey(key) + '"\\s*:\\s*"(?:[^"\\\\]|\\\\.)*"');
+      if (rx.test(body)) {
+        body = body.replace(rx, '"' + key + '": ' + jsString(value));
+        updated++;
+      } else {
+        pending.push('    "' + key + '": ' + jsString(value));
+        added++;
+      }
+    }
+
+    if (pending.length) {
+      /* Inserta antes de la llave de cierre, respetando la coma final */
+      const close = body.lastIndexOf("}");
+      let before = body.slice(0, close).replace(/\s*$/, "");
+      if (!before.endsWith(",")) before += ",";
+      body = before + "\n" + pending.join(",\n") + "\n  }";
+    }
+
+    if (updated || added) {
+      src = src.slice(0, dict.start) + body + src.slice(dict.end + 1);
+      touched = true;
+      totalUpdated += updated;
+      totalAdded += added;
+      console.log(`  ${path.basename(file)} · ${code}: ${updated} actualizadas, ${added} nuevas`);
+    }
+  }
+
+  if (touched) fs.writeFileSync(file, src, "utf8");
+}
+
+const missing = Object.keys(patch).filter(c => !seen.has(c));
+if (missing.length) {
+  console.error("\nERROR: idiomas no encontrados en los archivos: " + missing.join(", "));
+  process.exit(1);
+}
+
+console.log(`\nTotal: ${totalUpdated} claves actualizadas, ${totalAdded} anadidas en ${seen.size} idiomas.`);

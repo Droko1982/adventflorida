@@ -8,6 +8,25 @@
 
   var WA_NUMBER  = "17862392331";           /* +1 786 239 2331 */
   var VIDEO_ID   = "kLoPVmV4sK0";
+
+  /* ---------------------------------------------------------
+     DONACIONES — unico sitio que hay que tocar.
+     Rellena un valor y su boton aparece solo. Mientras esten
+     vacios, la pagina solo ofrece WhatsApp y cheque por correo,
+     asi que nunca se muestra un boton que no lleva a ninguna parte.
+
+       online : enlace de PayPal, Givelify, Tithe.ly o Stripe.
+                Ej. "https://www.paypal.com/donate?hosted_button_id=XXXXXXXX"
+                    "https://paypal.me/floridaadvent"
+       zelle  : correo o telefono registrado en Zelle. Zelle no tiene
+                enlace web: solo se muestra para copiarlo en el banco.
+                Ej. "give@floridaadventmissionaries.org"
+     --------------------------------------------------------- */
+  var GIVE = {
+    online: "",
+    zelle:  ""
+  };
+
   var LS_THEME   = "fam-theme";
   var LS_LANG    = "fam-lang";
   var DEFAULT_LANG = "en";
@@ -117,7 +136,6 @@
       var b  = document.createElement("button");
       b.type = "button";
       b.setAttribute("data-lang", l.code);
-      b.setAttribute("role", "menuitem");
       b.innerHTML = '<span class="lang-flag">' + l.flag + '</span>' +
                     '<span class="lang-native"></span>' +
                     '<span class="lang-code">' + l.label + '</span>';
@@ -224,6 +242,20 @@
 
       window.open(waLink(lines.join("\n")), "_blank", "noopener");
     });
+  }
+
+  /* ---------------- Donaciones ---------------- */
+  function wireGiving() {
+    var online = $("#giveOnline");
+    if (online && GIVE.online) {
+      online.setAttribute("href", GIVE.online);
+      online.hidden = false;
+    }
+    var zelle = $("#giveZelle"), value = $("#giveZelleValue");
+    if (zelle && value && GIVE.zelle) {
+      value.textContent = GIVE.zelle;
+      zelle.hidden = false;
+    }
   }
 
   /* ---------------- Video (carga diferida) ---------------- */
@@ -339,6 +371,7 @@
     wireNav();
     wireWhatsApp();
     wirePrayerForm();
+    wireGiving();
     wireVideo();
     wireReveal();
   });

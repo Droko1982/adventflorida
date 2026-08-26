@@ -97,12 +97,7 @@
   "sameAs": [
     "https://www.youtube.com/@FloridaAdventMissionaries",
     "https://www.facebook.com/floridaadvent/"
-  ],
-  "potentialAction": {
-    "@type": "DonateAction",
-    "name": "Donate to Florida Advent Missionaries",
-    "target": "https://app.bcharitable.org/charities/833734"
-  }
+  ]
 }
 </script>
 
@@ -202,7 +197,7 @@
           <span class="lang-code" id="langCode">EN</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <ul class="lang-menu" id="langMenu" role="menu"></ul>
+        <ul class="lang-menu" id="langMenu" aria-label="Language"></ul>
       </div>
 
       <button class="icon-btn" id="themeBtn" aria-label="Switch light / dark mode" title="Light / dark">
@@ -397,7 +392,7 @@
       <p class="section-lead" data-i18n="book.lead">A small book that has quietly changed millions of lives since 1892. In thirteen short chapters it answers the question that matters most: how does a real person actually come to Jesus and stay with Him? Read it online, download the PDF, or let us mail you a printed copy — all at no cost.</p>
     </div>
 
-    <div class="give-grid reveal" style="margin-bottom:44px">
+    <div class="book-grid reveal" style="margin-bottom:44px">
       <div>
         <h3 class="serif" style="font-size:1.9rem;margin-bottom:14px" data-i18n="book.why.t">Why this little book?</h3>
         <p style="color:var(--text-soft);margin-bottom:22px" data-i18n="book.why.d">Because it does not argue — it invites. It speaks to the person who feels far from God, the one who has tried and failed, the one who prays and wonders if anyone hears. It has been translated into more than 160 languages and given away by hand for over a century, and it is still the first book we place in someone's hands.</p>
@@ -617,38 +612,6 @@
   </div>
 </section>
 
-<!-- ============ DONAR ============ -->
-<section class="give" id="donar">
-  <div class="container">
-    <div class="give-grid">
-      <div class="reveal">
-        <span class="eyebrow" data-i18n="give.eyebrow">Support the mission</span>
-        <h2 data-i18n="give.title">Every book we give away was paid for by someone</h2>
-        <p data-i18n="give.lead">We charge nothing for Bible studies, literature or help — which only works because people who care make it possible. If you would like to put a copy of Steps to Christ into a stranger's hands, this is how.</p>
-        <ul class="give-facts">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="give.f1">Registered 501(c)(3) nonprofit — donations are tax-deductible in the US.</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="give.f2">Gifts go to printed literature, Bibles, fuel and community help.</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="give.f3">You can also give time instead of money — we always need drivers, translators and hosts.</span></li>
-        </ul>
-      </div>
-      <div class="give-card reveal">
-        <h3 data-i18n="give.card.t">Give or volunteer</h3>
-        <p data-i18n="give.card.d">Choose the way that fits you. If you would rather speak to a person first, message us and we will explain exactly where your gift goes.</p>
-        <a class="btn btn-primary btn-block" href="https://app.bcharitable.org/charities/833734" target="_blank" rel="noopener" style="margin-bottom:10px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0112 5.6 5.4 5.4 0 0121.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
-          <span data-i18n="give.card.donate">Donate online</span>
-        </a>
-        <a class="btn btn-wa btn-block" href="#" data-wa="volunteer">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
-          <span data-i18n="give.card.volunteer">I want to volunteer</span>
-        </a>
-        <p class="give-legal" style="margin-top:20px" data-i18n="give.card.mail">Prefer to give by mail? Cheques can be sent to the address below, payable to Florida Advent Missionaries Inc.</p>
-        <p class="give-legal" data-i18n="give.card.legal">Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. No goods or services are provided in exchange for contributions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ RECURSOS ============ -->
 <section id="recursos">
   <div class="container">
@@ -688,6 +651,52 @@
         <span><h3 data-i18n="res.6.t">Our YouTube channel</h3><p data-i18n="res.6.d">Sermons, testimonies and mission updates</p></span>
         <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DONAR (discreto, al final) ============ -->
+<section id="donar" class="give">
+  <div class="container narrow">
+    <div class="give-card reveal">
+      <span class="eyebrow" data-i18n="give.eyebrow">Keeping it free</span>
+      <h2 data-i18n="give.title">We never ask the people we serve for money</h2>
+      <p class="section-lead" data-i18n="give.lead">The studies, the books, the visits and the prayers cost nothing — not at the first meeting and not at the last. They are not free to us, though. So we ask here, once and quietly, and then we get back to the work.</p>
+
+      <ul class="give-facts">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg><span data-i18n="give.f1">A printed book placed in someone's hands</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg><span data-i18n="give.f2">Fuel to reach a study on the other side of the county</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14M3 5h6a3 3 0 013 2 3 3 0 013-2h6v14h-6a3 3 0 00-3 2 3 3 0 00-3-2H3z"/></svg><span data-i18n="give.f3">A Bible for someone who has never owned one</span></li>
+      </ul>
+
+      <p class="give-ways-title" data-i18n="give.card.t">Ways to give</p>
+      <p class="give-ways-lead" data-i18n="give.card.d">Whatever you send goes to literature, Bibles and getting a missionary to someone's door. If you would rather know exactly where it lands before you give, just ask.</p>
+
+      <div class="give-actions">
+        <a class="btn btn-ghost btn-sm" id="giveOnline" href="#" target="_blank" rel="noopener" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0112 5.6 5.4 5.4 0 0121.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg>
+          <span data-i18n="give.card.donate">Give online</span>
+        </a>
+        <a class="btn btn-ghost btn-sm" href="#" data-wa="give">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+          <span data-i18n="give.card.ask">Ask us how to give</span>
+        </a>
+        <a class="btn btn-ghost btn-sm" href="#" data-wa="volunteer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-1.6a3.4 3.4 0 00-3.4-3.4H6.4A3.4 3.4 0 003 18.4V20"/><circle cx="9.5" cy="7.4" r="3.4"/><path d="M21 20v-1.6a3.4 3.4 0 00-2.6-3.3"/></svg>
+          <span data-i18n="give.card.volunteer">Give your time instead</span>
+        </a>
+      </div>
+
+      <p class="give-zelle" id="giveZelle" hidden>
+        <span class="sr-only" data-i18n="give.card.zelle">Give by Zelle</span>
+        <span class="give-zelle-tag" aria-hidden="true" data-i18n="give.zelleLabel">Zelle</span>
+        <span id="giveZelleValue"></span>
+      </p>
+
+      <p class="give-grace" data-i18n="give.grace">And if money is tight right now, please keep it. Take the book, take the studies, and pray for us instead — that helps more than you know.</p>
+
+      <p class="give-legal" data-i18n="give.card.mail">Prefer to give by mail? Cheques can be sent to the address below, payable to Florida Advent Missionaries Inc.</p>
+      <p class="give-legal" data-i18n="give.card.legal">Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. No goods or services are provided in exchange for contributions.</p>
     </div>
   </div>
 </section>

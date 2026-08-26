@@ -560,6 +560,14 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .acc-body { padding: 0 22px 22px 70px; color: var(--text-soft); font-size: .95rem; }
 .acc-body .ref { display: block; margin-top: 10px; font-size: .77rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
 
+/* ---------- Libro: maqueta de dos columnas ---------- */
+.book-grid {
+    display: grid;
+    grid-template-columns: 1.04fr .96fr;
+    gap: clamp(28px, 5vw, 56px);
+    align-items: center;
+}
+
 /* ---------- Estudios biblicos ---------- */
 .study-grid {
     display: grid;
@@ -693,34 +701,77 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .prayer-list li { display: flex; gap: 12px; font-size: .94rem; color: var(--text-soft); }
 .prayer-list svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--accent); margin-top: 2px; }
 
-/* ---------- Donar ---------- */
-.give {
-    background: linear-gradient(140deg, #0F3B4C, #071C25);
-    color: #fff;
-}
-[data-theme="dark"] .give { background: var(--bg-alt); color: var(--text); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.give .eyebrow { color: var(--accent); }
-[data-theme="light"] .give .eyebrow { color: #E3B45C; }
-[data-theme="light"] .give .eyebrow::before { background: #E3B45C; }
-.give-grid { display: grid; grid-template-columns: 1.04fr .96fr; gap: clamp(28px, 5vw, 56px); align-items: center; }
-.give h2 { font-size: clamp(1.9rem, 4vw, 2.9rem); margin-bottom: 16px; }
-.give > .container > .give-grid > div > p { opacity: .9; margin-bottom: 24px; }
-.give-facts { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
-.give-facts li { display: flex; gap: 11px; align-items: flex-start; font-size: .93rem; opacity: .93; }
-.give-facts svg { width: 19px; height: 19px; flex-shrink: 0; color: #E3B45C; margin-top: 3px; }
-[data-theme="dark"] .give-facts svg { color: var(--accent); }
+/* ---------- Donar (discreto) ---------- */
+.give { background: var(--bg); }
+
 .give-card {
-    background: rgba(255,255,255,.09);
-    border: 1px solid rgba(255,255,255,.2);
+    background: var(--surface);
+    border: 1px solid var(--line);
     border-radius: 22px;
-    padding: clamp(26px, 4vw, 38px);
+    padding: clamp(30px, 5vw, 52px);
+    box-shadow: var(--shadow-sm);
 }
-[data-theme="dark"] .give-card { background: var(--surface); border-color: var(--line); }
-.give-card h3 { font-size: 1.46rem; margin-bottom: 12px; }
-.give-card p { font-size: .93rem; opacity: .9; margin-bottom: 20px; }
-.give-legal { font-size: .78rem; opacity: .72; margin-top: 16px; line-height: 1.55; }
-.give-card .btn-primary { background: #E3B45C; color: #0A1720; }
-[data-theme="dark"] .give-card .btn-primary { background: var(--accent); color: var(--accent-ink); }
+.give-card h2 {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+    margin-bottom: 16px;
+}
+.give-card .section-lead { margin-bottom: 30px; }
+
+.give-facts {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    gap: 16px;
+    padding: 24px 0;
+    margin-bottom: 30px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.give-facts li {
+    display: flex; gap: 11px; align-items: flex-start;
+    font-size: .91rem; color: var(--text-soft);
+}
+.give-facts svg { width: 19px; height: 19px; flex-shrink: 0; color: var(--accent); margin-top: 2px; }
+
+.give-ways-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.42rem; font-weight: 600;
+    margin-bottom: 7px;
+}
+.give-ways-lead { font-size: .93rem; color: var(--text-soft); margin-bottom: 20px; }
+
+.give-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+
+.give-zelle {
+    display: inline-flex; align-items: center; gap: 11px;
+    background: var(--accent-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 18px;
+    font-size: .9rem; font-weight: 600;
+    margin-bottom: 22px;
+}
+.give-zelle-tag {
+    font-size: .68rem; font-weight: 700;
+    letter-spacing: .13em; text-transform: uppercase;
+    color: var(--accent);
+}
+
+.give-grace {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.12rem, 2vw, 1.36rem);
+    line-height: 1.46;
+    color: var(--text);
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    margin-bottom: 28px;
+}
+
+.give-legal { font-size: .78rem; color: var(--text-soft); line-height: 1.55; margin-top: 8px; }
+
+/* [hidden] debe ganar a display:inline-flex de .btn */
+[hidden] { display: none !important; }
 
 /* ---------- Recursos ---------- */
 .res-grid {
@@ -857,7 +908,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     .menu-toggle { display: grid; }
     .hero-grid { grid-template-columns: 1fr; }
     .hero-art { display: none; }
-    .prayer-grid, .give-grid { grid-template-columns: 1fr; }
+    .prayer-grid, .book-grid { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr 1fr; }
     .footer-brand { grid-column: 1 / -1; }
 }

@@ -210,16 +210,16 @@
     "prayer.l3": "You may stay completely anonymous — an initial is enough.",
     "prayer.l4": "If you would like someone to visit or call you, just say so.",
 
-    "give.eyebrow": "Support the mission",
-    "give.title": "Every book we give away was paid for by someone",
-    "give.lead": "We charge nothing for Bible studies, literature or help — which only works because people who care make it possible. If you would like to put a copy of Steps to Christ into a stranger's hands, this is how.",
-    "give.f1": "Registered 501(c)(3) nonprofit — donations are tax-deductible in the US.",
-    "give.f2": "Gifts go to printed literature, Bibles, fuel and community help.",
-    "give.f3": "You can also give time instead of money — we always need drivers, translators and hosts.",
-    "give.card.t": "Give or volunteer",
-    "give.card.d": "Choose the way that fits you. If you would rather speak to a person first, message us and we will explain exactly where your gift goes.",
-    "give.card.donate": "Donate online",
-    "give.card.volunteer": "I want to volunteer",
+    "give.eyebrow": "Keeping it free",
+    "give.title": "We never ask the people we serve for money",
+    "give.lead": "The studies, the books, the visits and the prayers cost nothing — not at the first meeting and not at the last. They are not free to us, though. So we ask here, once and quietly, and then we get back to the work.",
+    "give.f1": "A printed book placed in someone's hands",
+    "give.f2": "Fuel to reach a study on the other side of the county",
+    "give.f3": "A Bible for someone who has never owned one",
+    "give.card.t": "Ways to give",
+    "give.card.d": "Whatever you send goes to literature, Bibles and getting a missionary to someone's door. If you would rather know exactly where it lands before you give, just ask.",
+    "give.card.donate": "Give online",
+    "give.card.volunteer": "Give your time instead",
     "give.card.mail": "Prefer to give by mail? Cheques can be sent to the address below, payable to Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. No goods or services are provided in exchange for contributions.",
 
@@ -270,7 +270,12 @@
     "wa.decision": "Hello. I would like to give my life to Jesus and I do not really know where to begin. Could someone talk with me?",
     "wa.volunteer": "Hello! I would like to volunteer with Florida Advent Missionaries. I can help with:",
     "wa.prayerIntro": "Prayer request",
-    "wa.name": "Name", "wa.city": "City", "wa.topic": "Topic", "wa.request": "Request"
+    "wa.name": "Name", "wa.city": "City", "wa.topic": "Topic", "wa.request": "Request",
+    "give.card.zelle": "Give by Zelle",
+    "give.card.ask": "Ask us how to give",
+    "give.grace": "And if money is tight right now, please keep it. Take the book, take the studies, and pray for us instead — that helps more than you know.",
+    "wa.give": "Hello! I would like to support the work of Florida Advent Missionaries. Could you tell me the best way to give?",
+    "give.zelleLabel": "Zelle"
   };
 
   /* ================= ESPAÑOL ================= */
@@ -447,16 +452,16 @@
     "prayer.l3": "Puedes permanecer totalmente anónimo: una inicial es suficiente.",
     "prayer.l4": "Si quieres que alguien te visite o te llame, solo dínoslo.",
 
-    "give.eyebrow": "Apoya la misión",
-    "give.title": "Cada libro que regalamos alguien lo pagó",
-    "give.lead": "No cobramos nada por los estudios bíblicos, la literatura o la ayuda, y eso solo funciona porque hay personas que lo hacen posible. Si quieres poner un ejemplar de El Camino a Cristo en las manos de un desconocido, así se hace.",
-    "give.f1": "Organización sin fines de lucro 501(c)(3): las donaciones son deducibles de impuestos en EE. UU.",
-    "give.f2": "Los donativos van a literatura impresa, Biblias, combustible y ayuda comunitaria.",
-    "give.f3": "También puedes dar tiempo en lugar de dinero: siempre necesitamos conductores, traductores y anfitriones.",
-    "give.card.t": "Dona o sé voluntario",
-    "give.card.d": "Elige la forma que se ajuste a ti. Si prefieres hablar primero con una persona, escríbenos y te explicamos exactamente a dónde va tu donativo.",
+    "give.eyebrow": "Para que siga siendo gratis",
+    "give.title": "Nunca le pedimos dinero a quien servimos",
+    "give.lead": "Los estudios, los libros, las visitas y las oraciones no cuestan nada, ni en el primer encuentro ni en el último. Para nosotros sí tienen un costo. Por eso lo pedimos aquí, una vez y en voz baja, y volvemos al trabajo.",
+    "give.f1": "Un libro impreso puesto en las manos de alguien",
+    "give.f2": "La gasolina para llegar a un estudio al otro lado del condado",
+    "give.f3": "Una Biblia para quien nunca ha tenido una",
+    "give.card.t": "Formas de donar",
+    "give.card.d": "Lo que envíes va a literatura, Biblias y a que un misionero llegue hasta la puerta de alguien. Si prefieres saber exactamente dónde termina antes de dar, pregúntanos.",
     "give.card.donate": "Donar en línea",
-    "give.card.volunteer": "Quiero ser voluntario",
+    "give.card.volunteer": "Dona tu tiempo",
     "give.card.mail": "¿Prefieres dar por correo? Puedes enviar un cheque a la dirección de abajo, a nombre de Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. No se entregan bienes ni servicios a cambio de las contribuciones.",
 
@@ -507,7 +512,12 @@
     "wa.decision": "Hola. Quisiera entregarle mi vida a Jesús y no sé muy bien por dónde empezar. ¿Podría alguien hablar conmigo?",
     "wa.volunteer": "¡Hola! Me gustaría ser voluntario con Florida Advent Missionaries. Puedo ayudar con:",
     "wa.prayerIntro": "Petición de oración",
-    "wa.name": "Nombre", "wa.city": "Ciudad", "wa.topic": "Tema", "wa.request": "Petición"
+    "wa.name": "Nombre", "wa.city": "Ciudad", "wa.topic": "Tema", "wa.request": "Petición",
+    "give.card.zelle": "Donar por Zelle",
+    "give.card.ask": "Pregúntanos cómo donar",
+    "give.grace": "Y si ahora mismo el dinero está apretado, guárdalo. Llévate el libro, llévate los estudios, y ora por nosotros: eso ayuda más de lo que crees.",
+    "wa.give": "¡Hola! Me gustaría apoyar la obra de Florida Advent Missionaries. ¿Me pueden decir cuál es la mejor forma de donar?",
+    "give.zelleLabel": "Zelle"
   };
 
   /* ================= FRANÇAIS ================= */
@@ -684,16 +694,16 @@
     "prayer.l3": "Vous pouvez rester totalement anonyme — une initiale suffit.",
     "prayer.l4": "Si vous souhaitez qu'on vous rende visite ou qu'on vous appelle, dites-le simplement.",
 
-    "give.eyebrow": "Soutenir la mission",
-    "give.title": "Chaque livre offert a été payé par quelqu'un",
-    "give.lead": "Nous ne facturons ni les études bibliques, ni la littérature, ni l'aide — ce qui n'est possible que parce que des gens s'en soucient. Si vous voulez mettre un exemplaire de Vers Jésus entre les mains d'un inconnu, voici comment.",
-    "give.f1": "Association 501(c)(3) enregistrée — les dons sont déductibles des impôts aux États-Unis.",
-    "give.f2": "Les dons servent à la littérature imprimée, aux Bibles, au carburant et à l'aide communautaire.",
-    "give.f3": "Vous pouvez aussi donner du temps plutôt que de l'argent : il nous faut toujours des chauffeurs, des traducteurs et des hôtes.",
-    "give.card.t": "Donner ou devenir bénévole",
-    "give.card.d": "Choisissez ce qui vous convient. Si vous préférez d'abord parler à quelqu'un, écrivez-nous et nous vous expliquerons exactement où va votre don.",
-    "give.card.donate": "Faire un don en ligne",
-    "give.card.volunteer": "Je veux être bénévole",
+    "give.eyebrow": "Pour que cela reste gratuit",
+    "give.title": "Nous ne demandons jamais d'argent à ceux que nous servons",
+    "give.lead": "Les études, les livres, les visites et les prières ne coûtent rien — ni à la première rencontre ni à la dernière. Pour nous, en revanche, cela a un prix. Alors nous le demandons ici, une seule fois et à voix basse, puis nous retournons au travail.",
+    "give.f1": "Un livre imprimé déposé entre les mains de quelqu'un",
+    "give.f2": "Le carburant pour rejoindre une étude à l'autre bout du comté",
+    "give.f3": "Une Bible pour quelqu'un qui n'en a jamais eu",
+    "give.card.t": "Comment donner",
+    "give.card.d": "Ce que vous envoyez va à la littérature, aux Bibles et au déplacement d'un missionnaire jusqu'à la porte de quelqu'un. Si vous préférez savoir exactement où cela aboutit avant de donner, demandez-nous.",
+    "give.card.donate": "Donner en ligne",
+    "give.card.volunteer": "Donnez plutôt de votre temps",
     "give.card.mail": "Vous préférez donner par courrier ? Les chèques peuvent être envoyés à l'adresse ci-dessous, à l'ordre de Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. Aucun bien ni service n'est fourni en échange des contributions.",
 
@@ -744,7 +754,12 @@
     "wa.decision": "Bonjour. J'aimerais donner ma vie à Jésus et je ne sais pas vraiment par où commencer. Quelqu'un pourrait-il me parler ?",
     "wa.volunteer": "Bonjour ! J'aimerais devenir bénévole avec Florida Advent Missionaries. Je peux aider avec :",
     "wa.prayerIntro": "Demande de prière",
-    "wa.name": "Nom", "wa.city": "Ville", "wa.topic": "Sujet", "wa.request": "Demande"
+    "wa.name": "Nom", "wa.city": "Ville", "wa.topic": "Sujet", "wa.request": "Demande",
+    "give.card.zelle": "Donner par Zelle",
+    "give.card.ask": "Demandez-nous comment donner",
+    "give.grace": "Et si l'argent manque en ce moment, gardez-le. Prenez le livre, prenez les études, et priez pour nous : cela aide plus que vous ne le croyez.",
+    "wa.give": "Bonjour ! J'aimerais soutenir l'œuvre de Florida Advent Missionaries. Pourriez-vous me dire quelle est la meilleure façon de donner ?",
+    "give.zelleLabel": "Zelle"
   };
 
 })();

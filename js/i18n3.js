@@ -182,16 +182,16 @@
     "prayer.l3": "U mag volledig anoniem blijven — een letter is genoeg.",
     "prayer.l4": "Wilt u dat iemand u bezoekt of belt? Zeg het gewoon.",
 
-    "give.eyebrow": "Steun de missie",
-    "give.title": "Elk boek dat we weggeven is door iemand betaald",
-    "give.lead": "Wij rekenen niets voor bijbelstudies, lectuur of hulp — en dat kan alleen omdat mensen het mogelijk maken. Wilt u een exemplaar van Schreden naar Christus in de handen van een onbekende leggen? Zo doet u dat.",
-    "give.f1": "Geregistreerde 501(c)(3)-organisatie — giften zijn in de VS fiscaal aftrekbaar.",
-    "give.f2": "Giften gaan naar gedrukte lectuur, Bijbels, brandstof en buurthulp.",
-    "give.f3": "U kunt ook tijd geven in plaats van geld: we hebben altijd chauffeurs, vertalers en gastgezinnen nodig.",
-    "give.card.t": "Geven of meehelpen",
-    "give.card.d": "Kies wat bij u past. Wilt u liever eerst iemand spreken? Schrijf ons en we leggen precies uit waar uw gift naartoe gaat.",
+    "give.eyebrow": "Zodat het gratis blijft",
+    "give.title": "Wij vragen de mensen die we dienen nooit om geld",
+    "give.lead": "De bijbelstudies, de boeken, de bezoeken en de gebeden kosten niets — niet bij de eerste ontmoeting en niet bij de laatste. Ons kosten ze wel iets. Daarom vragen we het hier, één keer en zachtjes, en gaan dan weer aan het werk.",
+    "give.f1": "Een gedrukt boek dat iemand in handen krijgt",
+    "give.f2": "De brandstof om een studie aan de andere kant van de county te bereiken",
+    "give.f3": "Een Bijbel voor iemand die er nooit een had",
+    "give.card.t": "Manieren om te geven",
+    "give.card.d": "Wat u stuurt gaat naar lectuur, Bijbels en naar het brengen van een zendeling tot bij iemand aan de deur. Wilt u vooraf precies weten waar het terechtkomt? Vraag het gerust.",
     "give.card.donate": "Online geven",
-    "give.card.volunteer": "Ik wil meehelpen",
+    "give.card.volunteer": "Geef liever uw tijd",
     "give.card.mail": "Liever per post geven? Cheques kunnen naar het onderstaande adres worden gestuurd, op naam van Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. Er worden geen goederen of diensten geleverd in ruil voor bijdragen.",
 
@@ -242,7 +242,12 @@
     "wa.decision": "Hallo. Ik wil mijn leven aan Jezus geven en weet niet goed waar ik moet beginnen. Zou iemand met mij kunnen praten?",
     "wa.volunteer": "Hallo! Ik wil graag meehelpen bij Florida Advent Missionaries. Ik kan helpen met:",
     "wa.prayerIntro": "Gebedsverzoek",
-    "wa.name": "Naam", "wa.city": "Stad", "wa.topic": "Onderwerp", "wa.request": "Verzoek"
+    "wa.name": "Naam", "wa.city": "Stad", "wa.topic": "Onderwerp", "wa.request": "Verzoek",
+    "give.card.zelle": "Geven via Zelle",
+    "give.card.ask": "Vraag ons hoe u kunt geven",
+    "give.grace": "En als het geld nu krap is, houd het dan. Neem het boek, neem de studies, en bid in plaats daarvan voor ons — dat helpt meer dan u denkt.",
+    "wa.give": "Hallo! Ik wil het werk van Florida Advent Missionaries steunen. Kunt u mij zeggen wat de beste manier is om te geven?",
+    "give.zelleLabel": "Zelle"
   };
 
   /* ================= РУССКИЙ ================= */
@@ -419,16 +424,16 @@
     "prayer.l3": "Вы можете остаться полностью анонимным — достаточно одной буквы.",
     "prayer.l4": "Если хотите, чтобы к вам пришли или позвонили, просто скажите.",
 
-    "give.eyebrow": "Поддержать служение",
-    "give.title": "Каждую книгу, которую мы дарим, кто-то оплатил",
-    "give.lead": "Мы не берём денег за изучение Библии, литературу или помощь — и это возможно лишь потому, что есть неравнодушные люди. Если вы хотите вложить экземпляр «Пути ко Христу» в руки незнакомца — вот как.",
-    "give.f1": "Зарегистрированная организация 501(c)(3) — пожертвования не облагаются налогом в США.",
-    "give.f2": "Пожертвования идут на печатную литературу, Библии, топливо и помощь общине.",
-    "give.f3": "Можно жертвовать время вместо денег: нам всегда нужны водители, переводчики и принимающие семьи.",
-    "give.card.t": "Пожертвовать или помочь",
-    "give.card.d": "Выберите то, что вам ближе. Если хотите сначала поговорить с человеком — напишите, и мы точно объясним, куда идёт ваше пожертвование.",
+    "give.eyebrow": "Чтобы это оставалось бесплатным",
+    "give.title": "Мы никогда не просим денег у тех, кому служим",
+    "give.lead": "Изучение Библии, книги, встречи и молитвы не стоят ничего — ни на первой встрече, ни на последней. Нам они всё же чего-то стоят. Поэтому мы просим здесь — один раз и негромко, — а потом возвращаемся к работе.",
+    "give.f1": "Печатная книга, вложенная кому-то в руки",
+    "give.f2": "Бензин, чтобы доехать до занятия на другом конце округа",
+    "give.f3": "Библия для того, у кого её никогда не было",
+    "give.card.t": "Способы помочь",
+    "give.card.d": "Всё, что вы отправите, идёт на литературу, Библии и на то, чтобы миссионер доехал до чьей-то двери. Если хотите заранее точно знать, куда это пойдёт, просто спросите.",
     "give.card.donate": "Пожертвовать онлайн",
-    "give.card.volunteer": "Хочу стать добровольцем",
+    "give.card.volunteer": "Подарите своё время",
     "give.card.mail": "Предпочитаете пожертвовать по почте? Чек можно отправить по указанному ниже адресу на имя Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. В обмен на пожертвования не предоставляются товары или услуги.",
 
@@ -479,7 +484,12 @@
     "wa.decision": "Здравствуйте. Я хотел бы отдать свою жизнь Иисусу и не знаю, с чего начать. Мог бы кто-нибудь поговорить со мной?",
     "wa.volunteer": "Здравствуйте! Я хотел бы стать добровольцем в Florida Advent Missionaries. Я могу помочь с:",
     "wa.prayerIntro": "Молитвенная просьба",
-    "wa.name": "Имя", "wa.city": "Город", "wa.topic": "Тема", "wa.request": "Просьба"
+    "wa.name": "Имя", "wa.city": "Город", "wa.topic": "Тема", "wa.request": "Просьба",
+    "give.card.zelle": "Пожертвовать через Zelle",
+    "give.card.ask": "Спросите, как пожертвовать",
+    "give.grace": "А если сейчас с деньгами туго — оставьте их себе. Возьмите книгу, возьмите уроки, а вместо этого помолитесь о нас: это помогает больше, чем вы думаете.",
+    "wa.give": "Здравствуйте! Я хотел бы поддержать служение Florida Advent Missionaries. Подскажите, как лучше всего пожертвовать?",
+    "give.zelleLabel": "Zelle"
   };
 
   /* ================= УКРАЇНСЬКА ================= */
@@ -656,16 +666,16 @@
     "prayer.l3": "Ви можете залишитися повністю анонімним — вистачить однієї літери.",
     "prayer.l4": "Якщо хочете, щоб до вас прийшли або зателефонували, просто скажіть.",
 
-    "give.eyebrow": "Підтримати служіння",
-    "give.title": "Кожну книгу, яку ми даруємо, хтось оплатив",
-    "give.lead": "Ми не беремо грошей за вивчення Біблії, літературу чи допомогу — і це можливо лише тому, що є небайдужі люди. Якщо ви хочете вкласти примірник «Шляху до Христа» в руки незнайомця — ось як.",
-    "give.f1": "Зареєстрована організація 501(c)(3) — пожертви не оподатковуються у США.",
-    "give.f2": "Пожертви йдуть на друковану літературу, Біблії, пальне й допомогу громаді.",
-    "give.f3": "Можна жертвувати час замість грошей: нам завжди потрібні водії, перекладачі та приймаючі родини.",
-    "give.card.t": "Пожертвувати або допомогти",
-    "give.card.d": "Оберіть те, що вам ближче. Якщо хочете спершу поговорити з людиною — напишіть, і ми точно пояснимо, куди йде ваша пожертва.",
+    "give.eyebrow": "Щоб це залишалося безкоштовним",
+    "give.title": "Ми ніколи не просимо грошей у тих, кому служимо",
+    "give.lead": "Вивчення Біблії, книги, відвідини й молитви не коштують нічого — ні на першій зустрічі, ні на останній. Нам вони все ж чогось коштують. Тому ми просимо тут — один раз і неголосно, — а потім повертаємося до праці.",
+    "give.f1": "Друкована книга, вкладена комусь у руки",
+    "give.f2": "Пальне, щоб дістатися до заняття на іншому кінці округу",
+    "give.f3": "Біблія для того, хто ніколи її не мав",
+    "give.card.t": "Способи допомогти",
+    "give.card.d": "Усе, що ви надішлете, іде на літературу, Біблії та на те, щоб місіонер доїхав до чиїхось дверей. Якщо хочете заздалегідь точно знати, куди це піде, просто запитайте.",
     "give.card.donate": "Пожертвувати онлайн",
-    "give.card.volunteer": "Хочу стати волонтером",
+    "give.card.volunteer": "Подаруйте свій час",
     "give.card.mail": "Бажаєте пожертвувати поштою? Чек можна надіслати на вказану нижче адресу на ім'я Florida Advent Missionaries Inc.",
     "give.card.legal": "Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. В обмін на пожертви товари чи послуги не надаються.",
 
@@ -716,7 +726,12 @@
     "wa.decision": "Вітаю. Я хотів би віддати своє життя Ісусові й не знаю, з чого почати. Чи міг би хтось поговорити зі мною?",
     "wa.volunteer": "Вітаю! Я хотів би стати волонтером у Florida Advent Missionaries. Я можу допомогти з:",
     "wa.prayerIntro": "Молитовне прохання",
-    "wa.name": "Ім'я", "wa.city": "Місто", "wa.topic": "Тема", "wa.request": "Прохання"
+    "wa.name": "Ім'я", "wa.city": "Місто", "wa.topic": "Тема", "wa.request": "Прохання",
+    "give.card.zelle": "Пожертвувати через Zelle",
+    "give.card.ask": "Запитайте, як пожертвувати",
+    "give.grace": "А якщо зараз із грошима сутужно — залиште їх собі. Візьміть книгу, візьміть уроки, а натомість помоліться за нас: це допомагає більше, ніж ви думаєте.",
+    "wa.give": "Вітаю! Я хотів би підтримати служіння Florida Advent Missionaries. Підкажіть, як найкраще пожертвувати?",
+    "give.zelleLabel": "Zelle"
   };
 
 })();
