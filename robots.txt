@@ -1,0 +1,13 @@
+# Florida Advent Missionaries — https://droko1982.github.io/adventflorida/
+User-agent: *
+Allow: /
+
+# Buscadores e IA: el contenido es publico y esta pensado para compartirse.
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: YandexBot
+Allow: /
+
+Sitemap: https://droko1982.github.io/adventflorida/sitemap.xml

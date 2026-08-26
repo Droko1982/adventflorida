@@ -1,0 +1,19 @@
+{
+  "name": "Florida Advent Missionaries",
+  "short_name": "FL Advent",
+  "description": "Free Bible studies, prayer and the book Steps to Christ in nine languages, anywhere in Florida.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0A1720",
+  "theme_color": "#0F3B4C",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "lifestyle", "books"],
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
