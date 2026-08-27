@@ -1,0 +1,56 @@
+{
+  "en": {
+    "prayer.f.reply": "Email or phone, only if you want us to reply (optional)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Leave it blank if you would rather stay anonymous. We pray either way.",
+    "book.library": "Open the free library"
+  },
+  "es": {
+    "prayer.f.reply": "Correo o teléfono, solo si quieres que te respondamos (opcional)",
+    "prayer.f.replyPh": "maria@correo.com",
+    "prayer.f.replyNote": "Déjalo en blanco si prefieres el anonimato. Oramos por ti de todos modos.",
+    "book.library": "Abrir la biblioteca gratuita"
+  },
+  "fr": {
+    "prayer.f.reply": "Courriel ou téléphone, uniquement si vous voulez une réponse (facultatif)",
+    "prayer.f.replyPh": "marie@courriel.com",
+    "prayer.f.replyNote": "Laissez-le vide si vous préférez rester anonyme. Nous prions quand même.",
+    "book.library": "Ouvrir la bibliothèque gratuite"
+  },
+  "ht": {
+    "prayer.f.reply": "Imel oswa telefòn, sèlman si ou vle nou reponn ou (opsyonèl)",
+    "prayer.f.replyPh": "mari@imel.com",
+    "prayer.f.replyNote": "Ou ka kite l vid epi rete anonim. N ap priye pou ou kanmenm.",
+    "book.library": "Ouvè bibliyotèk gratis la"
+  },
+  "pt": {
+    "prayer.f.reply": "E-mail ou telefone, só se você quiser uma resposta (opcional)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Pode deixar em branco se preferir ficar no anonimato. Oramos do mesmo jeito.",
+    "book.library": "Abrir a biblioteca gratuita"
+  },
+  "de": {
+    "prayer.f.reply": "E-Mail oder Telefon, nur wenn Sie eine Antwort möchten (optional)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Lassen Sie es leer, wenn Sie anonym bleiben möchten. Wir beten trotzdem.",
+    "book.library": "Kostenlose Bibliothek öffnen"
+  },
+  "nl": {
+    "prayer.f.reply": "E-mail of telefoon, alleen als u antwoord wilt (optioneel)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Laat het leeg als u anoniem wilt blijven. Wij bidden hoe dan ook.",
+    "book.library": "Gratis bibliotheek openen"
+  },
+  "ru": {
+    "prayer.f.reply": "Почта или телефон, только если хотите ответа (по желанию)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Можно оставить пустым и написать анонимно. Мы всё равно помолимся.",
+    "book.library": "Открыть бесплатную библиотеку"
+  },
+  "uk": {
+    "prayer.f.reply": "Пошта або телефон, тільки якщо хочете відповіді (за бажанням)",
+    "prayer.f.replyPh": "maria@email.com",
+    "prayer.f.replyNote": "Можна залишити порожнім і написати анонімно. Ми все одно помолимося.",
+    "book.library": "Відкрити безкоштовну бібліотеку"
+  }
+}

@@ -158,6 +158,10 @@
       bTitle.setAttribute("lang", code === "ht" ? "fr" : code);
     }
     if (bPdf && meta.book)   bPdf.setAttribute("href", meta.book.pdf);
+    var sinPdf = NO_PDF.indexOf(code) !== -1;
+    var bPdfL = $("#bookPdfLabel"), bPdfI = $("#bookPdfIcon");
+    if (bPdfL) bPdfL.textContent = sinPdf ? t("book.library") : t("book.download");
+    if (bPdfI) bPdfI.style.display = sinPdf ? "none" : "";
     if (bRead && meta.book)  bRead.setAttribute("href", meta.book.read);
     /* El criollo haitiano necesita un aviso propio: el libro no existe
        en kreyol, asi que los botones llevan a la edicion francesa. */
@@ -276,12 +280,15 @@
         list.forEach(function (_, n) {
           var d = document.createElement("button");
           d.type = "button";
-          d.setAttribute("aria-label", "Verse " + (n + 1));
+          d.setAttribute("aria-label", t("a11y.verseN").replace("{n}", String(n + 1)));
           d.addEventListener("click", function () { renderVerse(n); restartVerses(); });
           dots.appendChild(d);
         });
       }
+      /* La etiqueta se reescribe siempre, no solo al crear los puntos:
+         si no, al cambiar de idioma se quedaria en el anterior. */
       Array.prototype.forEach.call(dots.children, function (d, n) {
+        d.setAttribute("aria-label", t("a11y.verseN").replace("{n}", String(n + 1)));
         d.setAttribute("aria-current", n === verseIndex ? "true" : "false");
       });
     }

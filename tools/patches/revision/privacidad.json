@@ -1,0 +1,47 @@
+{
+  "en": {
+    "prayer.f.privacyOnline": "A forwarding service brings your request to our inbox, where the person who prays reads it — nobody else. Nothing is kept on this page.",
+    "contact.f.privacy": "A forwarding service brings your message to our inbox, where nobody else reads it. Nothing is kept on this page, you are added to no list, and we never ask for money.",
+    "prayer.l2": "You will never be added to a mailing list or asked for money."
+  },
+  "es": {
+    "prayer.f.privacyOnline": "Un servicio de reenvío lleva tu petición a nuestro buzón, donde la lee quien ora, y nadie más. No se guarda en esta página.",
+    "contact.f.privacy": "Un servicio de reenvío lleva tu mensaje a nuestro buzón, donde nadie más lo lee. No se guarda en esta página, no entras en ninguna lista y nunca te pedimos dinero.",
+    "prayer.l2": "Nunca te añadiremos a una lista de correo ni te pediremos dinero."
+  },
+  "fr": {
+    "prayer.f.privacyOnline": "Un service de redirection achemine votre demande vers notre boîte mail, où la personne qui prie la lit — personne d'autre. Rien n'est gardé sur ce site.",
+    "contact.f.privacy": "Un service de redirection nous transmet votre message, que personne d'autre ne lit. Rien n'est gardé sur ce site, vous n'êtes sur aucune liste et nous ne demandons jamais d'argent.",
+    "prayer.l2": "Nous ne vous mettrons sur aucune liste de diffusion et ne demanderons jamais d'argent."
+  },
+  "ht": {
+    "prayer.f.privacyOnline": "Yon sèvis transfè pote l nan bwat imèl nou an, kote se moun k ap priye a ki li l — pèsonn dòt. Anyen pa sere sou sit sa a.",
+    "contact.f.privacy": "Yon sèvis transfè pote l nan bwat imèl nou an, kote pèsonn dòt pa li l. Anyen pa sere sou sit sa a, ou pa antre nan okenn lis, epi nou pa janm mande lajan.",
+    "prayer.l2": "Nou p ap janm mete ou sou yon lis imèl ni mande ou lajan."
+  },
+  "pt": {
+    "prayer.f.privacyOnline": "Um serviço de reenvio leva seu pedido à nossa caixa de entrada, onde quem ora o lê — mais ninguém. Nada fica guardado nesta página.",
+    "contact.f.privacy": "Um serviço de reenvio leva sua mensagem à nossa caixa de entrada, onde mais ninguém a lê. Nada fica guardado nesta página, você não entra em nenhuma lista e nunca pedimos dinheiro.",
+    "prayer.l2": "Você não entra em nenhuma lista de e-mails e nunca pedimos dinheiro."
+  },
+  "de": {
+    "prayer.f.privacyOnline": "Ihr Anliegen kommt über einen Weiterleitungsdienst in unser Postfach, wo die betende Person es liest — sonst niemand. Auf dieser Seite wird nichts gespeichert.",
+    "contact.f.privacy": "Ihre Nachricht kommt über einen Weiterleitungsdienst zu uns, sonst liest sie niemand. Auf dieser Seite wird nichts gespeichert, Sie landen auf keiner Liste, wir bitten nie um Geld.",
+    "prayer.l2": "Sie landen nie in einem Verteiler und werden nie um Geld gebeten."
+  },
+  "nl": {
+    "prayer.f.privacyOnline": "Via een doorstuurdienst komt uw verzoek in onze mailbox, waar degene die bidt het leest — niemand anders. Op deze pagina blijft niets bewaard.",
+    "contact.f.privacy": "Via een doorstuurdienst komt uw bericht in onze mailbox, waar niemand anders het leest. Op deze pagina blijft niets bewaard, u komt op geen enkele lijst en we vragen nooit om geld.",
+    "prayer.l2": "U komt nooit op een mailinglijst en er wordt nooit om geld gevraagd."
+  },
+  "ru": {
+    "prayer.f.privacyOnline": "Через сервис пересылки просьба попадает к нам на почту, где её читают те, кто молится, — и больше никто. На сайте она не хранится.",
+    "contact.f.privacy": "Через сервис пересылки сообщение попадает к нам, и больше его никто не читает. На сайте оно не хранится, в списки вас не вносят и денег не просят.",
+    "prayer.l2": "Вас никогда не внесут в рассылку и не попросят денег."
+  },
+  "uk": {
+    "prayer.f.privacyOnline": "Прохання потрапляє через сервіс пересилання в нашу скриньку, де його читають ті, хто молиться, — і більше ніхто. На сайті воно не зберігається.",
+    "contact.f.privacy": "Повідомлення потрапляє до нас через сервіс пересилання, і більше його ніхто не читає. На сайті воно не зберігається, у списки вас не вносять і грошей не просять.",
+    "prayer.l2": "Вас ніколи не внесуть у розсилку й не попросять грошей."
+  }
+}

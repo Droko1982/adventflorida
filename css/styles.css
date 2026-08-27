@@ -1264,6 +1264,9 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     transition: border-color var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out);
 }
 .field textarea { min-height: 130px; resize: vertical; }
+/* Media linea bajo un campo opcional: lo que protege el anonimato que
+   la seccion promete. */
+.field-note { margin-top: 6px; font-size: .82rem; color: var(--text-soft); line-height: 1.5; }
 .field input:focus, .field select:focus, .field textarea:focus {
     outline: none;
     border-color: var(--accent);

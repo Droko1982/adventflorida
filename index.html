@@ -204,7 +204,7 @@
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a class="brand" href="#inicio" aria-label="Florida Advent Missionaries">
+    <a class="brand" href="#inicio" data-i18n-aria="a11y.brand" aria-label="Florida Advent Missionaries">
       <svg class="brand-mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
         <circle cx="32" cy="32" r="30" fill="var(--deep)"/>
         <path d="M32 13v10M32 23c-6-4-12-4-16-2v20c4-2 10-2 16 2 6-4 12-4 16-2V21c-4-2-10-2-16 2z" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -217,7 +217,7 @@
       </span>
     </a>
 
-    <nav class="main-nav" aria-label="Main">
+    <nav class="main-nav" data-i18n-aria="a11y.navMain" aria-label="Main">
       <ul>
         <li><a href="#cristo"      data-i18n="nav.christ">Jesus Christ</a></li>
         <li><a href="#libro"       data-i18n="nav.book">Free book</a></li>
@@ -232,15 +232,15 @@
 
     <div class="header-tools">
       <div class="lang" id="langWrap">
-        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Change language">
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" data-i18n-aria="a11y.changeLang" aria-label="Change language">
           <span class="lang-flag" id="langFlag">🇺🇸</span>
           <span class="lang-code" id="langCode">EN</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <ul class="lang-menu" id="langMenu" aria-label="Language"></ul>
+        <ul class="lang-menu" id="langMenu" data-i18n-aria="a11y.langList" aria-label="Language"></ul>
       </div>
 
-      <button class="icon-btn" id="themeBtn" aria-label="Switch light / dark mode" title="Light / dark">
+      <button class="icon-btn" id="themeBtn" data-i18n-aria="a11y.theme" aria-label="Switch light / dark mode" title="Light / dark">
         <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/>
         </svg>
@@ -249,7 +249,7 @@
         </svg>
       </button>
 
-      <button class="icon-btn menu-toggle" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+      <button class="icon-btn menu-toggle" id="menuBtn" data-i18n-aria="a11y.openMenu" aria-label="Open menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
     </div>
@@ -260,7 +260,7 @@
 <div class="mobile-nav" id="mobileNav" aria-hidden="true">
   <div class="mobile-nav-head">
     <span class="brand-name">Florida Advent</span>
-    <button class="icon-btn" id="menuClose" aria-label="Close menu">
+    <button class="icon-btn" id="menuClose" data-i18n-aria="a11y.closeMenu" aria-label="Close menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
@@ -347,7 +347,7 @@
         </a>
       </div>
 
-      <div class="near-out" id="nearOut" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="near-out" id="nearOut" role="status" aria-live="polite" aria-atomic="true" data-i18n-aria="a11y.nearOut" aria-label="Answer for your city"></div>
 
       <p class="near-note">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
@@ -363,7 +363,7 @@
     <div class="verse-card reveal" style="margin-bottom:48px">
       <p class="verse-text" id="verseText">“Come to me, all you who are weary and burdened, and I will give you rest.”</p>
       <p class="verse-ref" id="verseRef">Matthew 11:28</p>
-      <div class="verse-dots" id="verseDots" role="tablist" aria-label="Bible verses"></div>
+      <div class="verse-dots" id="verseDots" role="tablist" data-i18n-aria="a11y.verses" aria-label="Bible verses"></div>
     </div>
 
     <div class="section-head center reveal">
@@ -561,8 +561,8 @@
         <p style="font-size:.88rem;color:var(--text-soft);margin-bottom:20px" data-i18n="book.author">Ellen G. White · 1892 · Public domain</p>
 
         <a class="btn btn-primary btn-block" id="bookPdf" href="https://media4.egwwritings.org/pdf/en_SC.pdf" target="_blank" rel="noopener" style="margin-bottom:10px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          <span data-i18n="book.download">Download the PDF</span>
+          <svg id="bookPdfIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span id="bookPdfLabel">Download the PDF</span>
         </a>
         <a class="btn btn-ghost btn-block" id="bookRead" href="https://text.egwwritings.org/book/b108" target="_blank" rel="noopener" style="margin-bottom:10px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg>
@@ -960,6 +960,11 @@
         <div class="field">
           <label for="pMsg" data-i18n="prayer.f.msg">Your request</label>
           <textarea id="pMsg" name="message" placeholder="You can write as much or as little as you want…" data-i18n-placeholder="prayer.f.msgPh"></textarea>
+        </div>
+        <div class="field">
+          <label for="pReply" data-i18n="prayer.f.reply">Email or phone, only if you want us to reply (optional)</label>
+          <input type="text" id="pReply" name="reply" autocomplete="email" placeholder="maria@email.com" data-i18n-placeholder="prayer.f.replyPh">
+          <p class="field-note" data-i18n="prayer.f.replyNote">Leave it blank if you would rather stay anonymous. We pray either way.</p>
         </div>
         <div class="hp" aria-hidden="true"><label for="pHoney">Leave this field empty</label><input type="text" id="pHoney" name="_honey" tabindex="-1" autocomplete="off"></div>
         <button type="submit" class="btn btn-wa btn-block btn-lg" id="pSend">

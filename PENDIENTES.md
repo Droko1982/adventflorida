@@ -233,10 +233,13 @@ Por cada ciudad donde tengais gente, rellenad en `js/near.js`:
 
 Con tres ciudades ya funciona. No hace falta tenerlas las veintidos.
 
-Mientras `js/near.js` este vacio, la entradilla de ese bloque **ya no promete un
-nombre**: ofrece solo la hora del ocaso, que si es real, y se ofrece a averiguar
-cual es la congregacion mas cercana. En cuanto pongais la primera ciudad, vuelve
-sola a la version completa. No hay que tocar el texto.
+Mientras `js/near.js` este vacio, esa seccion **no promete compania**. Ni la
+entradilla ni la respuesta que sale al elegir ciudad. Ofrecen lo que si es
+seguro: la hora del ocaso, que la calcula el propio sitio, y buscar que
+congregacion queda mas cerca y en que idioma predica. La compania queda
+condicionada -- "si hay alguien que pueda entrar contigo, te lo decimos" -- en
+los nueve idiomas. `tools/test-promesas.js` vigila que no se vuelva a prometer
+sin condicion. Al poner la primera ciudad, el texto completo vuelve solo.
 
 ## 12. Misiones: se esconde sola mientras este vacia
 
