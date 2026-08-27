@@ -153,21 +153,31 @@ ofrece WhatsApp y cheque por correo, asi que nunca se muestra un boton roto.
 
 ## Contacto en linea
 
-Justo debajo, en el mismo `js/main.js`:
+En `js/main.js`, justo debajo de `GIVE`:
 
 ```js
-var CONTACT = { email: "" };
+var CONTACT = {
+  email: "fladventmissionaries@gmail.com",
+  token: ""      // cadena de FormSubmit; si esta puesta, se usa ella
+};
 ```
 
-Con un correo ahi, el formulario de contacto y el de peticiones de oracion pasan
-a enviarse **desde la propia pagina** via FormSubmit: sin servidor, sin coste y
-sin que el visitante tenga que salir ni tener WhatsApp. La primera vez que
-alguien envie algo, FormSubmit manda a ese correo un enlace de activacion que hay
-que pulsar una sola vez.
+El formulario de contacto y el de peticiones de oracion envian **desde la propia
+pagina** via FormSubmit: sin servidor, sin coste, y sin que el visitante tenga que
+salir ni tener WhatsApp. La primera vez, FormSubmit manda al buzon un enlace de
+activacion que hay que pulsar una sola vez.
 
-Vacio, los dos formularios siguen funcionando y entregan por WhatsApp. El aviso
-de privacidad debajo de cada uno cambia solo para decir en cada caso lo que de
-verdad pasa con el mensaje.
+`token` es opcional pero recomendado: con la cadena que da FormSubmit despues de
+activar, la direccion deja de aparecer en el codigo publico.
+
+Con el correo vacio, los dos formularios siguen funcionando y entregan por
+WhatsApp. El aviso de privacidad debajo de cada uno cambia solo para decir en cada
+caso lo que de verdad pasa con el mensaje.
+
+**FormSubmit contesta HTTP 200 aunque rechace el envio** (por ejemplo mientras el
+formulario no esta activado): el motivo va dentro, en `success`. El sitio mira el
+cuerpo y no el codigo, asi que nunca dice "enviado" a alguien cuyo mensaje no
+salio. Lo cubre `tools/test-forms.js`.
 
 ## SEO
 

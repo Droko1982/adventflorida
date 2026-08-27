@@ -29,34 +29,44 @@
   /* ---------------------------------------------------------
      CONTACTO EN LINEA — el otro unico sitio que hay que tocar.
 
-     Pon aqui el correo al que quieres que lleguen los mensajes
-     del formulario de contacto y las peticiones de oracion, y
-     los dos formularios pasan a enviarse desde la propia pagina,
-     sin abrir WhatsApp y sin que el visitante tenga que salir.
-
-       var CONTACT = { email: "hola@floridaadventmissionaries.org" };
+     Con un correo aqui, el formulario de contacto y el de peticiones
+     de oracion se envian desde la propia pagina, sin abrir WhatsApp
+     y sin que el visitante tenga que salir del sitio.
 
      No hace falta servidor ni cuenta de pago: usamos FormSubmit.
-     La PRIMERA vez que alguien envie el formulario, FormSubmit
-     manda a ese correo un mensaje con un enlace de activacion.
-     Hay que pulsarlo una sola vez; a partir de ahi todo llega solo.
-     Conviene hacer esa primera prueba uno mismo.
 
-     Mientras este vacio no se promete nada que no se cumpla: los
-     formularios siguen funcionando, pero preparan el mensaje y lo
+       email : buzon del ministerio al que llegan los mensajes.
+               La PRIMERA vez que alguien envie algo, FormSubmit manda
+               a ese correo un enlace de activacion. Hay que pulsarlo
+               una sola vez; despues todo llega solo.
+
+       token : la cadena que da FormSubmit despues de activar
+               ("Your form endpoint"). Si esta puesta, se usa en lugar
+               del correo y ASI LA DIRECCION DEJA DE APARECER EN EL
+               CODIGO PUBLICO. Recomendado: este archivo lo puede leer
+               cualquiera, y los robots de spam rastrean GitHub Pages
+               buscando justo esto. Funciona igual con las dos.
+
+     Mientras el correo este vacio no se promete nada que no se cumpla:
+     los formularios siguen funcionando, pero preparan el mensaje y lo
      entregan por WhatsApp, que es el canal que si esta comprobado.
-     El aviso de privacidad debajo de cada formulario cambia solo
-     para decir en cada caso lo que de verdad pasa.
+     El aviso de privacidad debajo de cada formulario cambia solo para
+     decir en cada caso lo que de verdad pasa.
 
-     Ojo: al ser peticiones de oracion, este correo deberia ser uno
-     del ministerio al que tenga acceso quien ora, no el personal
-     de nadie.
+     Ojo: por aqui entran peticiones de oracion con nombres, enfermedades
+     y problemas de familia. Que sea un buzon del ministerio al que tenga
+     acceso quien ora, no el personal de nadie.
      --------------------------------------------------------- */
-  var CONTACT = { email: "" };
+  var CONTACT = {
+    email: "fladventmissionaries@gmail.com",
+    token: ""
+  };
 
   /* Sin Promise no hay envio asincrono: se cae a WhatsApp, que siempre va. */
-  function online() { return !!CONTACT.email && !!window.Promise; }
-  function endpoint() { return "https://formsubmit.co/ajax/" + encodeURIComponent(CONTACT.email); }
+  function online() { return !!(CONTACT.token || CONTACT.email) && !!window.Promise; }
+  function endpoint() {
+    return "https://formsubmit.co/ajax/" + encodeURIComponent(CONTACT.token || CONTACT.email);
+  }
 
   var LS_THEME   = "fam-theme";
   var LS_LANG    = "fam-lang";
@@ -311,6 +321,20 @@
     }
   }
 
+  /* FormSubmit contesta 200 aunque haya rechazado el envio: el motivo
+     va dentro, en "success". Pasa, por ejemplo, mientras el formulario
+     no esta activado. Mirar solo el codigo HTTP diria "enviado" a
+     alguien cuyo mensaje no ha salido, que es la peor mentira posible
+     en una pagina donde la gente cuenta lo que le pasa. */
+  function aceptado(texto) {
+    if (!texto) return true;
+    try {
+      var r = JSON.parse(texto);
+      if (r && r.success !== undefined) return String(r.success) === "true";
+    } catch (e) {}
+    return true;
+  }
+
   /* Envia por FormSubmit. Devuelve una promesa que resuelve a true/false.
      Se usa fetch cuando el navegador lo tiene; si no, XMLHttpRequest,
      para no dejar fuera a nadie con un telefono viejo. */
@@ -325,7 +349,11 @@
           method: "POST",
           headers: { "Content-Type": "application/json", "Accept": "application/json" },
           body: json
-        }).then(function (r) { resolve(r.ok); }, function () { resolve(false); });
+        }).then(function (r) {
+          if (!r.ok) return resolve(false);
+          r.text().then(function (txt) { resolve(aceptado(txt)); },
+                        function () { resolve(true); });
+        }, function () { resolve(false); });
         return;
       }
       try {
@@ -333,7 +361,9 @@
         x.open("POST", endpoint(), true);
         x.setRequestHeader("Content-Type", "application/json");
         x.onreadystatechange = function () {
-          if (x.readyState === 4) resolve(x.status >= 200 && x.status < 300);
+          if (x.readyState === 4) {
+            resolve(x.status >= 200 && x.status < 300 && aceptado(x.responseText));
+          }
         };
         x.send(json);
       } catch (e) { resolve(false); }

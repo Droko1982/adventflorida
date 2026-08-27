@@ -34,10 +34,13 @@ function comprobar(cond, etiqueta, detalle) {
   console.log("  " + (cond ? "ok   " : "FALLA") + " " + (etiqueta + " ".repeat(34)).slice(0, 34) + (detalle || ""));
 }
 
-/* Monta la pagina entera. correo="" deja el modo WhatsApp;
-   con correo, se sustituye la constante antes de evaluar main.js.
+/* Monta la pagina entera con el CONTACT que se le pida, sea cual sea
+   el que este puesto de verdad en main.js: asi la prueba vale igual
+   antes y despues de configurarlo. correo="" fuerza el modo WhatsApp.
    respuesta: lo que debe contestar el servidor simulado. */
-function montar(correo, respuesta) {
+const BLOQUE_CONTACT = /var CONTACT = \{[\s\S]*?\};/;
+
+function montar(correo, respuesta, token) {
   const errores = [];
   const enviados = [];
   const abiertos = [];
@@ -56,17 +59,25 @@ function montar(correo, respuesta) {
   window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
   window.onerror = (m) => errores.push(String(m));
   window.open = (url) => { abiertos.push(String(url)); return null; };
+  /* El servidor simulado imita a FormSubmit de verdad, que contesta
+     200 con {"success":"false"} cuando rechaza el envio. */
+  const CUERPOS = {
+    true:  '{"success":"true"}',
+    sinActivar: '{"success":"false","message":"This form needs Activation. We\'ve sent you an email..."}',
+    vacio: "",
+  };
   window.fetch = (url, opciones) => {
     enviados.push({ url: String(url), opciones });
-    return respuesta === "red"
-      ? Promise.reject(new Error("sin red"))
-      : Promise.resolve({ ok: respuesta !== false, status: respuesta === false ? 400 : 200 });
+    if (respuesta === "red") return Promise.reject(new Error("sin red"));
+    if (respuesta === false) return Promise.resolve({ ok: false, status: 400, text: () => Promise.resolve("") });
+    const txt = CUERPOS[respuesta] !== undefined ? CUERPOS[respuesta] : CUERPOS.true;
+    return Promise.resolve({ ok: true, status: 200, text: () => Promise.resolve(txt) });
   };
 
-  const codigo = correo
-    ? MAIN.replace('var CONTACT = { email: "" };', 'var CONTACT = { email: ' + JSON.stringify(correo) + " };")
-    : MAIN;
-  if (correo && codigo === MAIN) errores.push("no se pudo inyectar el correo en main.js");
+  if (!BLOQUE_CONTACT.test(MAIN)) errores.push("no se encontro el bloque CONTACT en main.js");
+  const codigo = MAIN.replace(BLOQUE_CONTACT,
+    "var CONTACT = { email: " + JSON.stringify(correo) +
+    ", token: " + JSON.stringify(token || "") + " };");
 
   const langs = fs.readdirSync(path.join(ROOT, "js", "lang")).map((f) => "js/lang/" + f);
   for (const f of [...langs, "js/i18n.js", "js/sabbath.js", "js/videos.js", "js/near.js", "js/events.js"]) {
@@ -181,6 +192,25 @@ console.log("\n=== Que ve el visitante despues de enviar ===\n");
     comprobar(p.sel("#cStatus").classList.contains("is-err"), "sin conexion tampoco se queda colgado");
     comprobar(!p.sel("#cSend").disabled, "el boton vuelve a funcionar");
   }
+  {
+    /* FormSubmit contesta 200 con success:false mientras el formulario
+       no esta activado. Decir "enviado" ahi seria mentir. */
+    const p = montar("hola@ejemplo.org", "sinActivar");
+    p.escribir({ "#cReply": "maria@correo.com", "#cMsg": "Quiero el libro" });
+    p.enviar("#contactForm");
+    await p.esperar();
+    comprobar(p.sel("#cStatus").classList.contains("is-err"),
+      "200 con success:false NO es enviado", "el fallo mas facil de tragarse");
+    comprobar(p.sel("#cMsg").value === "Quiero el libro", "y no le borra el mensaje");
+  }
+  {
+    /* Si el cuerpo no dice nada, el 200 vale: no inventamos un fallo */
+    const p = montar("hola@ejemplo.org", "vacio");
+    p.escribir({ "#cReply": "maria@correo.com", "#cMsg": "Quiero el libro" });
+    p.enviar("#contactForm");
+    await p.esperar();
+    comprobar(p.sel("#cStatus").classList.contains("is-ok"), "200 sin cuerpo si cuenta como enviado");
+  }
 
   /* =========================================================
      4. Lo que no se debe poder enviar
@@ -251,6 +281,51 @@ console.log("\n=== Que ve el visitante despues de enviar ===\n");
       const etiq  = p.sel('label[for="cReply"]').textContent.trim();
       const crudo = [envia, priv, etiq].some((s) => /^(contact|form|prayer)\./.test(s) || !s);
       comprobar(!crudo, code, envia + " · " + etiq.slice(0, 32));
+    }
+  }
+
+  /* =========================================================
+     7. El token oculta la direccion del codigo publico
+     ========================================================= */
+  console.log("\n=== Con token de FormSubmit ===\n");
+  {
+    const p = montar("fladventmissionaries@gmail.com", true, "abc123token");
+    p.escribir({ "#cReply": "maria@correo.com", "#cMsg": "Quiero el libro" });
+    p.enviar("#contactForm");
+    comprobar(p.enviados.length === 1 && /\/ajax\/abc123token$/.test(p.enviados[0].url),
+      "el token manda sobre el correo", p.enviados[0].url);
+    comprobar(p.enviados[0].url.indexOf("gmail") === -1,
+      "la direccion no viaja en la URL", "es lo que la esconde de los robots");
+  }
+
+  /* =========================================================
+     8. Lo que hay puesto de verdad en main.js ahora mismo
+     ========================================================= */
+  console.log("\n=== Configuracion real del sitio ===\n");
+  {
+    const bloque = (MAIN.match(BLOQUE_CONTACT) || [""])[0];
+    const correo = (bloque.match(/email:\s*"([^"]*)"/) || [, ""])[1];
+    const token  = (bloque.match(/token:\s*"([^"]*)"/) || [, ""])[1];
+    const destino = token || correo;
+
+    comprobar(!!destino, "hay un destino configurado", destino || "vacio: entrega por WhatsApp");
+    if (correo) {
+      comprobar(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo), "el correo tiene forma valida", correo);
+      comprobar(correo.indexOf("ejemplo") === -1 && correo.indexOf("example") === -1,
+        "no es un correo de muestra");
+    }
+
+    /* Con destino puesto, la pagina cargada tal cual debe estar en linea */
+    const p = montar(correo, true, token);
+    comprobar(p.errores.length === 0, "carga sin errores", p.errores.join(" · "));
+    if (destino) {
+      comprobar(!p.sel("#pAlt").hidden, "el enlace alterno de WhatsApp se ve");
+      comprobar(!/WhatsApp/i.test(p.sel("#cPrivacy").textContent),
+        "el aviso ya dice que llega directo", p.sel("#cPrivacy").textContent.slice(0, 40) + "...");
+      p.escribir({ "#cReply": "maria@correo.com", "#cMsg": "Prueba" });
+      p.enviar("#contactForm");
+      comprobar(p.enviados.length === 1 && p.abiertos.length === 0,
+        "el visitante no sale de la pagina", p.enviados[0].url);
     }
   }
 

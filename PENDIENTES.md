@@ -3,34 +3,43 @@
 Lo que sigue **no bloquea** el sitio: ya esta publicado y funcional. Son mejoras y
 verificaciones que dependen de informacion que solo tiene el equipo de la organizacion.
 
-## 0. Un correo, y el contacto pasa a ser en linea (lo mas rentable de esta lista)
+## 0. Contacto en linea — falta UN clic
 
-La pagina ya tiene **dos formularios de verdad**: el de oracion y el nuevo de la
-seccion de contacto. Hoy los dos preparan el mensaje y lo entregan por WhatsApp,
-que es el unico canal comprobado. Con un correo pasan a enviarse **desde la propia
-pagina**, sin que el visitante tenga que salir ni tener WhatsApp instalado.
+El correo ya esta puesto: **fladventmissionaries@gmail.com**. El formulario de
+contacto y el de peticiones de oracion envian desde la propia pagina via
+FormSubmit: sin servidor, sin coste, y sin que el visitante tenga que salir del
+sitio ni tener WhatsApp.
 
-En `js/main.js`, justo debajo de `GIVE`:
+- [ ] **Abrir el correo de FormSubmit en fladventmissionaries@gmail.com y pulsar
+      "Activate Form".** Ese mensaje ya se envio el 27 de agosto de 2026 desde la
+      instalacion. Es un clic y se hace una sola vez.
+
+Mientras no se pulse, FormSubmit rechaza los envios. La pagina **no miente por
+eso**: detecta el rechazo, avisa de que no salio, no borra lo que la persona
+escribio y le ofrece WhatsApp. Aun asi, cada dia sin activar es correo perdido.
+
+Despues de activar, comprobadlo vosotros: entrad a la pagina, mandaos un mensaje
+desde el formulario de contacto y mirad que llega al buzon.
+
+### Recomendado en cuanto este activado: esconder la direccion
+
+`js/main.js` es publico, y los robots de spam rastrean GitHub Pages buscando
+justo direcciones de correo dentro del codigo. FormSubmit da, despues de activar,
+una cadena aleatoria que hace el mismo trabajo sin ensenar el buzon:
 
 ```js
-var CONTACT = { email: "" };   // ponedlo aqui y ya esta
+var CONTACT = {
+  email: "fladventmissionaries@gmail.com",
+  token: ""      // <- pegad aqui la cadena de FormSubmit
+};
 ```
 
-Como activarlo, una sola vez:
+- [ ] Copiar de FormSubmit el "form endpoint" (la cadena aleatoria) y pegarla en
+      `token`. Si esta puesta se usa ella y la direccion deja de aparecer en el
+      codigo. Funciona igual con las dos.
 
-1. Poner el correo del ministerio entre las comillas y publicar.
-2. Enviar vosotros mismos un mensaje de prueba desde la pagina.
-3. FormSubmit mandara a ese correo un mensaje con un **enlace de activacion**.
-   Pulsarlo. A partir de ahi todo llega solo, sin servidor y sin coste.
-
-- [ ] **Elegir el correo.** Que sea uno del ministerio al que tenga acceso quien
-      ora, no el personal de nadie: por ahi van a entrar peticiones de oracion
-      con nombres, enfermedades y problemas de familia.
-- [ ] Hacer la prueba de activacion y comprobar que llega.
-
-Mientras el campo siga vacio no se rompe nada ni se promete nada falso: los
-formularios funcionan, y el aviso de privacidad debajo de cada uno **cambia solo**
-para decir en cada caso lo que de verdad pasa con el mensaje.
+Ojo con el buzon: por ahi entran peticiones de oracion con nombres, enfermedades
+y problemas de familia. Que solo lo lea quien tenga que leerlo.
 
 ## 1. Confirmar con Florida Advent Missionaries (importante)
 
