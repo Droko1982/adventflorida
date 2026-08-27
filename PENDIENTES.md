@@ -114,3 +114,66 @@ buenas en nueve idiomas:
       Cristo* en kreyol, ni television, ni radio, ni biblioteca de Elena White.
       El sitio ya lo dice con honestidad y ofrece el frances, pero conviene tener
       a alguien que pueda leer con esa persona en kreyol, que es lo que promete.
+
+## 9. Fechas adventistas fijas para planificar el ano
+
+Estas salieron de la investigacion y estan verificadas contra fuentes
+oficiales. **No estan puestas como eventos del grupo**, porque son de la
+Asociacion, no vuestras: ponerlas como propias seria atribuirse algo ajeno.
+Sirven para saber alrededor de que fechas conviene organizar lo vuestro.
+
+| Cuando | Que |
+|---|---|
+| Enero, 10 dias | **Ten Days of Prayer** — reuniones de oracion cada noche, terminan en sabado (7-17 ene 2026) |
+| Enero | Sabado de enfasis en Salud (10 ene 2026) |
+| Febrero | **VBS Showcase** de la Florida Conference: Orlando 21 feb, Miami 28 feb 2026 |
+| Marzo, 3er sabado | **Global Youth Day** — el gran dia de servicio joven (21 mar 2026) |
+| Marzo | Entrenamiento de Respuesta a Desastres, Florida Conference (13-15 mar 2026) |
+| Abril | **World Impact Day** y Semana del Evangelismo de Literatura |
+| Abril | **Camp Meeting** de la Florida Conference |
+| Mayo | **Campestre** · Global Adventurer's Day |
+| Verano | **Escuela Biblica de Vacaciones (VBS)** con el kit oficial, en ingles y espanol |
+| Septiembre, 3er sabado | **Dia del Conquistador** (19 sep 2026) |
+| Septiembre | Retiro de salud "Fit Together" |
+| Noviembre, 8 dias | **Semana de Oracion** (7-14 nov 2026) |
+| Diciembre | Sabado de enfasis en Salud (12 dic 2026) |
+
+Programas oficiales con nombre propio que se pueden usar tal cual:
+**Breathe-Free 2** (dejar de fumar, ocho dias, gratis, con material en espanol),
+**Journey to Wholeness** (grupo semanal de doce pasos centrado en Cristo),
+**Seasons** (acompanamiento en el duelo), **GLOW** (folletos de bolsillo,
+"Giving Light to Our World", en mas de 25 idiomas), **FC-LIFE** (formacion
+gratuita en evangelismo laico, tres domingos al ano).
+
+- [ ] **Confirmar a que asociacion pertenece el grupo.** Florida esta cubierta
+      por al menos **tres**: la Florida Conference, la Southeastern Conference
+      y, en el Panhandle occidental, la Gulf States Conference. No es "una y la
+      otra": se solapan. De eso depende a que calendario y a que formaciones
+      teneis acceso.
+
+## 10. SEO: lo que quedo resuelto y lo que depende de vosotros
+
+Resuelto y comprobado por `node tools/test-seo.js` (40 puntos) y
+`node tools/test-loader.js`:
+
+- [x] El canonical y el `og:url` siguen al idioma. Antes las nueve variantes
+      declaraban la raiz, y con eso Google habria indexado solo la inglesa.
+- [x] Titulo de 48 caracteres y descripcion de 135: lo que Google muestra sin
+      cortar.
+- [x] `hreflang` de los nueve idiomas mas `x-default`, en el head y en el sitemap.
+- [x] Cuatro bloques de datos estructurados validos: Organization, Book,
+      FAQPage y WebSite, mas Event cuando haya eventos.
+- [x] Jerarquia de encabezados sin saltos, un solo `h1`.
+- [x] 238 KB por visita en el peor caso, con un solo idioma descargado.
+
+Pendiente, y no lo puedo hacer yo:
+
+- [ ] **Google Search Console y Bing Webmaster Tools**: dar de alta el sitio y
+      enviar `sitemap.xml`. Sin esto, la indexacion tarda semanas en lugar de dias.
+- [ ] **Enlazar el sitio desde el canal de YouTube y desde Facebook.** Es la
+      senal de autoridad mas rapida y mas barata que existe para un sitio nuevo.
+- [ ] **Los eventos no daran resultado enriquecido en Google** mientras vivan en
+      una pagina de listado: Google exige una pagina por evento. El dato
+      estructurado sigue siendo correcto y util, pero no esperes la tarjeta con
+      fecha en los resultados.
+- [ ] **Fotografias.** Sigue siendo el hueco mas grande de la pagina.
