@@ -30,7 +30,8 @@ const keys = new Set();
 for (const m of html.matchAll(/data-i18n(?:-html|-placeholder|-aria)?="([^"]+)"/g)) keys.add(m[1]);
 
 /* Claves que no aparecen en el HTML porque las pone el JS al renderizar */
-const SOLO_JS = ["book.legalHt", "sab.now", "sab.next"];
+const SOLO_JS = ["book.legalHt", "sab.now", "sab.next",
+  "mis.title", "mis.lead", "mis.title0", "mis.lead0", "mis.lead.stale", "mis.titlePast"];
 const PREFIJOS_JS = ["ev.type.", "st.play", "st.langNote", "mis.empty", "mis.less", "mis.join", "mis.moreInfo", "mis.langNote", "wa.",
   "near.sunsetLine", "near.church", "near.time", "near.mapLink", "near.person", "near.none"];
 const OPCIONALES = ["meta.description", "book.legalAlt", "prayer.f.needMsg"];

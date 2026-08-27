@@ -397,7 +397,28 @@
     "st.langNote": "Este vídeo está em {lang}.",
     "st.channel": "Ver todas as histórias no nosso canal",
     "st.privacy": "Os vídeos estão alojados no YouTube. Nada é carregado e nada é rastreado até carregar em reproduzir.",
-    "nav.stories": "Histórias"
+    "nav.stories": "Histórias",
+    "nav.join": "Junte-se",
+    "join.eyebrow": "Vá você mesmo",
+    "join.title": "Ninguém nesses vídeos tinha isto planeado",
+    "join.lead": "Cada um deles estava a fazer outra coisa. O que mudou não foi a preparação nem o tempo livre: alguém perguntou e disseram que sim. Se ao vê-los se moveu alguma coisa dentro de si, isso merece atenção em vez de uma explicação.",
+    "join.1.t": "Não precisa de ser qualificado",
+    "join.1.d": "Um criador de conteúdos, uma mulher a tomar conta de dois cães, alguém que não conseguia sair da cama. Nenhum tinha formação. O que tiveram foi um momento em que deixaram de explicar porque não.",
+    "join.2.t": "Não tem de sair da Flórida para começar",
+    "join.2.d": "Parte do que fazemos vai para fora e parte acontece numa rua a quatro quarteirões daqui. As duas contam. Se um passaporte está fora de alcance agora, isso não fecha nada.",
+    "join.3.t": "Perguntar não é comprometer-se",
+    "join.3.d": "Escreva e pergunte o que implicaria de facto. Terá uma resposta franca sobre tempo, custo e o que se espera, e depois decide. Ninguém vai andar a ligar-lhe.",
+    "join.quote": "«Se nunca foi missionário, perdeu a melhor parte de ser cristão.»",
+    "join.quoteWho": "Derick Morgan · Vice-presidente",
+    "join.cta.t": "Quer saber o que é preciso?",
+    "join.cta.d": "Conte-nos um pouco de si e do que poderia dar: uma semana, um fim de semana, uma tarde. Dizemos-lhe com honestidade o que vem aí e se há lugar para si.",
+    "join.cta.btn": "Quero saber como começar",
+    "join.cta.note": "Não publicamos aqui datas nem custos das viagens, porque mudam e preferimos dizer-lhe os verdadeiros a deixar um número antigo na página.",
+    "wa.join": "Olá! Vi as histórias no vosso site e gostaria de saber o que é preciso para ir convosco. Sobre mim:",
+    "mis.title0": "É aqui que vamos registar o que fazemos",
+    "mis.lead0": "Até agora não mantivemos um registo. Daqui em diante, cada visita, cada mesa de saúde e cada semana de reuniões fica escrita nesta página: a data, a rua, e uma fotografia quando quem nela aparece tiver dado autorização.",
+    "mis.lead.stale": "Há cerca de {months} meses que não pomos nada de novo neste calendário. É a verdade e preferimos mostrá-la a encher a página. O que não parou foi o sábado: chega todas as semanas, e alguém pode dizer-lhe para onde ir neste sábado.",
+    "mis.titlePast": "Onde estivemos"
   };
 
 })();

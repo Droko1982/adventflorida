@@ -397,7 +397,28 @@
     "st.langNote": "Este video está en {lang}.",
     "st.channel": "Ver todas las historias en nuestro canal",
     "st.privacy": "Los videos están alojados en YouTube. No se carga nada y no se rastrea nada hasta que pulses reproducir.",
-    "nav.stories": "Historias"
+    "nav.stories": "Historias",
+    "nav.join": "Únete",
+    "join.eyebrow": "Ve tú mismo",
+    "join.title": "Nadie de esos videos lo tenía planeado tampoco",
+    "join.lead": "Todos estaban haciendo otra cosa. Lo que cambió no fue su preparación ni su tiempo libre: alguien les preguntó y dijeron que sí. Si al verlos se te movió algo por dentro, eso merece que le prestes atención en vez de explicártelo.",
+    "join.1.t": "No hace falta que estés preparado",
+    "join.1.d": "Un creador de contenido, una mujer cuidando dos perros, alguien que no lograba levantarse de la cama. Ninguno tenía formación. Lo que tuvieron fue un momento en que dejaron de explicar por qué no.",
+    "join.2.t": "No tienes que salir de la Florida para empezar",
+    "join.2.d": "Parte de lo que hacemos sale fuera y parte ocurre en una calle a cuatro cuadras de aquí. Las dos cuentan. Si ahora mismo un pasaporte queda lejos, eso no cierra nada.",
+    "join.3.t": "Preguntar no es comprometerse",
+    "join.3.d": "Escribe y pregunta qué implicaría de verdad. Te vamos a dar una respuesta clara sobre tiempo, costo y qué se espera, y después decides tú. Nadie te va a estar llamando.",
+    "join.quote": "«Si nunca has sido misionero, te has perdido la mejor parte de ser cristiano.»",
+    "join.quoteWho": "Derick Morgan · Vicepresidente",
+    "join.cta.t": "¿Quieres saber qué hace falta?",
+    "join.cta.d": "Cuéntanos un poco de ti y qué podrías dar: una semana, un fin de semana, una tarde. Te decimos con honestidad qué viene y si hay un lugar para ti en ello.",
+    "join.cta.btn": "Quiero saber cómo empezar",
+    "join.cta.note": "No publicamos aquí fechas ni costos de los viajes, porque cambian y preferimos decirte los de verdad antes que dejar un número viejo en la página.",
+    "wa.join": "¡Hola! Vi las historias en su página y me gustaría saber qué hace falta para ir con ustedes. Sobre mí:",
+    "mis.title0": "Aquí es donde vamos a dejar por escrito lo que hacemos",
+    "mis.lead0": "Hasta ahora no habíamos llevado un registro. De aquí en adelante, cada visita, cada mesa de salud y cada semana de reuniones queda escrita en esta página: la fecha, la calle y una foto cuando quienes salen en ella hayan dado su permiso.",
+    "mis.lead.stale": "Llevamos unos {months} meses sin poner nada nuevo en este calendario. Es la verdad y preferimos enseñarla antes que rellenar la página. Lo que no se ha detenido es el sábado: llega cada semana, y alguien puede decirte a dónde ir este sábado.",
+    "mis.titlePast": "Dónde hemos estado"
   };
 
 })();

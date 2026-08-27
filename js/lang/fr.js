@@ -397,7 +397,28 @@
     "st.langNote": "Cette vidéo est en {lang}.",
     "st.channel": "Voir toutes les histoires sur notre chaîne",
     "st.privacy": "Les vidéos sont hébergées sur YouTube. Rien ne se charge et rien n'est suivi tant que vous n'appuyez pas sur lecture.",
-    "nav.stories": "Histoires"
+    "nav.stories": "Histoires",
+    "nav.join": "Nous rejoindre",
+    "join.eyebrow": "Partez vous-même",
+    "join.title": "Personne dans ces vidéos ne l'avait prévu non plus",
+    "join.lead": "Chacun d'eux faisait autre chose. Ce qui a changé, ce n'est ni leur formation ni leur temps libre : quelqu'un a demandé, et ils ont dit oui. Si en les regardant quelque chose a bougé en vous, cela mérite votre attention plutôt qu'une explication.",
+    "join.1.t": "Vous n'avez pas besoin d'être qualifié",
+    "join.1.d": "Un créateur de contenu, une femme qui gardait deux chiens, quelqu'un qui n'arrivait plus à sortir du lit. Aucun n'avait de formation. Ce qu'ils ont eu, c'est un moment où ils ont cessé d'expliquer pourquoi non.",
+    "join.2.t": "Vous n'avez pas besoin de quitter la Floride pour commencer",
+    "join.2.d": "Une partie de notre travail part à l'étranger et une partie se passe dans une rue à quatre pâtés de maisons d'ici. Les deux comptent. Si un passeport est hors de portée en ce moment, cela ne ferme rien.",
+    "join.3.t": "Demander n'est pas s'engager",
+    "join.3.d": "Écrivez et demandez ce que cela impliquerait vraiment. Vous aurez une réponse franche sur le temps, le coût et ce qui est attendu, et ensuite vous déciderez. Personne ne va vous rappeler sans cesse.",
+    "join.quote": "« Si vous n'avez jamais été missionnaire, vous avez manqué la plus belle part de la vie chrétienne. »",
+    "join.quoteWho": "Derick Morgan · Vice-président",
+    "join.cta.t": "Vous voulez savoir ce que cela demande ?",
+    "join.cta.d": "Parlez-nous un peu de vous et de ce que vous pourriez donner : une semaine, un week-end, une soirée. Nous vous dirons honnêtement ce qui se prépare et s'il y a une place pour vous.",
+    "join.cta.btn": "Je voudrais savoir comment commencer",
+    "join.cta.note": "Nous ne publions pas ici les dates ni les coûts des voyages, parce qu'ils changent et que nous préférons vous donner les vrais plutôt que de laisser un vieux chiffre sur la page.",
+    "wa.join": "Bonjour ! J'ai vu les témoignages sur votre site et j'aimerais savoir ce qu'il faut pour partir avec vous. À mon sujet :",
+    "mis.title0": "C'est ici que nous consignerons ce que nous faisons",
+    "mis.lead0": "Jusqu'ici nous n'avons pas tenu de relevé. À partir de maintenant, chaque visite, chaque table de santé et chaque semaine de réunions sera notée sur cette page : la date, la rue, et une photo quand les personnes qui y figurent auront donné leur accord.",
+    "mis.lead.stale": "Cela fait environ {months} mois que nous n'avons rien ajouté à ce calendrier. C'est la vérité et nous préférons la montrer plutôt que de remplir la page. Ce qui ne s'est pas arrêté, c'est le sabbat : il revient chaque semaine, et quelqu'un peut vous dire où aller samedi.",
+    "mis.titlePast": "Où nous sommes allés"
   };
 
 })();

@@ -397,7 +397,28 @@
     "st.langNote": "Dieses Video ist auf {lang}.",
     "st.channel": "Alle Geschichten auf unserem Kanal",
     "st.privacy": "Die Videos liegen bei YouTube. Es wird nichts geladen und nichts verfolgt, bis Sie auf Abspielen drücken.",
-    "nav.stories": "Geschichten"
+    "nav.stories": "Geschichten",
+    "nav.join": "Mitkommen",
+    "join.eyebrow": "Gehen Sie selbst",
+    "join.title": "Niemand in diesen Videos hatte das geplant",
+    "join.lead": "Jeder von ihnen tat gerade etwas anderes. Was sich änderte, war weder ihre Ausbildung noch ihre freie Zeit: Jemand fragte, und sie sagten ja. Wenn beim Zusehen etwas in Ihnen in Bewegung geraten ist, verdient das Aufmerksamkeit statt einer Erklärung.",
+    "join.1.t": "Sie müssen nicht qualifiziert sein",
+    "join.1.d": "Ein Content-Creator, eine Frau, die zwei Hunde hütete, jemand, der nicht aus dem Bett kam. Keiner hatte eine Ausbildung. Was sie hatten, war ein Moment, in dem sie aufhörten zu erklären, warum nicht.",
+    "join.2.t": "Sie müssen Florida nicht verlassen, um anzufangen",
+    "join.2.d": "Ein Teil unserer Arbeit geht ins Ausland, ein Teil findet in einer Straße vier Blocks von hier statt. Beides zählt. Wenn ein Reisepass gerade außer Reichweite ist, schließt das nichts aus.",
+    "join.3.t": "Fragen heißt nicht zusagen",
+    "join.3.d": "Schreiben Sie und fragen Sie, was es wirklich bedeuten würde. Sie bekommen eine klare Antwort über Zeit, Kosten und Erwartungen, und dann entscheiden Sie. Niemand wird Sie immer wieder anrufen.",
+    "join.quote": "„Wer nie Missionar war, hat den besten Teil des Christseins verpasst.“",
+    "join.quoteWho": "Derick Morgan · Vizepräsident",
+    "join.cta.t": "Möchten Sie wissen, was dazugehört?",
+    "join.cta.d": "Erzählen Sie uns kurz von sich und davon, was Sie geben könnten: eine Woche, ein Wochenende, einen Abend. Wir sagen Ihnen ehrlich, was ansteht und ob darin ein Platz für Sie ist.",
+    "join.cta.btn": "Ich möchte wissen, wie man anfängt",
+    "join.cta.note": "Wir veröffentlichen hier keine Reisetermine und keine Kosten, weil sie sich ändern und wir Ihnen lieber die echten nennen, als eine alte Zahl auf der Seite stehen zu lassen.",
+    "wa.join": "Hallo! Ich habe die Geschichten auf Ihrer Website gesehen und möchte wissen, was dazugehört, um mitzukommen. Über mich:",
+    "mis.title0": "Hier werden wir aufschreiben, was wir tun",
+    "mis.lead0": "Bisher haben wir nichts aufgezeichnet. Von jetzt an wird jeder Besuch, jeder Gesundheitstisch und jede Woche mit Versammlungen auf dieser Seite festgehalten: das Datum, die Straße, und ein Foto, wenn die Abgebildeten zugestimmt haben.",
+    "mis.lead.stale": "Seit etwa {months} Monaten haben wir nichts Neues in diesen Kalender gestellt. Das ist die Wahrheit, und wir zeigen sie lieber, als die Seite zu füllen. Was nicht aufgehört hat, ist der Sabbat: Er kommt jede Woche, und jemand kann Ihnen sagen, wohin Sie am Samstag gehen können.",
+    "mis.titlePast": "Wo wir waren"
   };
 
 })();

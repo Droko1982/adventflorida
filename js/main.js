@@ -675,9 +675,31 @@
       if (b) b.textContent = pastExpanded ? t("mis.less") : t("mis.more");
     }
 
+    /* El cero se muestra. Una pestana sin numero no dice si esta
+       vacia o si simplemente no la has abierto. */
     var cUp = $("#tabUpCount"), cPast = $("#tabPastCount");
-    if (cUp)   cUp.textContent   = s.up.length   ? s.up.length   : "";
-    if (cPast) cPast.textContent = s.past.length ? s.past.length : "";
+    if (cUp)   cUp.textContent   = String(s.up.length);
+    if (cPast) cPast.textContent = String(s.past.length);
+
+    /* El encabezado tiene que decir la verdad en los tres estados.
+       El titulo prometia "y a donde vamos" ocho lineas encima de
+       "todavia no hay nada en el calendario". Y el estado mas
+       probable a la larga no es el vacio sino el desactualizado:
+       un calendario que llevan voluntarios se queda quieto. */
+    var head = $("#misiones .section-title"), lead = $("#misiones .section-lead");
+    var vacio = !s.up.length && !s.past.length;
+    var ultimo = s.past.length ? s.past[0].start : null;
+    var dias = ultimo ? Math.round((Date.now() - new Date(ultimo + "T12:00:00").getTime()) / 86400000) : 0;
+
+    /* El titulo no puede prometer "y a donde vamos" encima de un
+       registro parado hace medio ano. */
+    if (head) head.textContent = t(vacio ? "mis.title0" : (s.up.length ? "mis.title" : "mis.titlePast"));
+    if (lead) {
+      if (vacio) lead.textContent = t("mis.lead0");
+      else if (!s.up.length && dias > 90)
+        lead.textContent = t("mis.lead.stale").replace("{months}", String(Math.round(dias / 30)));
+      else lead.textContent = t("mis.lead");
+    }
 
     eventSchema(s.up);
   }

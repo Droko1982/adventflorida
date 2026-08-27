@@ -523,6 +523,8 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .value-card h3 { font-size: 1.32rem; margin-bottom: 8px; }
 .value-card p { font-size: .93rem; color: var(--text-soft); }
 
+.join { background: var(--bg); }
+
 /* ---------- Testimonios en video ---------- */
 .stories { background: var(--bg-alt); }
 
@@ -979,6 +981,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     margin-left: 7px;
     font-size: .78rem;
     opacity: .72;
+    font-variant-numeric: tabular-nums;
 }
 
 .mis-grid {

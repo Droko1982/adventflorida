@@ -397,7 +397,28 @@
     "st.langNote": "This video is in {lang}.",
     "st.channel": "See every story on our channel",
     "st.privacy": "Videos are hosted on YouTube. Nothing loads and nothing is tracked until you press play.",
-    "nav.stories": "Stories"
+    "nav.stories": "Stories",
+    "nav.join": "Join us",
+    "join.eyebrow": "Go yourself",
+    "join.title": "Nobody in those videos planned this either",
+    "join.lead": "Every one of them was doing something else. What changed was not their training or their free time — someone asked, and they said yes. If watching them stirred something in you, that is worth paying attention to rather than explaining away.",
+    "join.1.t": "You do not need to be qualified",
+    "join.1.d": "A content creator, a woman minding two dogs, someone who could not get out of bed. None of them had training. What they had was a moment when they stopped explaining why not.",
+    "join.2.t": "You do not have to leave Florida to start",
+    "join.2.d": "Some of our work goes abroad and some of it happens on a street four blocks from here. Both count. If a passport is out of reach right now, that closes nothing.",
+    "join.3.t": "Asking is not committing",
+    "join.3.d": "Write and ask what it would actually involve. You will get a straight answer about time, cost and what is expected, and then you decide. Nobody is going to keep calling you.",
+    "join.quote": "“If you have never been a missionary, you have missed the best part of being a Christian.”",
+    "join.quoteWho": "Derick Morgan · Vice President",
+    "join.cta.t": "Would you like to know what it takes?",
+    "join.cta.d": "Tell us a little about yourself and what you could give — a week, a weekend, an evening. We will tell you honestly what is coming up and whether there is a place for you in it.",
+    "join.cta.btn": "I would like to know how to start",
+    "join.cta.note": "We do not publish trip dates or costs on this page, because they change and we would rather tell you the real ones than leave an old number here.",
+    "wa.join": "Hello! I saw the stories on your website and I would like to know what it takes to go with you. About me:",
+    "mis.title0": "This is where we will write down what we do",
+    "mis.lead0": "We have not kept a record until now. From here on, every visit, every health table and every week of meetings gets written down on this page — the date, the street, and a photograph where the people in it have said yes.",
+    "mis.lead.stale": "We have not put anything new on this calendar in about {months} months. That is the truth and we would rather show it than pad the page. What has not stopped is the Sabbath — it comes every week, and someone can tell you where to go this Saturday.",
+    "mis.titlePast": "Where we have been"
   };
 
 })();

@@ -397,7 +397,28 @@
     "st.langNote": "Deze video is in het {lang}.",
     "st.channel": "Alle verhalen op ons kanaal",
     "st.privacy": "De video's staan op YouTube. Er wordt niets geladen en niets gevolgd tot u op afspelen drukt.",
-    "nav.stories": "Verhalen"
+    "nav.stories": "Verhalen",
+    "nav.join": "Doe mee",
+    "join.eyebrow": "Ga zelf",
+    "join.title": "Niemand in die video's had dit gepland",
+    "join.lead": "Ze waren allemaal met iets anders bezig. Wat veranderde was niet hun opleiding of hun vrije tijd: iemand vroeg het, en ze zeiden ja. Als er bij het kijken iets in u bewoog, verdient dat aandacht in plaats van een verklaring.",
+    "join.1.t": "U hoeft niet gekwalificeerd te zijn",
+    "join.1.d": "Een contentmaker, een vrouw die op twee honden paste, iemand die het bed niet uit kwam. Geen van hen had een opleiding. Wat ze hadden was een moment waarop ze stopten uit te leggen waarom niet.",
+    "join.2.t": "U hoeft Florida niet te verlaten om te beginnen",
+    "join.2.d": "Een deel van ons werk gaat naar het buitenland en een deel gebeurt in een straat vier blokken verderop. Beide tellen. Als een paspoort nu buiten bereik is, sluit dat niets uit.",
+    "join.3.t": "Vragen is niet toezeggen",
+    "join.3.d": "Schrijf en vraag wat het werkelijk zou inhouden. U krijgt een eerlijk antwoord over tijd, kosten en wat er verwacht wordt, en dan beslist u. Niemand blijft u bellen.",
+    "join.quote": "“Wie nooit zendeling is geweest, heeft het mooiste deel van het christen-zijn gemist.”",
+    "join.quoteWho": "Derick Morgan · Vicevoorzitter",
+    "join.cta.t": "Wilt u weten wat ervoor nodig is?",
+    "join.cta.d": "Vertel ons iets over uzelf en over wat u zou kunnen geven: een week, een weekend, een avond. We vertellen u eerlijk wat eraan komt en of daar een plek voor u in is.",
+    "join.cta.btn": "Ik wil weten hoe ik kan beginnen",
+    "join.cta.note": "We publiceren hier geen reisdata of kosten, omdat die veranderen en we u liever de echte noemen dan een oud getal op de pagina te laten staan.",
+    "wa.join": "Hallo! Ik zag de verhalen op uw website en ik wil graag weten wat er nodig is om mee te gaan. Over mij:",
+    "mis.title0": "Hier gaan we opschrijven wat we doen",
+    "mis.lead0": "Tot nu toe hebben we niets bijgehouden. Vanaf nu komt elk bezoek, elke gezondheidstafel en elke week met samenkomsten op deze pagina te staan: de datum, de straat, en een foto wanneer de mensen erop toestemming hebben gegeven.",
+    "mis.lead.stale": "We hebben al zo'n {months} maanden niets nieuws in deze agenda gezet. Dat is de waarheid en die laten we liever zien dan de pagina op te vullen. Wat niet is gestopt, is de sabbat: die komt elke week, en iemand kan u zeggen waar u zaterdag heen kunt.",
+    "mis.titlePast": "Waar we zijn geweest"
   };
 
 })();

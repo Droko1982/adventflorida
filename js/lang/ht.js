@@ -397,7 +397,28 @@
     "st.langNote": "Videyo sa a an {lang}.",
     "st.channel": "Wè tout istwa yo sou chèn nou an",
     "st.privacy": "Videyo yo sou YouTube. Anyen pa chaje epi anyen pa swiv ou jiskaske ou peze jwe.",
-    "nav.stories": "Istwa"
+    "nav.stories": "Istwa",
+    "nav.join": "Vin avèk nou",
+    "join.eyebrow": "Ale ou menm",
+    "join.title": "Pèsonn nan videyo sa yo pa t planifye sa non plis",
+    "join.lead": "Yo tout t ap fè yon lòt bagay. Sa ki chanje a se pa t fòmasyon yo ni tan lib yo: yon moun mande yo, epi yo di wi. Si lè ou gade yo gen yon bagay ki brannen anndan ou, sa merite ou prete l atansyon olye ou eksplike l.",
+    "join.1.t": "Ou pa bezwen kalifye",
+    "join.1.d": "Yon kreyatè kontni, yon fanm k ap veye de chen, yon moun ki pa t ka leve nan kabann. Okenn pa t gen fòmasyon. Sa yo te genyen se yon moman kote yo sispann eksplike poukisa non.",
+    "join.2.t": "Ou pa bezwen kite Florid pou kòmanse",
+    "join.2.d": "Yon pati nan travay nou ale deyò e yon lòt pati fèt nan yon lari kat kwen isit la. Toude konte. Si yon paspò lwen pou ou kounye a, sa pa fèmen anyen.",
+    "join.3.t": "Mande se pa angaje ou",
+    "join.3.d": "Ekri epi mande kisa sa ta mande vre. W ap jwenn yon repons klè sou tan, sou pri ak sou sa yo atann, epi apre se ou ki deside. Pèsonn p ap kontinye rele ou.",
+    "join.quote": "«Si ou pa janm te misyonè, ou rate pi bèl pati nan lavi kretyen an.»",
+    "join.quoteWho": "Derick Morgan · Vis Prezidan",
+    "join.cta.t": "Èske ou vle konnen kisa sa mande?",
+    "join.cta.d": "Di nou yon ti kras sou ou ak sou sa ou ta ka bay: yon semèn, yon wikenn, yon aswè. N ap di ou ak onètete kisa k ap vini epi si gen yon plas pou ou ladan l.",
+    "join.cta.btn": "Mwen vle konnen kijan pou m kòmanse",
+    "join.cta.note": "Nou pa pibliye dat ni pri vwayaj yo sou paj sa a, paske yo chanje epi nou pito di ou vre yo olye nou kite yon chif ki fin vye sou paj la.",
+    "wa.join": "Bonjou! Mwen wè istwa yo sou sit nou an epi mwen ta renmen konnen kisa sa mande pou m ale avèk nou. Sou mwen menm:",
+    "mis.title0": "Se isit la n ap ekri sa nou fè",
+    "mis.lead0": "Jiskaprezan nou pa t kenbe yon rejis. Apati kounye a, chak vizit, chak tab sante ak chak semèn reyinyon ap ekri sou paj sa a: dat la, lari a, ak yon foto lè moun ki ladan l yo bay pèmisyon yo.",
+    "mis.lead.stale": "Gen anviwon {months} mwa nou pa mete anyen nouvo nan kalandriye sa a. Se verite a epi nou pito montre l olye nou plen paj la. Sa ki pa kanpe se saba a: li vini chak semèn, epi yon moun ka di ou kote pou ou ale samdi sa a.",
+    "mis.titlePast": "Kote nou te ye"
   };
 
 })();
