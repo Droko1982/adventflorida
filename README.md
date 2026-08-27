@@ -125,6 +125,7 @@ node tools/test-sunset.js                    comprueba el calculo del ocaso
 node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
 node tools/test-page.js                      carga la pagina en un DOM y la prueba entera
 node tools/test-forms.js                     los dos formularios, en sus dos modos
+node tools/test-gospel.js                    la seccion del evangelio, doctrina incluida
 node tools/test-contrast.js                  comprueba el contraste WCAG de la paleta
 node tools/test-responsive.js                telefono, tableta y escritorio
 node tools/test-rhythm.js                    alternancia de fondos y ritmo de secciones
@@ -133,7 +134,7 @@ node tools/test-loader.js                    comprueba que solo se descarga un i
 node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
 ```
 
-`test-page.js` y `test-forms.js` necesitan jsdom, que no es dependencia del sitio:
+`test-page.js`, `test-forms.js` y `test-gospel.js` necesitan jsdom, que no es dependencia del sitio:
 `npm install --no-save jsdom`.
 
 Para anadir o cambiar textos, **no edites los `js/lang/*.js` a mano**: escribe
