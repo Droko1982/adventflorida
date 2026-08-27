@@ -53,10 +53,6 @@
     "value.3.d": "Florida hat über 200 adventistische Gemeinden. Nennen Sie uns Ihre Stadt, und wir helfen Ihnen, eine zu finden, die Ihre Sprache spricht.",
     "value.4.t": "Praktische Hilfe",
     "value.4.d": "Lebensmittel, Kleidung, Gesundheitsvorträge und eine helfende Hand, wenn das Leben schwer wird. Das Evangelium ist auch für den Körper eine gute Nachricht.",
-    "video.eyebrow": "In unseren eigenen Worten",
-    "video.title": "Worum es bei Florida Advent Missionaries geht",
-    "video.caption": "Video wird von YouTube gehostet. Es wird nichts geladen, bevor Sie auf Abspielen drücken.",
-    "video.play": "Video abspielen",
     "christ.eyebrow": "Das Herz von allem",
     "christ.title": "Jesus Christus — Wegweiser, Retter und Freund",
     "christ.lead": "Vor jeder Lehre, jeder Kirche und jeder Tradition steht eine Person. Alles, was wir glauben, wächst aus dem, was Er für uns getan hat. Wenn Sie nur eines von dieser Seite mitnehmen, dann Ihn.",
@@ -393,7 +389,15 @@
     "near.person": "In {city} fragen Sie nach {name}, die Sprachen spricht: {langs}.",
     "near.none": "In {city} haben wir noch niemanden, und das sagen wir Ihnen lieber, als Sie irgendwohin zu schicken, das wir nicht kennen. Schreiben Sie uns trotzdem: Wir suchen die nächste Gemeinde in Ihrer Sprache, und jemand geht mit Ihnen hinein.",
     "near.note": "Von Ihnen wird nichts verlangt. Sie müssen kein Mitglied sein, sich nicht auf eine bestimmte Art kleiden, und niemand wird Sie um Geld bitten.",
-    "wa.near": "Hallo. Ich bin in {city} und spreche lieber {lang}. Wohin kann ich an diesem Sabbat gehen?"
+    "wa.near": "Hallo. Ich bin in {city} und spreche lieber {lang}. Wohin kann ich an diesem Sabbat gehen?",
+    "st.eyebrow": "In ihren eigenen Worten",
+    "st.title": "Menschen, die das gar nicht gesucht haben",
+    "st.lead": "Niemand hier hatte vor, Missionar zu werden. Einer erholte sich von einem Motorradunfall. Eine war in eine Depression gerutscht. Eine hütete ein Wochenende lang die Hunde von jemandem. Das sind ihre eigenen Berichte, in ihren eigenen Stimmen.",
+    "st.play": "Video abspielen",
+    "st.langNote": "Dieses Video ist auf {lang}.",
+    "st.channel": "Alle Geschichten auf unserem Kanal",
+    "st.privacy": "Die Videos liegen bei YouTube. Es wird nichts geladen und nichts verfolgt, bis Sie auf Abspielen drücken.",
+    "nav.stories": "Geschichten"
   };
 
 })();

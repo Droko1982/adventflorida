@@ -53,10 +53,6 @@
     "value.3.d": "La Floride compte plus de 200 communautés adventistes. Dites-nous votre ville et nous vous aiderons à en trouver une qui parle votre langue.",
     "value.4.t": "Une aide concrète",
     "value.4.d": "Nourriture, vêtements, conférences de santé et un coup de main quand la vie pèse. L'évangile est aussi une bonne nouvelle pour le corps.",
-    "video.eyebrow": "Dans nos propres mots",
-    "video.title": "Ce qu'est vraiment Florida Advent Missionaries",
-    "video.caption": "Vidéo hébergée sur YouTube. Rien ne se charge avant que vous n'appuyiez sur lecture.",
-    "video.play": "Lire la vidéo",
     "christ.eyebrow": "Le cœur de tout",
     "christ.title": "Jésus-Christ : guide, Sauveur et ami",
     "christ.lead": "Avant toute doctrine, toute église et toute tradition, il y a une Personne. Tout ce que nous croyons naît de ce qu'Il a fait pour nous. Si vous ne retenez qu'une chose de cette page, que ce soit Lui.",
@@ -393,7 +389,15 @@
     "near.person": "À {city}, demandez {name}, qui parle {langs}.",
     "near.none": "Nous n'avons encore personne à {city}, et nous préférons vous le dire plutôt que de vous envoyer quelque part que nous ne connaissons pas. Écrivez-nous quand même : nous trouverons la communauté la plus proche dans votre langue, et quelqu'un entrera avec vous.",
     "near.note": "On ne vous demande rien. Vous n'avez pas besoin d'être membre, ni de vous habiller d'une certaine façon, et personne ne vous demandera d'argent.",
-    "wa.near": "Bonjour. Je suis à {city} et je préfère parler {lang}. Où puis-je aller ce sabbat ?"
+    "wa.near": "Bonjour. Je suis à {city} et je préfère parler {lang}. Où puis-je aller ce sabbat ?",
+    "st.eyebrow": "Dans leurs propres mots",
+    "st.title": "Des gens qui ne cherchaient pas cela",
+    "st.lead": "Personne ici n'avait prévu de devenir missionnaire. L'un se remettait d'un accident de moto. Une autre avait sombré dans la dépression. Une autre gardait les chiens de quelqu'un le temps d'un week-end. Voici leurs récits, racontés par eux-mêmes.",
+    "st.play": "Lire la vidéo",
+    "st.langNote": "Cette vidéo est en {lang}.",
+    "st.channel": "Voir toutes les histoires sur notre chaîne",
+    "st.privacy": "Les vidéos sont hébergées sur YouTube. Rien ne se charge et rien n'est suivi tant que vous n'appuyez pas sur lecture.",
+    "nav.stories": "Histoires"
   };
 
 })();

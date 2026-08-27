@@ -53,10 +53,6 @@
     "value.3.d": "Florid gen plis pase 200 kongregasyon adventis. Di nou vil ou epi n ap ede ou jwenn youn ki pale lang ou.",
     "value.4.t": "Èd konkrè",
     "value.4.d": "Manje, rad, konferans sou sante ak yon men lè lavi a lou. Levanjil la se bon nouvèl pou kò a tou.",
-    "video.eyebrow": "Nan pwòp pawòl nou",
-    "video.title": "Kisa Florida Advent Missionaries ye vre",
-    "video.caption": "Videyo a sou YouTube. Anyen pa chaje jiskaske ou peze jwe.",
-    "video.play": "Jwe videyo a",
     "christ.eyebrow": "Kè tout bagay",
     "christ.title": "Jezikri — gid, Sovè ak zanmi",
     "christ.lead": "Anvan tout doktrin, tout legliz ak tout tradisyon, gen yon Moun. Tout sa nou kwè soti nan sa Li fè pou nou. Si ou pran yon sèl bagay nan paj sa a, se pou l se Li.",
@@ -393,7 +389,15 @@
     "near.person": "Nan {city}, mande pou {name}, ki pale {langs}.",
     "near.none": "Nou poko gen pèsonn nan {city}, epi nou pito di ou sa olye nou voye ou yon kote nou pa konnen. Ekri nou kanmenm: n ap chèche kongregasyon ki pi pre a nan lang ou, epi yon moun ap antre avèk ou.",
     "near.note": "Yo pa mande ou anyen. Ou pa bezwen se manm ou ye, ou pa bezwen abiye yon jan an patikilye, epi pèsonn p ap mande ou lajan.",
-    "wa.near": "Bonjou. Mwen nan {city} epi mwen pito pale {lang}. Kote mwen ka ale saba sa a?"
+    "wa.near": "Bonjou. Mwen nan {city} epi mwen pito pale {lang}. Kote mwen ka ale saba sa a?",
+    "st.eyebrow": "Nan pwòp pawòl yo",
+    "st.title": "Moun ki pa t ap chèche sa",
+    "st.lead": "Pèsonn isit la pa t planifye vin misyonè. Youn t ap refè apre yon aksidan moto. Yon lòt te tonbe nan depresyon. Yon lòt t ap veye chen yon moun pandan yon wikenn. Men istwa yo, jan yo menm rakonte yo.",
+    "st.play": "Jwe videyo a",
+    "st.langNote": "Videyo sa a an {lang}.",
+    "st.channel": "Wè tout istwa yo sou chèn nou an",
+    "st.privacy": "Videyo yo sou YouTube. Anyen pa chaje epi anyen pa swiv ou jiskaske ou peze jwe.",
+    "nav.stories": "Istwa"
   };
 
 })();

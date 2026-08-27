@@ -53,10 +53,6 @@
     "value.3.d": "Florida has more than 200 Adventist congregations. Tell us your city and we will help you find one that speaks your language.",
     "value.4.t": "Practical help",
     "value.4.d": "Food, clothing, health talks and a hand when life gets heavy. The gospel is good news for the body too.",
-    "video.eyebrow": "In our own words",
-    "video.title": "What Florida Advent Missionaries is all about",
-    "video.caption": "Video hosted on YouTube. Nothing loads until you press play.",
-    "video.play": "Play the video",
     "christ.eyebrow": "The heart of everything",
     "christ.title": "Jesus Christ — guide, Saviour and friend",
     "christ.lead": "Before any doctrine, any church and any tradition, there is a Person. Everything we believe grows out of what He did for us. If you take away only one thing from this page, let it be Him.",
@@ -393,7 +389,15 @@
     "near.person": "{name} is the person to ask for in {city}, and speaks {langs}.",
     "near.none": "We do not have anyone in {city} yet, and we would rather tell you that than send you somewhere we do not know. Write to us anyway — we will find the nearest congregation in your language, and someone will go in with you.",
     "near.note": "Nothing is asked of you. You do not have to be a member, you do not have to dress a particular way, and nobody will ask you for money.",
-    "wa.near": "Hello. I am in {city} and I would rather speak {lang}. Where should I go this Sabbath?"
+    "wa.near": "Hello. I am in {city} and I would rather speak {lang}. Where should I go this Sabbath?",
+    "st.eyebrow": "In their own words",
+    "st.title": "People who were not looking for this",
+    "st.lead": "Nobody here planned to become a missionary. One was recovering from a motorcycle accident. One had sunk into depression. One was minding somebody's dogs for the weekend. These are their own accounts, in their own voices.",
+    "st.play": "Play the video",
+    "st.langNote": "This video is in {lang}.",
+    "st.channel": "See every story on our channel",
+    "st.privacy": "Videos are hosted on YouTube. Nothing loads and nothing is tracked until you press play.",
+    "nav.stories": "Stories"
   };
 
 })();

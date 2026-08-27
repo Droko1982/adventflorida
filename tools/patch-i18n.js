@@ -12,12 +12,14 @@
 
    - Si la clave ya existe en ese idioma, se reemplaza su valor.
    - Si no existe, se anade al final de ese diccionario.
+   - Si el valor es null, la clave se BORRA. Sirve para limpiar
+     los restos de una seccion que ya no existe.
    - Falla si un idioma del parche no existe en los archivos.
    ========================================================= */
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const ROOT  = path.resolve(__dirname, "..");
 const LANG_DIR = path.join(ROOT, "js", "lang");
@@ -71,7 +73,7 @@ function findDict(src, code) {
 }
 
 const seen = new Set();
-let totalUpdated = 0, totalAdded = 0;
+let totalUpdated = 0, totalAdded = 0, totalRemoved = 0;
 
 for (const file of FILES) {
   let src = fs.readFileSync(file, "utf8");
@@ -86,8 +88,21 @@ for (const file of FILES) {
     let updated = 0, added = 0;
     const pending = [];
 
+    let removed = 0;
+
     for (const [key, value] of Object.entries(patch[code])) {
       const rx = new RegExp('"' + rxKey(key) + '"\\s*:\\s*"(?:[^"\\\\]|\\\\.)*"');
+
+      /* Un valor null borra la clave: asi se limpian los restos
+         de una seccion que ya no existe. */
+      if (value === null) {
+        const rxLinea = new RegExp(
+          '\\n?\\s*"' + rxKey(key) + '"\\s*:\\s*"(?:[^"\\\\]|\\\\.)*",?'
+        );
+        if (rxLinea.test(body)) { body = body.replace(rxLinea, ""); removed++; }
+        continue;
+      }
+
       if (rx.test(body)) {
         body = body.replace(rx, '"' + key + '": ' + jsString(value));
         updated++;
@@ -97,6 +112,9 @@ for (const file of FILES) {
       }
     }
 
+    /* Borrar puede dejar una coma colgando antes de la llave */
+    if (removed) body = body.replace(/,(\s*)\}$/, "$1}");
+
     if (pending.length) {
       /* Inserta antes de la llave de cierre, respetando la coma final */
       const close = body.lastIndexOf("}");
@@ -105,12 +123,14 @@ for (const file of FILES) {
       body = before + "\n" + pending.join(",\n") + "\n  }";
     }
 
-    if (updated || added) {
+    if (updated || added || removed) {
       src = src.slice(0, dict.start) + body + src.slice(dict.end + 1);
       touched = true;
       totalUpdated += updated;
       totalAdded += added;
-      console.log(`  ${path.basename(file)} · ${code}: ${updated} actualizadas, ${added} nuevas`);
+      totalRemoved += removed;
+      console.log(`  ${path.basename(file)} · ${code}: ${updated} actualizadas, ${added} nuevas` +
+        (removed ? `, ${removed} borradas` : ""));
     }
   }
 
@@ -123,4 +143,5 @@ if (missing.length) {
   process.exit(1);
 }
 
-console.log(`\nTotal: ${totalUpdated} claves actualizadas, ${totalAdded} anadidas en ${seen.size} idiomas.`);
+console.log(`\nTotal: ${totalUpdated} actualizadas, ${totalAdded} anadidas` +
+  (totalRemoved ? `, ${totalRemoved} borradas` : "") + ` en ${seen.size} idiomas.`);

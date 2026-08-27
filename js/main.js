@@ -1,13 +1,12 @@
 /* =========================================================
    Florida Advent Missionaries · Interacciones
-   Tema claro/oscuro · 9 idiomas · WhatsApp · versiculos · video
+   Tema claro/oscuro · 9 idiomas · WhatsApp · versiculos · testimonios
    Autor: Dr. Mauricio Rodriguez Herrera
    ========================================================= */
 (function () {
   "use strict";
 
   var WA_NUMBER  = "17862392331";           /* +1 786 239 2331 */
-  var VIDEO_ID   = "kLoPVmV4sK0";
 
   /* ---------------------------------------------------------
      DONACIONES — unico sitio que hay que tocar.
@@ -126,6 +125,7 @@
 
     renderVerse(0);
     renderSabbath();
+    renderStories();
     nearRender();
     renderMissions();
     store(LS_LANG, code);
@@ -344,6 +344,59 @@
     /* Se refresca cada minuto: el estado cambia solo al ponerse el sol */
     if (sabbathTimer) clearInterval(sabbathTimer);
     sabbathTimer = setInterval(renderSabbath, 60000);
+  }
+
+  /* ---------------- Testimonios en video ---------------- */
+  var VIDEOS = window.FAM_VIDEOS || [];
+
+  /* Se enlaza la miniatura de YouTube y solo se carga el
+     reproductor al pulsar, con el dominio sin cookies. Nada
+     se descarga ni se re-publica. */
+  function playVideo(btn) {
+    var wrap = document.createElement("div");
+    wrap.className = "st-thumb is-playing";
+    var frame = document.createElement("iframe");
+    frame.setAttribute("src", "https://www.youtube-nocookie.com/embed/" +
+      btn.getAttribute("data-video") + "?autoplay=1&rel=0");
+    frame.setAttribute("title", btn.getAttribute("data-title"));
+    frame.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+    frame.setAttribute("allowfullscreen", "");
+    wrap.appendChild(frame);
+    btn.parentNode.replaceChild(wrap, btn);
+  }
+
+  function renderStories() {
+    var grid = $("#stGrid");
+    if (!grid || !VIDEOS.length) return;
+
+    grid.innerHTML = VIDEOS.map(function (v, i) {
+      var lang = v.lang || "en";
+      var otro = lang !== currentLang ? ' lang="' + esc(lang) + '"' : "";
+      var quien = [v.person, v.role].filter(Boolean).join(" · ");
+
+      var h = '<article class="st-card' + (i === 0 ? " is-lead" : "") + '">' +
+        '<button class="st-thumb" type="button" data-video="' + esc(v.id) + '" ' +
+          'data-title="' + esc(v.title) + '" aria-label="' + esc(t("st.play") + ": " + v.title) + '">' +
+          '<img src="https://i.ytimg.com/vi/' + esc(v.id) + '/hqdefault.jpg" alt="" ' +
+               'loading="lazy" decoding="async" width="480" height="360">' +
+          '<span class="st-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+          '<path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11.2-7.2a1 1 0 000-1.8L8.6 3.9A1 1 0 007 4.8z"/></svg></span>' +
+        "</button>" +
+        '<div class="st-body">';
+
+      if (quien) h += '<div class="st-who">' + esc(quien) + "</div>";
+      h += "<h3" + otro + ">" + esc(v.title) + "</h3>";
+      if (v.hook) h += '<p class="st-hook"' + otro + ">" + esc(v.hook) + "</p>";
+      if (lang !== currentLang) {
+        h += '<p class="st-note">' + icon(ICON_GLOBE) +
+             esc(t("st.langNote").replace("{lang}", langName(lang))) + "</p>";
+      }
+      return h + "</div></article>";
+    }).join("");
+
+    $$("#stGrid button.st-thumb").forEach(function (b) {
+      b.addEventListener("click", function () { playVideo(b); });
+    });
   }
 
   /* ---------------- Alguien cerca de ti ---------------- */
@@ -667,21 +720,6 @@
     }
   }
 
-  /* ---------------- Video (carga diferida) ---------------- */
-  function wireVideo() {
-    var facade = $("#videoFacade");
-    if (!facade) return;
-    facade.addEventListener("click", function () {
-      var frame = document.createElement("iframe");
-      frame.setAttribute("src", "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?autoplay=1&rel=0");
-      frame.setAttribute("title", t("video.title"));
-      frame.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
-      frame.setAttribute("allowfullscreen", "");
-      frame.setAttribute("loading", "lazy");
-      facade.parentNode.replaceChild(frame, facade);
-    });
-  }
-
   /* ---------------- Navegacion ---------------- */
   function wireNav() {
     var header = $("#siteHeader");
@@ -785,9 +823,9 @@
     wirePrayerForm();
     wireGiving();
     wireSabbath();
+    renderStories();
     wireNear();
     wireMissions();
-    wireVideo();
     wireReveal();
   });
 })();

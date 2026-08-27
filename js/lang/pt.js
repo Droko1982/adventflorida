@@ -53,10 +53,6 @@
     "value.3.d": "A Flórida tem mais de 200 congregações adventistas. Diga-nos a sua cidade e ajudamos você a encontrar uma que fale o seu idioma.",
     "value.4.t": "Ajuda prática",
     "value.4.d": "Alimentos, roupas, palestras de saúde e uma mão quando a vida pesa. O evangelho também é boa notícia para o corpo.",
-    "video.eyebrow": "Nas nossas próprias palavras",
-    "video.title": "O que é a Florida Advent Missionaries",
-    "video.caption": "Vídeo hospedado no YouTube. Nada é carregado até você clicar em reproduzir.",
-    "video.play": "Reproduzir o vídeo",
     "christ.eyebrow": "O centro de tudo",
     "christ.title": "Jesus Cristo — guia, Salvador e amigo",
     "christ.lead": "Antes de qualquer doutrina, qualquer igreja e qualquer tradição, há uma Pessoa. Tudo o que cremos nasce do que Ele fez por nós. Se você levar apenas uma coisa desta página, que seja Ele.",
@@ -393,7 +389,15 @@
     "near.person": "Em {city} pergunte por {name}, que fala {langs}.",
     "near.none": "Ainda não temos ninguém em {city}, e preferimos dizer-lhe isso a mandá-lo para um sítio que não conhecemos. Escreva-nos na mesma: procuramos a congregação mais próxima no seu idioma, e alguém entra consigo.",
     "near.note": "Não se lhe pede nada. Não tem de ser membro, não tem de se vestir de uma maneira específica, e ninguém lhe vai pedir dinheiro.",
-    "wa.near": "Olá. Estou em {city} e prefiro falar {lang}. Para onde posso ir neste sábado?"
+    "wa.near": "Olá. Estou em {city} e prefiro falar {lang}. Para onde posso ir neste sábado?",
+    "st.eyebrow": "Nas suas próprias palavras",
+    "st.title": "Gente que não andava à procura disto",
+    "st.lead": "Ninguém aqui planeou ser missionário. Um estava a recuperar de um acidente de mota. Outra tinha afundado na depressão. Outra estava a tomar conta dos cães de alguém num fim de semana. Estes são os relatos deles, contados por eles próprios.",
+    "st.play": "Reproduzir o vídeo",
+    "st.langNote": "Este vídeo está em {lang}.",
+    "st.channel": "Ver todas as histórias no nosso canal",
+    "st.privacy": "Os vídeos estão alojados no YouTube. Nada é carregado e nada é rastreado até carregar em reproduzir.",
+    "nav.stories": "Histórias"
   };
 
 })();

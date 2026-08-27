@@ -1,0 +1,92 @@
+{
+  "en": {
+    "st.eyebrow": "In their own words",
+    "st.title": "People who were not looking for this",
+    "st.lead": "Nobody here planned to become a missionary. One was recovering from a motorcycle accident. One had sunk into depression. One was minding somebody's dogs for the weekend. These are their own accounts, in their own voices.",
+    "st.play": "Play the video",
+    "st.langNote": "This video is in {lang}.",
+    "st.channel": "See every story on our channel",
+    "st.privacy": "Videos are hosted on YouTube. Nothing loads and nothing is tracked until you press play.",
+    "nav.stories": "Stories"
+  },
+  "es": {
+    "st.eyebrow": "En sus propias palabras",
+    "st.title": "Gente que no andaba buscando esto",
+    "st.lead": "Nadie de aquí planeó ser misionero. Uno se estaba recuperando de un accidente de moto. Otra se había hundido en la depresión. Otra estaba cuidando los perros de alguien un fin de semana. Estos son sus relatos, contados por ellos mismos.",
+    "st.play": "Reproducir el video",
+    "st.langNote": "Este video está en {lang}.",
+    "st.channel": "Ver todas las historias en nuestro canal",
+    "st.privacy": "Los videos están alojados en YouTube. No se carga nada y no se rastrea nada hasta que pulses reproducir.",
+    "nav.stories": "Historias"
+  },
+  "fr": {
+    "st.eyebrow": "Dans leurs propres mots",
+    "st.title": "Des gens qui ne cherchaient pas cela",
+    "st.lead": "Personne ici n'avait prévu de devenir missionnaire. L'un se remettait d'un accident de moto. Une autre avait sombré dans la dépression. Une autre gardait les chiens de quelqu'un le temps d'un week-end. Voici leurs récits, racontés par eux-mêmes.",
+    "st.play": "Lire la vidéo",
+    "st.langNote": "Cette vidéo est en {lang}.",
+    "st.channel": "Voir toutes les histoires sur notre chaîne",
+    "st.privacy": "Les vidéos sont hébergées sur YouTube. Rien ne se charge et rien n'est suivi tant que vous n'appuyez pas sur lecture.",
+    "nav.stories": "Histoires"
+  },
+  "ht": {
+    "st.eyebrow": "Nan pwòp pawòl yo",
+    "st.title": "Moun ki pa t ap chèche sa",
+    "st.lead": "Pèsonn isit la pa t planifye vin misyonè. Youn t ap refè apre yon aksidan moto. Yon lòt te tonbe nan depresyon. Yon lòt t ap veye chen yon moun pandan yon wikenn. Men istwa yo, jan yo menm rakonte yo.",
+    "st.play": "Jwe videyo a",
+    "st.langNote": "Videyo sa a an {lang}.",
+    "st.channel": "Wè tout istwa yo sou chèn nou an",
+    "st.privacy": "Videyo yo sou YouTube. Anyen pa chaje epi anyen pa swiv ou jiskaske ou peze jwe.",
+    "nav.stories": "Istwa"
+  },
+  "pt": {
+    "st.eyebrow": "Nas suas próprias palavras",
+    "st.title": "Gente que não andava à procura disto",
+    "st.lead": "Ninguém aqui planeou ser missionário. Um estava a recuperar de um acidente de mota. Outra tinha afundado na depressão. Outra estava a tomar conta dos cães de alguém num fim de semana. Estes são os relatos deles, contados por eles próprios.",
+    "st.play": "Reproduzir o vídeo",
+    "st.langNote": "Este vídeo está em {lang}.",
+    "st.channel": "Ver todas as histórias no nosso canal",
+    "st.privacy": "Os vídeos estão alojados no YouTube. Nada é carregado e nada é rastreado até carregar em reproduzir.",
+    "nav.stories": "Histórias"
+  },
+  "de": {
+    "st.eyebrow": "In ihren eigenen Worten",
+    "st.title": "Menschen, die das gar nicht gesucht haben",
+    "st.lead": "Niemand hier hatte vor, Missionar zu werden. Einer erholte sich von einem Motorradunfall. Eine war in eine Depression gerutscht. Eine hütete ein Wochenende lang die Hunde von jemandem. Das sind ihre eigenen Berichte, in ihren eigenen Stimmen.",
+    "st.play": "Video abspielen",
+    "st.langNote": "Dieses Video ist auf {lang}.",
+    "st.channel": "Alle Geschichten auf unserem Kanal",
+    "st.privacy": "Die Videos liegen bei YouTube. Es wird nichts geladen und nichts verfolgt, bis Sie auf Abspielen drücken.",
+    "nav.stories": "Geschichten"
+  },
+  "nl": {
+    "st.eyebrow": "In hun eigen woorden",
+    "st.title": "Mensen die hier niet naar op zoek waren",
+    "st.lead": "Niemand hier was van plan zendeling te worden. De een herstelde van een motorongeluk. De ander was in een depressie beland. Weer een ander paste een weekend op iemands honden. Dit zijn hun eigen verhalen, in hun eigen stem.",
+    "st.play": "Video afspelen",
+    "st.langNote": "Deze video is in het {lang}.",
+    "st.channel": "Alle verhalen op ons kanaal",
+    "st.privacy": "De video's staan op YouTube. Er wordt niets geladen en niets gevolgd tot u op afspelen drukt.",
+    "nav.stories": "Verhalen"
+  },
+  "ru": {
+    "st.eyebrow": "Их собственными словами",
+    "st.title": "Люди, которые этого не искали",
+    "st.lead": "Никто здесь не собирался становиться миссионером. Один приходил в себя после аварии на мотоцикле. Другая провалилась в депрессию. Третья на выходных присматривала за чужими собаками. Это их собственные рассказы, их голосами.",
+    "st.play": "Воспроизвести видео",
+    "st.langNote": "Это видео на языке: {lang}.",
+    "st.channel": "Все истории на нашем канале",
+    "st.privacy": "Видео размещены на YouTube. Ничего не загружается и не отслеживается, пока вы не нажмёте воспроизведение.",
+    "nav.stories": "Истории"
+  },
+  "uk": {
+    "st.eyebrow": "Їхніми власними словами",
+    "st.title": "Люди, які цього не шукали",
+    "st.lead": "Ніхто тут не збирався ставати місіонером. Один приходив до тями після аварії на мотоциклі. Інша провалилася в депресію. Ще одна на вихідних доглядала чужих собак. Це їхні власні розповіді, їхніми голосами.",
+    "st.play": "Відтворити відео",
+    "st.langNote": "Це відео мовою: {lang}.",
+    "st.channel": "Усі історії на нашому каналі",
+    "st.privacy": "Відео розміщені на YouTube. Нічого не завантажується і не відстежується, доки ви не натиснете відтворення.",
+    "nav.stories": "Історії"
+  }
+}

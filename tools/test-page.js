@@ -40,7 +40,7 @@ window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {
 window.onerror = (m) => errores.push(String(m));
 
 const LANGF = fs.readdirSync(path.join(ROOT,"js","lang")).map(f => "js/lang/"+f);
-for (const f of [...LANGF, "js/i18n.js", "js/sabbath.js", "js/near.js", "js/events.js", "js/main.js"]) {
+for (const f of [...LANGF, "js/i18n.js", "js/sabbath.js", "js/videos.js", "js/near.js", "js/events.js", "js/main.js"]) {
   try { window.eval(fs.readFileSync(path.join(ROOT, f), "utf8")); }
   catch (e) { errores.push(f + ": " + e.message); }
 }
@@ -69,6 +69,23 @@ comprobar(/\d/.test(txt("#sabEndTime")), "hora de fin", txt("#sabEndTime") + " Â
 sel("#sabCity").value = "pensacola";
 sel("#sabCity").dispatchEvent(new window.Event("change"));
 comprobar(/\d/.test(txt("#sabStartTime")), "cambio de ciudad", "Pensacola (hora central): " + txt("#sabStartTime"));
+
+/* ---------------- Testimonios en video ---------------- */
+console.log("\n=== Testimonios en video ===\n");
+const tarjetas = [...window.document.querySelectorAll("#stGrid .st-card")];
+comprobar(tarjetas.length === 5, "5 testimonios", tarjetas.length + " tarjetas");
+comprobar(tarjetas[0].classList.contains("is-lead"), "el primero destacado",
+  txt("#stGrid .st-who"));
+comprobar(tarjetas.every((c) => /i\.ytimg\.com/.test(c.querySelector("img").getAttribute("src"))),
+  "miniaturas de YouTube", "enlazadas, no descargadas");
+comprobar(tarjetas.every((c) => c.querySelector("img").getAttribute("loading") === "lazy"),
+  "carga diferida de imagenes");
+comprobar(window.document.querySelectorAll("#stGrid iframe").length === 0,
+  "nada de YouTube antes de pulsar");
+sel("#stGrid button.st-thumb").dispatchEvent(new window.Event("click"));
+const marco = sel("#stGrid iframe");
+comprobar(!!marco && /youtube-nocookie\.com/.test(marco.getAttribute("src")),
+  "al pulsar, dominio sin cookies");
 
 /* ---------------- Alguien cerca de ti ---------------- */
 console.log("\n=== Alguien cerca de ti ===\n");

@@ -53,10 +53,6 @@
     "value.3.d": "Florida heeft meer dan 200 adventistische gemeenten. Noem uw stad en we helpen u er een te vinden die uw taal spreekt.",
     "value.4.t": "Praktische hulp",
     "value.4.d": "Voedsel, kleding, gezondheidslezingen en een helpende hand als het leven zwaar wordt. Het evangelie is ook goed nieuws voor het lichaam.",
-    "video.eyebrow": "In onze eigen woorden",
-    "video.title": "Waar Florida Advent Missionaries voor staat",
-    "video.caption": "Video gehost op YouTube. Er wordt niets geladen tot u op afspelen drukt.",
-    "video.play": "Video afspelen",
     "christ.eyebrow": "Het hart van alles",
     "christ.title": "Jezus Christus — gids, Redder en vriend",
     "christ.lead": "Vóór elke leer, elke kerk en elke traditie staat een Persoon. Alles wat we geloven komt voort uit wat Hij voor ons deed. Als u maar één ding van deze pagina meeneemt, laat het Hem zijn.",
@@ -393,7 +389,15 @@
     "near.person": "Vraag in {city} naar {name}, die {langs} spreekt.",
     "near.none": "We hebben nog niemand in {city}, en dat zeggen we liever dan u ergens heen te sturen dat we niet kennen. Schrijf ons toch: we zoeken de dichtstbijzijnde gemeente in uw taal, en iemand gaat met u mee naar binnen.",
     "near.note": "Er wordt niets van u gevraagd. U hoeft geen lid te zijn, u hoeft zich niet op een bepaalde manier te kleden, en niemand zal u om geld vragen.",
-    "wa.near": "Hallo. Ik ben in {city} en spreek liever {lang}. Waar kan ik deze sabbat heen?"
+    "wa.near": "Hallo. Ik ben in {city} en spreek liever {lang}. Waar kan ik deze sabbat heen?",
+    "st.eyebrow": "In hun eigen woorden",
+    "st.title": "Mensen die hier niet naar op zoek waren",
+    "st.lead": "Niemand hier was van plan zendeling te worden. De een herstelde van een motorongeluk. De ander was in een depressie beland. Weer een ander paste een weekend op iemands honden. Dit zijn hun eigen verhalen, in hun eigen stem.",
+    "st.play": "Video afspelen",
+    "st.langNote": "Deze video is in het {lang}.",
+    "st.channel": "Alle verhalen op ons kanaal",
+    "st.privacy": "De video's staan op YouTube. Er wordt niets geladen en niets gevolgd tot u op afspelen drukt.",
+    "nav.stories": "Verhalen"
   };
 
 })();
