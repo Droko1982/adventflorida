@@ -22,6 +22,7 @@ oracion y el libro *Steps to Christ* — en el idioma que hablan.
 | **El sabado** | Reloj del ocaso para 22 ciudades, el evangelio primero, linea de tiempo del dia, que esperar en tu primera visita y 5 preguntas sinceras |
 | **Estudios biblicos** | 4 series + 3 pasos para empezar |
 | **Ministerios** | 6 frentes de trabajo |
+| **Misiones** | Eventos pasados y proximos, repartidos solos por fecha, con datos estructurados |
 | **Oracion** | Formulario que compone un mensaje de WhatsApp (sin backend) |
 | **Donaciones** | 501(c)(3): online, voluntariado y cheque por correo |
 | **Recursos** | 6 enlaces externos verificados |
@@ -40,6 +41,32 @@ dentro de un minuto de la tabla oficial de la Florida Conference en sus seis
 ciudades. El contenido de la seccion salio de una investigacion con verificacion
 adversarial (158 afirmaciones confirmadas, 12 descartadas por erroneas); el
 resumen esta en [tools/research/](tools/research/).
+
+## Misiones y eventos
+
+Toda la seccion sale de **`js/events.js`**, que es el unico archivo que hay que
+tocar para anadir un evento. Esta escrito para alguien que no programa: cada
+campo explicado, ejemplos listos para copiar y pegar, y las instrucciones para
+editarlo **desde el navegador**, sin instalar nada.
+
+Para anadir un evento sin salir de GitHub:
+
+1. Entra a [js/events.js](https://github.com/Droko1982/adventflorida/blob/main/js/events.js)
+2. Pulsa el lapiz de **Edit**
+3. Copia uno de los ejemplos, pegalo dentro de los corchetes y cambia los datos
+4. **Commit changes**
+
+En dos o tres minutos aparece en la web. La pagina lo coloca sola en *proximos*
+o en *ya realizados* comparando la fecha con el dia de hoy en Florida.
+
+**Los idiomas.** No hace falta escribir cada evento nueve veces. Se escribe una
+vez en el idioma que sea, se marca con `lang`, y la pagina avisa con una linea
+pequena en que idioma esta. Si hay traduccion para algun idioma, se pone como
+objeto y ese idioma la recibe. Exigir nueve traducciones por evento seria
+garantizar que nadie publique nada.
+
+Las fotos van en `assets/eventos/`. Las normas (tamano, formato y el permiso
+para publicar caras) estan en [assets/eventos/README.md](assets/eventos/README.md).
 
 ## Nueve idiomas
 
@@ -65,6 +92,7 @@ js/i18n.js          EN · ES · FR
 js/i18n2.js         HT · PT · DE
 js/i18n3.js         NL · RU · UK
 js/sabbath.js       Calculo del ocaso (NOAA) y ventana del sabado
+js/events.js        Los eventos de misiones (el archivo que editan los voluntarios)
 js/main.js          Tema, idioma, versiculos, WhatsApp, video, sabado, donaciones
 tools/              Herramientas de mantenimiento y pruebas (ver abajo)
 assets/             Iconos PWA, favicon SVG e imagen Open Graph
@@ -80,7 +108,8 @@ Sin dependencias, sin build, sin framework. HTML + CSS + JS vanilla.
 ```
 node tools/test-sunset.js                    comprueba el calculo del ocaso
 node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
-node tools/test-page.js                      carga la pagina en un DOM y la prueba entera
+node tools/test-page.js                      carga la pagina en un DOM y la prueba entera (30 asserts)
+node tools/test-contrast.js                  comprueba el contraste WCAG de la paleta
 node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
 ```
 
