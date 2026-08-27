@@ -379,7 +379,21 @@
     "ev.type.visit": "Besuch",
     "wa.event": "Hallo! Ich würde gern hierher kommen: {title}. Können Sie mir mehr dazu sagen?",
     "wa.eventNews": "Hallo! Ich möchte erfahren, wenn in meiner Nähe etwas stattfindet. Meine Stadt ist:",
-    "wa.need": "Hallo! In meiner Nachbarschaft gibt es eine Not, von der ich Ihnen erzählen möchte:"
+    "wa.need": "Hallo! In meiner Nachbarschaft gibt es eine Not, von der ich Ihnen erzählen möchte:",
+    "near.eyebrow": "Wo auch immer Sie in Florida sind",
+    "near.title": "Jemand in Ihrer Nähe würde sich freuen, Sie kennenzulernen",
+    "near.lead": "Wählen Sie Ihre Stadt und die Sprache, in der Sie lieber sprechen. Wir sagen Ihnen, wann der Sabbat bei Ihnen beginnt, wohin Sie am Samstag gehen können, und den Namen der Person, die draußen auf Sie wartet, damit Sie nicht allein hineingehen müssen.",
+    "near.city": "Ihre Stadt",
+    "near.lang": "Die Sprache, in der Sie lieber sprechen",
+    "near.cta": "Sagen Sie mir, wohin",
+    "near.sunsetLine": "In {city} beginnt der Sabbat am Freitag um {start} und endet am Samstag um {end}.",
+    "near.church": "Wohin",
+    "near.time": "Der Hauptgottesdienst beginnt um {time}.",
+    "near.mapLink": "In der Karte öffnen",
+    "near.person": "In {city} fragen Sie nach {name}, die Sprachen spricht: {langs}.",
+    "near.none": "In {city} haben wir noch niemanden, und das sagen wir Ihnen lieber, als Sie irgendwohin zu schicken, das wir nicht kennen. Schreiben Sie uns trotzdem: Wir suchen die nächste Gemeinde in Ihrer Sprache, und jemand geht mit Ihnen hinein.",
+    "near.note": "Von Ihnen wird nichts verlangt. Sie müssen kein Mitglied sein, sich nicht auf eine bestimmte Art kleiden, und niemand wird Sie um Geld bitten.",
+    "wa.near": "Hallo. Ich bin in {city} und spreche lieber {lang}. Wohin kann ich an diesem Sabbat gehen?"
   };
 
 })();

@@ -126,6 +126,7 @@
 
     renderVerse(0);
     renderSabbath();
+    nearRender();
     renderMissions();
     store(LS_LANG, code);
   }
@@ -345,6 +346,91 @@
     sabbathTimer = setInterval(renderSabbath, 60000);
   }
 
+  /* ---------------- Alguien cerca de ti ---------------- */
+  var NEAR = window.FAM_NEAR || {};
+  var LS_NEAR_LANG = "fam-near-lang";
+
+  function nearRender() {
+    var out = $("#nearOut"), selC = $("#nearCity"), selL = $("#nearLang");
+    if (!out || !selC || !selL || !window.FAM_SUNSET) return;
+
+    var city = window.FAM_SUNSET.city(selC.value);
+    var lang = selL.value;
+    var loc = intlLocale();
+    var win = window.FAM_SUNSET.currentOrNextSabbath(city);
+    var datos = NEAR[city.id];
+    var html = "";
+
+    /* La hora del ocaso siempre es real: se calcula, no se promete */
+    if (win) {
+      html += '<p class="near-line">' +
+        icon(ICON_CLOCK) + "<span>" +
+        esc(t("near.sunsetLine")
+          .replace("{city}", city.name)
+          .replace("{start}", window.FAM_SUNSET.formatTime(win.start, city.tz, loc))
+          .replace("{end}", window.FAM_SUNSET.formatTime(win.end, city.tz, loc))) +
+        "</span></p>";
+    }
+
+    if (datos && datos.church) {
+      html += '<div class="near-where"><h3>' + esc(t("near.church")) + "</h3>" +
+              "<p><strong>" + esc(datos.church) + "</strong></p>";
+      if (datos.address) html += '<p class="muted">' + esc(datos.address) + "</p>";
+      if (datos.time)    html += '<p class="muted">' + esc(t("near.time").replace("{time}", datos.time)) + "</p>";
+      if (datos.map)     html += '<a href="' + esc(datos.map) + '" target="_blank" rel="noopener">' +
+                                 esc(t("near.mapLink")) + "</a>";
+      html += "</div>";
+
+      if (datos.person) {
+        var idiomas = (datos.langs || []).map(langName).join(", ");
+        html += '<p class="near-line">' + icon(ICON_PERSON) + "<span>" +
+          esc(t("near.person").replace("{name}", datos.person)
+                              .replace("{city}", city.name)
+                              .replace("{langs}", idiomas)) + "</span></p>";
+      }
+    } else {
+      html += '<p class="near-line"><span class="muted">' +
+        esc(t("near.none").replace("{city}", city.name)) + "</span></p>";
+    }
+
+    out.innerHTML = html;
+
+    var cta = $("#nearCta");
+    if (cta) {
+      cta.setAttribute("href", waLink(
+        t("wa.near").replace("{city}", city.name).replace("{lang}", langName(lang))
+      ));
+    }
+  }
+
+  function wireNear() {
+    var selC = $("#nearCity"), selL = $("#nearLang");
+    if (!selC || !selL || !window.FAM_SUNSET) return;
+
+    selC.innerHTML = "";
+    window.FAM_SUNSET.cities.forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c.id; o.textContent = c.name;
+      selC.appendChild(o);
+    });
+    selC.value = store(LS_CITY) || "delray";
+    if (!selC.value) selC.value = "delray";
+
+    selL.innerHTML = "";
+    LANGS.forEach(function (l) {
+      var o = document.createElement("option");
+      o.value = l.code; o.textContent = l.native;
+      selL.appendChild(o);
+    });
+    selL.value = store(LS_NEAR_LANG) || currentLang;
+    if (!selL.value) selL.value = currentLang;
+
+    selC.addEventListener("change", function () { store(LS_CITY, selC.value); nearRender(); });
+    selL.addEventListener("change", function () { store(LS_NEAR_LANG, selL.value); nearRender(); });
+
+    nearRender();
+  }
+
   /* ---------------- Misiones y eventos ---------------- */
   var EVENTS = window.FAM_EVENTS || [];
   var pastExpanded = false;
@@ -408,6 +494,7 @@
   var ICON_PIN   = '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/>';
   var ICON_CLOCK = '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>';
   var ICON_GLOBE = '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18 15 15 0 010-18z"/>';
+  var ICON_PERSON = '<path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>';
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -698,6 +785,7 @@
     wirePrayerForm();
     wireGiving();
     wireSabbath();
+    wireNear();
     wireMissions();
     wireVideo();
     wireReveal();

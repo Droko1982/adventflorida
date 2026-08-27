@@ -379,7 +379,21 @@
     "ev.type.visit": "Visite",
     "wa.event": "Bonjour ! J'aimerais venir à ceci : {title}. Pourriez-vous m'en dire plus ?",
     "wa.eventNews": "Bonjour ! J'aimerais savoir quand il se passe quelque chose près de chez moi. Ma ville est :",
-    "wa.need": "Bonjour ! Il y a un besoin dans mon quartier dont j'aimerais vous parler :"
+    "wa.need": "Bonjour ! Il y a un besoin dans mon quartier dont j'aimerais vous parler :",
+    "near.eyebrow": "Où que vous soyez en Floride",
+    "near.title": "Quelqu'un près de chez vous serait heureux de vous rencontrer",
+    "near.lead": "Choisissez votre ville et la langue dans laquelle vous préférez parler. Nous vous dirons à quelle heure le sabbat commence chez vous, où aller samedi, et le nom de la personne qui vous attendra dehors pour que vous n'ayez pas à entrer seul.",
+    "near.city": "Votre ville",
+    "near.lang": "La langue dans laquelle vous préférez parler",
+    "near.cta": "Dites-moi où aller",
+    "near.sunsetLine": "À {city}, le sabbat commence le vendredi à {start} et se termine le samedi à {end}.",
+    "near.church": "Où aller",
+    "near.time": "Le culte principal commence à {time}.",
+    "near.mapLink": "Ouvrir dans le plan",
+    "near.person": "À {city}, demandez {name}, qui parle {langs}.",
+    "near.none": "Nous n'avons encore personne à {city}, et nous préférons vous le dire plutôt que de vous envoyer quelque part que nous ne connaissons pas. Écrivez-nous quand même : nous trouverons la communauté la plus proche dans votre langue, et quelqu'un entrera avec vous.",
+    "near.note": "On ne vous demande rien. Vous n'avez pas besoin d'être membre, ni de vous habiller d'une certaine façon, et personne ne vous demandera d'argent.",
+    "wa.near": "Bonjour. Je suis à {city} et je préfère parler {lang}. Où puis-je aller ce sabbat ?"
   };
 
 })();

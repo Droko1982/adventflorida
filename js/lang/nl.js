@@ -379,7 +379,21 @@
     "ev.type.visit": "Bezoek",
     "wa.event": "Hallo! Ik zou hier graag naartoe komen: {title}. Kunt u mij er meer over vertellen?",
     "wa.eventNews": "Hallo! Ik wil graag weten wanneer er iets bij mij in de buurt is. Mijn stad is:",
-    "wa.need": "Hallo! Er is nood in mijn buurt waarover ik u wil vertellen:"
+    "wa.need": "Hallo! Er is nood in mijn buurt waarover ik u wil vertellen:",
+    "near.eyebrow": "Waar u ook bent in Florida",
+    "near.title": "Iemand bij u in de buurt zou u graag ontmoeten",
+    "near.lead": "Kies uw stad en de taal waarin u liever spreekt. We vertellen u wanneer de sabbat bij u begint, waar u zaterdag heen kunt, en de naam van wie buiten op u wacht zodat u niet alleen naar binnen hoeft.",
+    "near.city": "Uw stad",
+    "near.lang": "De taal waarin u liever spreekt",
+    "near.cta": "Zeg me waar ik heen kan",
+    "near.sunsetLine": "In {city} begint de sabbat op vrijdag om {start} en eindigt op zaterdag om {end}.",
+    "near.church": "Waar naartoe",
+    "near.time": "De hoofddienst begint om {time}.",
+    "near.mapLink": "Openen in de kaart",
+    "near.person": "Vraag in {city} naar {name}, die {langs} spreekt.",
+    "near.none": "We hebben nog niemand in {city}, en dat zeggen we liever dan u ergens heen te sturen dat we niet kennen. Schrijf ons toch: we zoeken de dichtstbijzijnde gemeente in uw taal, en iemand gaat met u mee naar binnen.",
+    "near.note": "Er wordt niets van u gevraagd. U hoeft geen lid te zijn, u hoeft zich niet op een bepaalde manier te kleden, en niemand zal u om geld vragen.",
+    "wa.near": "Hallo. Ik ben in {city} en spreek liever {lang}. Waar kan ik deze sabbat heen?"
   };
 
 })();

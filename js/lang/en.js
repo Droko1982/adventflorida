@@ -379,7 +379,21 @@
     "ev.type.visit": "Visit",
     "wa.event": "Hello! I would like to come to this: {title}. Could you tell me more?",
     "wa.eventNews": "Hello! I would like to know when something is happening near me. My city is:",
-    "wa.need": "Hello! There is a need in my neighbourhood I would like to tell you about:"
+    "wa.need": "Hello! There is a need in my neighbourhood I would like to tell you about:",
+    "near.eyebrow": "Wherever you are in Florida",
+    "near.title": "Someone near you would be glad to meet you",
+    "near.lead": "Choose your city and the language you would rather speak. We will tell you when the Sabbath begins where you live, where to go this Saturday, and the name of the person who will be waiting outside so you do not have to walk in alone.",
+    "near.city": "Your city",
+    "near.lang": "The language you would rather speak",
+    "near.cta": "Tell me where to go",
+    "near.sunsetLine": "In {city} the Sabbath begins on Friday at {start} and ends on Saturday at {end}.",
+    "near.church": "Where to go",
+    "near.time": "The main service begins at {time}.",
+    "near.mapLink": "Open in maps",
+    "near.person": "{name} is the person to ask for in {city}, and speaks {langs}.",
+    "near.none": "We do not have anyone in {city} yet, and we would rather tell you that than send you somewhere we do not know. Write to us anyway — we will find the nearest congregation in your language, and someone will go in with you.",
+    "near.note": "Nothing is asked of you. You do not have to be a member, you do not have to dress a particular way, and nobody will ask you for money.",
+    "wa.near": "Hello. I am in {city} and I would rather speak {lang}. Where should I go this Sabbath?"
   };
 
 })();

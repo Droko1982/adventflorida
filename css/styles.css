@@ -7,38 +7,38 @@
 /* ---------- Tokens de tema ---------- */
 :root,
 [data-theme="light"] {
-    --bg:         #FBF9F4;
-    --bg-alt:     #F2EDE2;
-    --surface:    #FFFFFF;
-    --surface-2:  #F7F3EA;
-    --text:       #14232E;
-    --text-soft:  #55697A;
+    --bg:         #FAF6EE;
+    --bg-alt:     #F2EBDC;
+    --surface:    #FFFCF6;
+    --surface-2:  #F6F0E4;
+    --text:       #22201C;
+    --text-soft:  #6A6157;
     --accent:     #8A5D0D;
     --accent-ink: #FFFFFF;
-    --accent-soft:#FBF1DC;
+    --accent-soft:#FBEFD9;
     --deep:       #0F3B4C;
     --deep-ink:   #FFFFFF;
     --deep-soft:  #E6EFF2;
-    --line:       rgba(20, 35, 46, .13);
-    --line-strong:rgba(20, 35, 46, .24);
+    --line:       rgba(34, 32, 28, .15);
+    --line-strong:rgba(34, 32, 28, .26);
     --shadow:     0 18px 44px -26px rgba(15, 59, 76, .40);
     --shadow-sm:  0 6px 20px -12px rgba(15, 59, 76, .30);
     --ring:       rgba(138, 93, 13, .40);
 }
 
 [data-theme="dark"] {
-    --bg:         #0A1720;
-    --bg-alt:     #071119;
-    --surface:    #10242F;
-    --surface-2:  #0D1E28;
-    --text:       #E9F0F4;
-    --text-soft:  #9FB3BF;
+    --bg:         #101B1D;
+    --bg-alt:     #0B1416;
+    --surface:    #18272A;
+    --surface-2:  #141F22;
+    --text:       #F1ECE3;
+    --text-soft:  #B0A798;
     --accent:     #E3B45C;
     --accent-ink: #0A1720;
-    --accent-soft:#1B2A2C;
+    --accent-soft:#202C26;
     --deep:       #7FC2D6;
     --deep-ink:   #06131A;
-    --deep-soft:  #0D2029;
+    --deep-soft:  #12262B;
     --line:       rgba(233, 240, 244, .14);
     --line-strong:rgba(233, 240, 244, .28);
     --shadow:     0 22px 54px -28px rgba(0, 0, 0, .80);
@@ -409,6 +409,90 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     z-index: 0;
 }
 .hero-art svg { position: relative; z-index: 1; width: 100%; height: auto; }
+
+/* ---------- Alguien cerca de ti ---------- */
+.near {
+    background:
+        radial-gradient(760px 420px at 82% 0%, var(--accent-soft), transparent 62%),
+        var(--bg-alt);
+    padding: clamp(46px, 6vw, 72px) 0;
+    border-bottom: 1px solid var(--line);
+}
+.near-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: clamp(26px, 4vw, 42px);
+    box-shadow: var(--shadow);
+    max-width: 860px;
+    margin: 0 auto;
+}
+.near-card h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin-bottom: 12px; }
+.near-card > p.section-lead { margin-bottom: 26px; font-size: 1rem; }
+
+.near-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 14px;
+    align-items: end;
+    margin-bottom: 8px;
+}
+.near-form .field { margin-bottom: 0; }
+.near-form select {
+    width: 100%;
+    background: var(--bg);
+    border: 1.4px solid var(--line);
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+.near-form select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--ring); }
+
+.near-out {
+    margin-top: 26px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+.near-line {
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: .97rem;
+    margin-bottom: 14px;
+}
+.near-line:last-of-type { margin-bottom: 0; }
+.near-line svg { width: 19px; height: 19px; flex-shrink: 0; color: var(--accent); margin-top: 3px; }
+.near-line strong { font-weight: 600; }
+.near-line .muted { color: var(--text-soft); }
+
+.near-where {
+    background: var(--bg-alt);
+    border-radius: 15px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+}
+.near-where h3 {
+    font-size: .72rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 9px;
+}
+.near-where p { font-size: .95rem; margin-bottom: 5px; }
+.near-where a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; font-size: .9rem; }
+
+.near-note {
+    margin-top: 20px;
+    font-size: .84rem;
+    color: var(--text-soft);
+    display: flex; gap: 9px; align-items: flex-start;
+}
+.near-note svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 3px; color: var(--accent); }
+
+@media (max-width: 700px) {
+    .near-form { grid-template-columns: 1fr; }
+    .near-form .btn { width: 100%; }
+}
 
 /* ---------- Tarjetas de valor ---------- */
 .value-grid {

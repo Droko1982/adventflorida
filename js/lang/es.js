@@ -379,7 +379,21 @@
     "ev.type.visit": "Visita",
     "wa.event": "¡Hola! Me gustaría ir a esto: {title}. ¿Me pueden contar más?",
     "wa.eventNews": "¡Hola! Me gustaría saber cuándo haya algo cerca de mí. Mi ciudad es:",
-    "wa.need": "¡Hola! Hay una necesidad en mi barrio que quisiera contarles:"
+    "wa.need": "¡Hola! Hay una necesidad en mi barrio que quisiera contarles:",
+    "near.eyebrow": "Estés donde estés en la Florida",
+    "near.title": "Hay alguien cerca de ti que se alegraría de conocerte",
+    "near.lead": "Elige tu ciudad y el idioma en el que prefieres hablar. Te decimos a qué hora empieza el sábado donde vives, a dónde ir este sábado, y el nombre de quien va a estar esperándote afuera para que no tengas que entrar solo.",
+    "near.city": "Tu ciudad",
+    "near.lang": "El idioma en el que prefieres hablar",
+    "near.cta": "Dime a dónde ir",
+    "near.sunsetLine": "En {city} el sábado empieza el viernes a las {start} y termina el sábado a las {end}.",
+    "near.church": "A dónde ir",
+    "near.time": "El culto principal empieza a las {time}.",
+    "near.mapLink": "Abrir en el mapa",
+    "near.person": "En {city} pregunta por {name}, que habla {langs}.",
+    "near.none": "Todavía no tenemos a nadie en {city}, y preferimos decírtelo antes que mandarte a un lugar que no conocemos. Escríbenos igual: buscamos la congregación más cercana en tu idioma y alguien entra contigo.",
+    "near.note": "No se te pide nada. No tienes que ser miembro, no tienes que vestirte de ninguna manera concreta, y nadie te va a pedir dinero.",
+    "wa.near": "Hola. Estoy en {city} y prefiero hablar en {lang}. ¿A dónde puedo ir este sábado?"
   };
 
 })();

@@ -11,8 +11,8 @@
    ========================================================= */
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 let JSDOM;
 try {
@@ -40,7 +40,7 @@ window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {
 window.onerror = (m) => errores.push(String(m));
 
 const LANGF = fs.readdirSync(path.join(ROOT,"js","lang")).map(f => "js/lang/"+f);
-for (const f of [...LANGF, "js/i18n.js", "js/sabbath.js", "js/events.js", "js/main.js"]) {
+for (const f of [...LANGF, "js/i18n.js", "js/sabbath.js", "js/near.js", "js/events.js", "js/main.js"]) {
   try { window.eval(fs.readFileSync(path.join(ROOT, f), "utf8")); }
   catch (e) { errores.push(f + ": " + e.message); }
 }
@@ -69,6 +69,27 @@ comprobar(/\d/.test(txt("#sabEndTime")), "hora de fin", txt("#sabEndTime") + " Â
 sel("#sabCity").value = "pensacola";
 sel("#sabCity").dispatchEvent(new window.Event("change"));
 comprobar(/\d/.test(txt("#sabStartTime")), "cambio de ciudad", "Pensacola (hora central): " + txt("#sabStartTime"));
+
+/* ---------------- Alguien cerca de ti ---------------- */
+console.log("\n=== Alguien cerca de ti ===\n");
+comprobar(sel("#nearCity").options.length === 22, "22 ciudades");
+comprobar(sel("#nearLang").options.length === 9, "9 idiomas");
+comprobar(/\d/.test(txt("#nearOut .near-line")), "da la hora del ocaso", txt("#nearOut .near-line").slice(0, 46) + "â€¦");
+comprobar(!!sel("#nearOut .muted"), "sin datos, lo dice con franqueza");
+comprobar(!sel("#nearOut .near-where"), "no inventa una direccion");
+comprobar(decodeURIComponent(sel("#nearCta").getAttribute("href")).includes("Delray Beach"),
+  "WhatsApp con la ciudad puesta");
+
+window.FAM_NEAR.orlando = {
+  church: "Iglesia de prueba", address: "123 Main St, Orlando, FL",
+  map: "https://maps.google.com/?q=Orlando", time: "11:00", langs: ["es", "en"], person: "Ana"
+};
+sel("#nearCity").value = "orlando";
+sel("#nearCity").dispatchEvent(new window.Event("change"));
+comprobar(txt("#nearOut .near-where p strong") === "Iglesia de prueba", "muestra la iglesia");
+comprobar(!!sel("#nearOut .near-where a"), "y el enlace al mapa");
+comprobar(txt("#nearOut .near-line:last-child").includes("Ana"), "y quien te espera",
+  txt("#nearOut .near-line:last-child").slice(0, 44));
 
 /* ---------------- Misiones: arranca sin eventos ---------------- */
 console.log("\n=== Misiones, sin ningun evento ===\n");

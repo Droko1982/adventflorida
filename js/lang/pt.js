@@ -379,7 +379,21 @@
     "ev.type.visit": "Visita",
     "wa.event": "Olá! Gostaria de ir a isto: {title}. Podem contar-me mais?",
     "wa.eventNews": "Olá! Gostaria de saber quando houver algo perto de mim. A minha cidade é:",
-    "wa.need": "Olá! Há uma necessidade no meu bairro que gostaria de vos contar:"
+    "wa.need": "Olá! Há uma necessidade no meu bairro que gostaria de vos contar:",
+    "near.eyebrow": "Onde quer que esteja na Flórida",
+    "near.title": "Há alguém perto de si que teria gosto em conhecê-lo",
+    "near.lead": "Escolha a sua cidade e o idioma em que prefere falar. Dizemos-lhe a que horas começa o sábado onde vive, para onde ir no sábado, e o nome de quem vai estar à sua espera lá fora para que não tenha de entrar sozinho.",
+    "near.city": "A sua cidade",
+    "near.lang": "O idioma em que prefere falar",
+    "near.cta": "Diga-me para onde ir",
+    "near.sunsetLine": "Em {city} o sábado começa na sexta às {start} e termina no sábado às {end}.",
+    "near.church": "Para onde ir",
+    "near.time": "O culto principal começa às {time}.",
+    "near.mapLink": "Abrir no mapa",
+    "near.person": "Em {city} pergunte por {name}, que fala {langs}.",
+    "near.none": "Ainda não temos ninguém em {city}, e preferimos dizer-lhe isso a mandá-lo para um sítio que não conhecemos. Escreva-nos na mesma: procuramos a congregação mais próxima no seu idioma, e alguém entra consigo.",
+    "near.note": "Não se lhe pede nada. Não tem de ser membro, não tem de se vestir de uma maneira específica, e ninguém lhe vai pedir dinheiro.",
+    "wa.near": "Olá. Estou em {city} e prefiro falar {lang}. Para onde posso ir neste sábado?"
   };
 
 })();

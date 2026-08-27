@@ -379,7 +379,21 @@
     "ev.type.visit": "Vizit",
     "wa.event": "Bonjou! Mwen ta renmen vin nan sa a: {title}. Èske nou ka di m plis?",
     "wa.eventNews": "Bonjou! Mwen ta renmen konnen lè gen yon bagay toupre m. Vil mwen se:",
-    "wa.need": "Bonjou! Gen yon bezwen nan katye m mwen ta renmen pale nou de li:"
+    "wa.need": "Bonjou! Gen yon bezwen nan katye m mwen ta renmen pale nou de li:",
+    "near.eyebrow": "Nenpòt kote ou ye nan Florid",
+    "near.title": "Gen yon moun toupre ou ki t ap kontan rankontre ou",
+    "near.lead": "Chwazi vil ou ak lang ou pito pale a. N ap di ou kilè saba a kòmanse kote ou rete, kote pou ou ale samdi, ak non moun k ap tann ou deyò a pou ou pa bezwen antre pou kont ou.",
+    "near.city": "Vil ou",
+    "near.lang": "Lang ou pito pale a",
+    "near.cta": "Di m kote pou m ale",
+    "near.sunsetLine": "Nan {city}, saba a kòmanse vandredi a {start} epi li fini samdi a {end}.",
+    "near.church": "Kote pou ale",
+    "near.time": "Kilt prensipal la kòmanse a {time}.",
+    "near.mapLink": "Louvri nan kat la",
+    "near.person": "Nan {city}, mande pou {name}, ki pale {langs}.",
+    "near.none": "Nou poko gen pèsonn nan {city}, epi nou pito di ou sa olye nou voye ou yon kote nou pa konnen. Ekri nou kanmenm: n ap chèche kongregasyon ki pi pre a nan lang ou, epi yon moun ap antre avèk ou.",
+    "near.note": "Yo pa mande ou anyen. Ou pa bezwen se manm ou ye, ou pa bezwen abiye yon jan an patikilye, epi pèsonn p ap mande ou lajan.",
+    "wa.near": "Bonjou. Mwen nan {city} epi mwen pito pale {lang}. Kote mwen ka ale saba sa a?"
   };
 
 })();
