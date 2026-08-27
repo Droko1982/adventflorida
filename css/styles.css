@@ -704,6 +704,76 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .gospel-cta h3 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-bottom: 14px; }
 .gospel-cta p { opacity: .88; max-width: 62ch; margin: 0 auto 26px; }
 
+
+/* La quinta tarjeta es la parte del lector: ocupa la fila entera */
+.gospel-step.is-response { grid-column: 1 / -1; }
+.gospel-step.is-response h3 { font-size: 1.55rem; }
+
+.gospel-verbs {
+    list-style: none;
+    counter-reset: verbo;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: 14px 26px;
+    margin: 6px 0 16px;
+}
+.gospel-verbs li {
+    counter-increment: verbo;
+    position: relative;
+    padding-left: 34px;
+    font-size: .94rem;
+    color: var(--text-soft);
+}
+.gospel-verbs li::before {
+    content: counter(verbo);
+    position: absolute; left: 0; top: -1px;
+    width: 24px; height: 24px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: .78rem; font-weight: 700;
+}
+.gospel-alone {
+    font-size: .93rem;
+    color: var(--text);
+    border-left: 3px solid var(--accent);
+    padding-left: 16px;
+    margin-bottom: 14px;
+}
+
+/* Etiqueta de las referencias: "Romanos 3:23" a secas no dice nada
+   a quien no sabe que es una cita biblica */
+.gospel-reflab {
+    display: block;
+    font-size: .68rem;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 3px;
+}
+
+/* Dos puertas: la del que ya quiere y la del que todavia pregunta */
+.gospel-doors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+/* Las etiquetas de estos botones son frases, y hay idiomas que ocupan
+   un 40% mas: sin esto el texto se sale y overflow-x lo esconde */
+.gospel-doors .btn {
+    white-space: normal;
+    line-height: 1.25;
+    text-wrap: balance;
+}
+@media (max-width: 620px) {
+    .gospel-doors { flex-direction: column; }
+    .gospel-doors .btn { width: 100%; }
+}
+[data-theme="dark"] .gospel-cta .btn-ghost,
+.gospel-cta .btn-ghost { border-color: currentColor; }
+
 /* ---------- Acordeon (creencias / FAQ) ---------- */
 .accordion { display: flex; flex-direction: column; gap: 12px; }
 .acc-item {
