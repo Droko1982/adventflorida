@@ -118,6 +118,7 @@
 
     renderVerse(0);
     renderSabbath();
+    renderMissions();
     store(LS_LANG, code);
   }
 
@@ -321,6 +322,222 @@
     sabbathTimer = setInterval(renderSabbath, 60000);
   }
 
+  /* ---------------- Misiones y eventos ---------------- */
+  var EVENTS = window.FAM_EVENTS || [];
+  var pastExpanded = false;
+  var PAST_VISIBLE = 3;
+
+  /* Fecha civil de hoy en Florida. Se usa la hora del este, donde
+     vive la inmensa mayoria del estado; una hora de diferencia con
+     el Panhandle no cambia en que lista cae un evento. */
+  function floridaToday() {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(new Date());
+  }
+
+  /* Texto del evento en el idioma actual, con reserva honesta:
+     idioma actual -> idioma original del evento -> ingles -> el que haya. */
+  function evText(field, ev) {
+    if (!field) return "";
+    if (typeof field === "string") return field;
+    if (field[currentLang]) return field[currentLang];
+    if (ev.lang && field[ev.lang]) return field[ev.lang];
+    if (field.en) return field.en;
+    var k = Object.keys(field);
+    return k.length ? field[k[0]] : "";
+  }
+
+  /* True si el titulo NO existe en el idioma que esta leyendo la persona */
+  function evNeedsNote(ev) {
+    if (typeof ev.title === "string") return (ev.lang || "en") !== currentLang;
+    return ev.title && ev.title[currentLang] === undefined;
+  }
+
+  function evShownLang(ev) {
+    if (typeof ev.title === "string") return ev.lang || "en";
+    if (ev.title && ev.title[currentLang]) return currentLang;
+    if (ev.lang && ev.title && ev.title[ev.lang]) return ev.lang;
+    if (ev.title && ev.title.en) return "en";
+    return ev.lang || "en";
+  }
+
+  function langName(code) {
+    for (var i = 0; i < LANGS.length; i++) if (LANGS[i].code === code) return LANGS[i].native;
+    return code;
+  }
+
+  function splitEvents() {
+    var today = floridaToday(), up = [], past = [];
+    EVENTS.forEach(function (e) {
+      if (!e || !e.start) return;
+      ((e.end || e.start) >= today ? up : past).push(e);
+    });
+    up.sort(function (a, b) { return a.start < b.start ? -1 : a.start > b.start ? 1 : 0; });
+    past.sort(function (a, b) { return a.start > b.start ? -1 : a.start < b.start ? 1 : 0; });
+    return { up: up, past: past };
+  }
+
+  function icon(path) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+           'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';
+  }
+  var ICON_PIN   = '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/>';
+  var ICON_CLOCK = '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>';
+  var ICON_GLOBE = '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18 15 15 0 010-18z"/>';
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function eventCard(ev, isPast, isNext) {
+    var loc = intlLocale();
+    /* Se anade T12:00 para que la fecha no se corra un dia por el huso */
+    var d = new Date(ev.start + "T12:00:00");
+    var dia = new Intl.DateTimeFormat(loc, { day: "numeric" }).format(d);
+    var mes = new Intl.DateTimeFormat(loc, { month: "short" }).format(d);
+    var ano = new Intl.DateTimeFormat(loc, { year: "numeric" }).format(d);
+
+    var h = '<article class="ev-card' + (isPast ? " is-past" : "") + (isNext ? " is-next" : "") + '">';
+
+    if (ev.photo) {
+      h += '<img class="ev-photo" src="' + esc(ev.photo) + '" alt="" loading="lazy" decoding="async">';
+    }
+
+    h += '<div class="ev-body"><div class="ev-top">' +
+         '<div class="ev-date"><span class="d">' + esc(dia) + '</span>' +
+         '<span class="m">' + esc(mes) + '</span><span class="y">' + esc(ano) + '</span></div>' +
+         '<div class="ev-head">';
+    if (ev.type) h += '<span class="ev-type">' + esc(t("ev.type." + ev.type)) + "</span>";
+    h += "<h3>" + esc(evText(ev.title, ev)) + "</h3></div></div>";
+
+    var desc = evText(ev.desc, ev);
+    if (desc) h += '<p class="ev-desc">' + esc(desc) + "</p>";
+
+    var meta = [];
+    if (ev.city)  meta.push("<span>" + icon(ICON_PIN) + esc(ev.city + (ev.place ? " · " + ev.place : "")) + "</span>");
+    if (ev.time && !isPast) meta.push("<span>" + icon(ICON_CLOCK) + esc(ev.time) + "</span>");
+    if (meta.length) h += '<div class="ev-meta">' + meta.join("") + "</div>";
+
+    if (evNeedsNote(ev)) {
+      h += '<p class="ev-lang-note">' + icon(ICON_GLOBE) +
+           esc(t("mis.langNote").replace("{lang}", langName(evShownLang(ev)))) + "</p>";
+    }
+
+    if (!isPast) {
+      var msg = t("wa.event").replace("{title}", evText(ev.title, ev));
+      h += '<a class="btn btn-wa btn-sm" href="' + esc(waLink(msg)) + '" target="_blank" rel="noopener">' +
+           esc(t("mis.join")) + "</a>";
+    } else if (ev.link) {
+      h += '<a class="btn btn-ghost btn-sm" href="' + esc(ev.link) + '" target="_blank" rel="noopener">' +
+           esc(t("mis.moreInfo")) + "</a>";
+    }
+
+    return h + "</div></article>";
+  }
+
+  function emptyState(titleKey, textKey, withCta) {
+    var h = '<div class="mis-empty">' +
+      icon('<path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/>') +
+      "<h3>" + esc(t(titleKey)) + "</h3><p>" + esc(t(textKey)) + "</p>";
+    if (withCta) {
+      h += '<a class="btn btn-wa" href="' + esc(waLink(t("wa.eventNews"))) + '" target="_blank" rel="noopener">' +
+           esc(t("mis.emptyUp.cta")) + "</a>";
+    }
+    return h + "</div>";
+  }
+
+  /* Datos estructurados: solo los eventos que aun no han pasado */
+  function eventSchema(upcoming) {
+    var old = $("#eventSchema");
+    if (old) old.parentNode.removeChild(old);
+    if (!upcoming.length) return;
+    var data = upcoming.slice(0, 12).map(function (ev) {
+      var o = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        name: evText(ev.title, ev),
+        startDate: ev.time ? ev.start + "T" + ev.time : ev.start,
+        endDate: ev.end || ev.start,
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        eventStatus: "https://schema.org/EventScheduled",
+        organizer: { "@type": "Organization", name: "Florida Advent Missionaries" },
+        isAccessibleForFree: true,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD",
+                  availability: "https://schema.org/InStock", url: location.href }
+      };
+      var desc = evText(ev.desc, ev);
+      if (desc) o.description = desc;
+      o.location = ev.city
+        ? { "@type": "Place", name: ev.place || ev.city,
+            address: { "@type": "PostalAddress", addressLocality: ev.city,
+                       addressRegion: "FL", addressCountry: "US" } }
+        : { "@type": "Place", name: "Florida",
+            address: { "@type": "PostalAddress", addressRegion: "FL", addressCountry: "US" } };
+      return o;
+    });
+    var s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.id = "eventSchema";
+    s.textContent = JSON.stringify(data.length === 1 ? data[0] : data);
+    document.head.appendChild(s);
+  }
+
+  function renderMissions() {
+    var up = $("#misUpcoming"), past = $("#misPast");
+    if (!up || !past) return;
+    var s = splitEvents();
+
+    up.innerHTML = s.up.length
+      ? s.up.map(function (e, i) { return eventCard(e, false, i === 0); }).join("")
+      : emptyState("mis.emptyUp.t", "mis.emptyUp.d", true);
+
+    var shown = pastExpanded ? s.past : s.past.slice(0, PAST_VISIBLE);
+    past.innerHTML = s.past.length
+      ? shown.map(function (e) { return eventCard(e, true, false); }).join("")
+      : emptyState("mis.emptyPast.t", "mis.emptyPast.d", false);
+
+    var more = $("#misMore");
+    if (more) {
+      var hay = s.past.length > PAST_VISIBLE;
+      more.hidden = !hay || past.hidden;
+      var b = $("#misMoreBtn");
+      if (b) b.textContent = pastExpanded ? t("mis.less") : t("mis.more");
+    }
+
+    var cUp = $("#tabUpCount"), cPast = $("#tabPastCount");
+    if (cUp)   cUp.textContent   = s.up.length   ? s.up.length   : "";
+    if (cPast) cPast.textContent = s.past.length ? s.past.length : "";
+
+    eventSchema(s.up);
+  }
+
+  function wireMissions() {
+    var tabUp = $("#tabUp"), tabPast = $("#tabPast");
+    if (!tabUp || !tabPast) return;
+
+    function show(which) {
+      var esUp = which === "up";
+      tabUp.setAttribute("aria-selected", esUp ? "true" : "false");
+      tabPast.setAttribute("aria-selected", esUp ? "false" : "true");
+      $("#misUpcoming").hidden = !esUp;
+      $("#misPast").hidden = esUp;
+      renderMissions();
+    }
+    tabUp.addEventListener("click", function () { show("up"); });
+    tabPast.addEventListener("click", function () { show("past"); });
+
+    var b = $("#misMoreBtn");
+    if (b) b.addEventListener("click", function () { pastExpanded = !pastExpanded; renderMissions(); });
+
+    /* Si no hay nada proximo pero si hay historial, se abre en el historial:
+       una seccion que arranca vacia parece rota. */
+    var s = splitEvents();
+    show(!s.up.length && s.past.length ? "past" : "up");
+  }
+
   /* ---------------- Donaciones ---------------- */
   function wireGiving() {
     var online = $("#giveOnline");
@@ -450,6 +667,7 @@
     wirePrayerForm();
     wireGiving();
     wireSabbath();
+    wireMissions();
     wireVideo();
     wireReveal();
   });

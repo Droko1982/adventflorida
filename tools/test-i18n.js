@@ -26,7 +26,9 @@ for (const l of LANGS) {
 // claves definidas pero no usadas (informativo)
 const en = Object.keys(I18N.en);
 const APLICADAS_POR_JS = ['book.legalHt','sab.now','sab.next'];
-const unused = en.filter(k => !keys.has(k) && !k.startsWith('wa.') && k !== 'meta.description' && !k.startsWith('prayer.f.need') && k !== 'book.legalAlt' && !APLICADAS_POR_JS.includes(k));
+/* Prefijos que el JS inserta al renderizar (eventos, estados vacios) */
+const PREFIJOS_JS = ['ev.type.','mis.empty','mis.less','mis.join','mis.moreInfo','mis.langNote'];
+const unused = en.filter(k => !keys.has(k) && !k.startsWith('wa.') && k !== 'meta.description' && !k.startsWith('prayer.f.need') && k !== 'book.legalAlt' && !APLICADAS_POR_JS.includes(k) && !PREFIJOS_JS.some(p => k.startsWith(p)));
 console.log('Definidas y no usadas en HTML:', unused.length ? unused.join(', ') : 'ninguna');
 console.log(bad ? `\n*** ${bad} idioma(s) con problemas ***` : '\nTodo correcto en los 9 idiomas.');
 

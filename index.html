@@ -185,6 +185,7 @@
         <li><a href="#creencias"   data-i18n="nav.beliefs">Beliefs</a></li>
         <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
         <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
+        <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
         <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
         <li><a href="#contacto"    data-i18n="nav.contact">Contact</a></li>
       </ul>
@@ -232,6 +233,7 @@
     <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
     <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
     <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
+    <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
     <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
     <li><a href="#donar"       data-i18n="nav.give">Give</a></li>
     <li><a href="#recursos"    data-i18n="nav.resources">Resources</a></li>
@@ -743,6 +745,46 @@
   </div>
 </section>
 
+<!-- ============ MISIONES ============ -->
+<section class="missions" id="misiones">
+  <div class="container">
+
+    <div class="section-head center reveal">
+      <span class="eyebrow" data-i18n="mis.eyebrow">Out on mission</span>
+      <h2 class="section-title" data-i18n="mis.title">Where we have been, and where we are going next</h2>
+      <p class="section-lead" data-i18n="mis.lead">This is the honest record of what we actually do: the streets we knocked on, the tables we set up in a park, the evenings we spent in someone's living room. If something here is near you, come. You do not need an invitation and you do not need to be an Adventist.</p>
+    </div>
+
+    <div class="mis-tabs reveal" role="tablist">
+      <button class="mis-tab" id="tabUp" type="button" role="tab" aria-selected="true" aria-controls="misUpcoming">
+        <span data-i18n="mis.tabUp">Coming up</span><span class="count" id="tabUpCount"></span>
+      </button>
+      <button class="mis-tab" id="tabPast" type="button" role="tab" aria-selected="false" aria-controls="misPast">
+        <span data-i18n="mis.tabPast">Already done</span><span class="count" id="tabPastCount"></span>
+      </button>
+    </div>
+
+    <div class="mis-grid reveal" id="misUpcoming" role="tabpanel" aria-labelledby="tabUp"></div>
+    <div class="mis-grid reveal" id="misPast" role="tabpanel" aria-labelledby="tabPast" hidden></div>
+
+    <div class="mis-more" id="misMore" hidden>
+      <button class="btn btn-ghost btn-sm" id="misMoreBtn" type="button" data-i18n="mis.more">Show more</button>
+    </div>
+
+    <div class="narrow reveal" style="margin:44px auto 0">
+      <div class="value-card" style="border-left:4px solid var(--accent)">
+        <h3 style="font-size:1.34rem;margin-bottom:9px" data-i18n="mis.need.t">Is there a need on your street?</h3>
+        <p style="font-size:.95rem;color:var(--text-soft);margin-bottom:18px" data-i18n="mis.need.d">A neighbour nobody checks on. A family that lost everything in the last storm. A block where nobody has ever been offered a Bible study. Tell us and we will come — you do not have to organise anything, and you do not have to be there when we do.</p>
+        <a class="btn btn-wa btn-sm" href="#" data-wa="need">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+          <span data-i18n="mis.need.cta">Tell us about it</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ ORACIÓN ============ -->
 <section id="oracion">
   <div class="container">
@@ -978,6 +1020,7 @@
           <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
           <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
           <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
+          <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
         </ul>
       </div>
 
@@ -1008,6 +1051,7 @@
 <script src="js/i18n2.js"></script>
 <script src="js/i18n3.js"></script>
 <script src="js/sabbath.js"></script>
+<script src="js/events.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
