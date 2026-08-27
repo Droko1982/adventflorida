@@ -92,6 +92,14 @@
     var ogLocale = $("meta[property='og:locale']");
     if (ogLocale && meta.locale) ogLocale.setAttribute("content", meta.locale);
 
+    /* El canonical sigue al idioma tambien al cambiarlo sin recargar,
+       para que nunca declare que la version inglesa es la buena. */
+    var url = "https://droko1982.github.io/adventflorida/" + (code === "en" ? "" : "?lang=" + code);
+    var canon = $("link[rel='canonical']");
+    if (canon) canon.setAttribute("href", url);
+    var ogUrl = $("meta[property='og:url']");
+    if (ogUrl) ogUrl.setAttribute("content", url);
+
     /* Libro: enlaces e idioma */
     var bTitle = $("#bookTitleLocal");
     var bPdf   = $("#bookPdf");

@@ -1139,7 +1139,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 .socials a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 .socials svg { width: 18px; height: 18px; }
-.footer-col h4 { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--text); margin-bottom: 15px; }
+.footer-col h3, .footer-col h4 { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--text); margin-bottom: 15px; }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
 .footer-col a { color: var(--text-soft); transition: color .2s ease; }
 .footer-col a:hover { color: var(--accent); }

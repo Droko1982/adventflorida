@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Florida Advent Missionaries · Free Bible Studies &amp; Steps to Christ in 9 Languages</title>
-<meta name="description" id="metaDescription" content="Florida Advent Missionaries: a lay Seventh-day Adventist missionary group serving all of Florida. Free Bible studies, prayer, and the book Steps to Christ in 9 languages. Jesus Christ is our guide and Saviour.">
+<title>Florida Advent Missionaries · Free Bible Studies</title>
+<meta name="description" id="metaDescription" content="Free Bible studies, prayer and the book Steps to Christ, in nine languages, anywhere in Florida. Jesus Christ is our guide and Saviour.">
 <meta name="keywords" content="Florida Advent Missionaries, adventist missionaries Florida, free Bible study Florida, Steps to Christ free book, misioneros adventistas Florida, estudios biblicos gratis Florida, Bible study Spanish Creole French Florida, Delray Beach adventist, prayer request Florida, Seventh-day Adventist Florida, El Camino a Cristo gratis, Vers Jesus livre gratuit, oracion adventista Florida">
 <meta name="author" content="Dr. Mauricio Rodríguez Herrera">
 <meta name="copyright" content="© Dr. Mauricio Rodríguez Herrera">
@@ -89,7 +89,19 @@
       if (L.indexOf(b) > -1) { c = b; break; }
     }
   }
-  document.write('<scr' + 'ipt src="js/lang/' + (c || "en") + '.js"><\/scr' + 'ipt>');
+  c = c || "en";
+
+  /* El canonical tiene que seguir al idioma. Si las nueve variantes
+     ?lang= declaran el mismo canonical que la raiz, Google descarta
+     ocho de ellas y solo indexa la inglesa, y el hreflang no sirve
+     de nada. */
+  var url = "https://droko1982.github.io/adventflorida/" + (c === "en" ? "" : "?lang=" + c);
+  var canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.setAttribute("href", url);
+  var ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute("content", url);
+
+  document.write('<scr' + 'ipt src="js/lang/' + c + '.js"><\/scr' + 'ipt>');
 })();
 </script>
 
@@ -529,7 +541,7 @@
             <div class="sun-slot-day" id="sabStartDay"></div>
           </div>
           <div class="sun-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
           </div>
           <div class="sun-slot">
             <div class="sun-slot-label" data-i18n="sab.ends">Ends</div>
@@ -1039,7 +1051,7 @@
       </div>
 
       <div class="footer-col">
-        <h4 data-i18n="footer.explore">Explore</h4>
+        <h3 class="footer-col-h" data-i18n="footer.explore">Explore</h3>
         <ul>
           <li><a href="#cristo"      data-i18n="nav.christ">Jesus Christ</a></li>
           <li><a href="#libro"       data-i18n="nav.book">Free book</a></li>
@@ -1052,7 +1064,7 @@
       </div>
 
       <div class="footer-col">
-        <h4 data-i18n="footer.connect">Connect</h4>
+        <h3 class="footer-col-h" data-i18n="footer.connect">Connect</h3>
         <ul>
           <li><a href="#oracion"  data-i18n="nav.prayer">Prayer</a></li>
           <li><a href="#donar"    data-i18n="nav.give">Give</a></li>

@@ -58,10 +58,19 @@ async function probar(lang, esperado, etiqueta) {
   const texto = titulo ? titulo.textContent.trim() : "";
   const htmlLang = w.document.documentElement.getAttribute("lang");
 
+  /* El canonical tiene que apuntar a esta variante, no a la raiz:
+     si no, Google descarta ocho de los nueve idiomas. */
+  const BASE = "https://droko1982.github.io/adventflorida/";
+  const canonEsperado = BASE + (esperado === "en" ? "" : "?lang=" + esperado);
+  const canonReal = w.document.querySelector('link[rel="canonical"]').getAttribute("href");
+  const ogReal = w.document.querySelector('meta[property="og:url"]').getAttribute("content");
+
   const unoSolo = cargados.length === 1 && cargados[0] === esperado;
   const traducido = htmlLang === esperado && texto.length > 3 && texto !== "sab.title";
-  const ok = unoSolo && traducido && errs.length === 0;
+  const canonOk = canonReal === canonEsperado && ogReal === canonEsperado;
+  const ok = unoSolo && traducido && canonOk && errs.length === 0;
   if (!ok) fallos++;
+  if (!canonOk) console.log("       canonical: " + canonReal + "  (esperado " + canonEsperado + ")");
 
   console.log(
     "  " + (ok ? "ok  " : "FALLA") + " " + (etiqueta + "                    ").slice(0, 20) +
