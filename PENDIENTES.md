@@ -201,3 +201,13 @@ Mover `#misiones` mas arriba, a la altura de "Quienes somos". Ahora esta
 despues de Ministerios a proposito: una seccion vacia en el sitio donde mas
 gente mira seria peor que no tenerla. Con historial y fotos, se convierte en
 lo mas convincente de la pagina.
+
+## 13. Once llamadas a la accion compitiendo
+
+La pagina tiene once botones de WhatsApp mas la burbuja flotante. Cada uno por
+separado tiene sentido, pero juntos se restan: si todo es la accion principal,
+ninguna lo es. No los he quitado porque cual sobra es una decision vuestra, no
+mia. Cuando el bloque de "a donde ir" tenga datos de tres ciudades, merece la
+pena revisar si el boton generico de la seccion de contacto y el del menu movil
+siguen haciendo falta, y si la burbuja flotante debe seguir apareciendo encima
+del bloque principal.

@@ -80,6 +80,17 @@ const PARES = [
   ["deep-ink", "deep", 4.5, "texto del boton oscuro"],
   ["deep", "deep-soft", 3, "icono sobre fondo suave"],
   ["deep", "bg", 4.5, "azul sobre el fondo"],
+
+  /* Elementos de interfaz. WCAG 1.4.11 pide 3:1 al borde que
+     identifica un control y al indicador de foco. La primera
+     version de esta auditoria solo medía texto, y por eso se
+     le escaparon los dos fallos de abajo durante semanas. */
+  ["ring", "bg", 3, "anillo de foco sobre el fondo"],
+  ["ring", "surface", 3, "anillo de foco sobre tarjeta"],
+  ["ring", "bg-alt", 3, "anillo de foco sobre el fondo alterno"],
+  ["line-btn", "bg", 3, "borde del boton fantasma"],
+  ["line-btn", "surface", 3, "borde del boton fantasma en tarjeta"],
+  ["line-btn", "bg-alt", 3, "borde del boton fantasma en fondo alterno"],
 ];
 
 const TEMAS = [
