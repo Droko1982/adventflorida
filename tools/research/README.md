@@ -18,3 +18,30 @@ y varios enlaces que estaban caidos o secuestrados. Ninguna de esas llego al sit
 
 Vale la pena releerlos antes de tocar el texto de la seccion: casi cada frase
 tiene una razon detras, y varias evitan un error concreto.
+
+---
+
+## Segunda investigacion: misiones, color y conversion
+
+- **`design-plan.md`** — el plan de construccion: color, seccion de misiones,
+  que anadiria la tradicion adventista y cual es el cambio de mayor impacto.
+
+Salio de cuatro vias de investigacion con verificacion adversarial: 106
+afirmaciones, 90 confirmadas y 16 descartadas por erroneas. La via de identidad
+visual fue la peor: 7 de 18 erroneas, casi todas por atribuir colores de marca
+a sitios adventistas que en realidad usaban valores por defecto de WordPress.
+
+**La critica a este plan no llego a registrarse**, a diferencia de la del
+sabado. Los valores de color si se comprobaron aparte con `tools/test-contrast.js`
+antes de aplicarlos.
+
+Tres cosas de aqui que conviene no olvidar:
+
+1. La iglesia mundial declara que **no existe un color oficial adventista**. No
+   hay ninguna paleta que estemos incumpliendo.
+2. La Division Norteamericana si tiene ocho colores oficiales, entre ellos el
+   azul "Denim" `#003B5C`. **Deliberadamente no lo copiamos**: hacerlo empezaria
+   a leerse como entidad oficial.
+3. Bajo la politica BA 40 40 §4, un ministerio laico solo puede usar las marcas
+   de la iglesia **con permiso escrito**. Por eso el sitio no lleva el simbolo de
+   la llama con la Biblia y la cruz por ninguna parte, ni siquiera de fondo.

@@ -14,6 +14,7 @@ oracion y el libro *Steps to Christ* — en el idioma que hablan.
 | Bloque | Contenido |
 |---|---|
 | **Hero + versiculos** | 4 versiculos que rotan, traducidos a los 9 idiomas |
+| **Alguien cerca de ti** | Eliges ciudad e idioma y te dice cuando empieza el sabado ahi, a donde ir y quien te espera |
 | **Quienes somos** | Grupo laico, cobertura estatal, 4 tarjetas de valor |
 | **Video** | Canal oficial de YouTube, con carga diferida (privacidad) |
 | **Cristo** | El evangelio en 4 pasos + llamado a la decision |
@@ -41,6 +42,20 @@ dentro de un minuto de la tabla oficial de la Florida Conference en sus seis
 ciudades. El contenido de la seccion salio de una investigacion con verificacion
 adversarial (158 afirmaciones confirmadas, 12 descartadas por erroneas); el
 resumen esta en [tools/research/](tools/research/).
+
+## A donde ir, ciudad por ciudad
+
+Una persona desconocida llega con dos preguntas: **cuando** y **donde**. El
+bloque que hay justo debajo del hero las responde. La hora del ocaso se calcula
+sola y es real desde el primer dia; lo demas se rellena en
+[js/near.js](js/near.js), un archivo por ciudad con la iglesia, la direccion, el
+mapa, la hora del culto, los idiomas y el nombre de quien va a esperar fuera.
+
+Mientras una ciudad no tenga datos, la pagina **lo dice** en lugar de inventarse
+una direccion. Mandar a alguien a un sitio equivocado un sabado por la manana es
+peor que no mandarlo.
+
+Se edita igual que los eventos: desde el navegador, en GitHub, sin instalar nada.
 
 ## Misiones y eventos
 
@@ -92,6 +107,7 @@ js/i18n.js          EN · ES · FR
 js/i18n2.js         HT · PT · DE
 js/i18n3.js         NL · RU · UK
 js/sabbath.js       Calculo del ocaso (NOAA) y ventana del sabado
+js/near.js          A donde ir por ciudad (el archivo que editan los voluntarios)
 js/events.js        Los eventos de misiones (el archivo que editan los voluntarios)
 js/main.js          Tema, idioma, versiculos, WhatsApp, video, sabado, donaciones
 tools/              Herramientas de mantenimiento y pruebas (ver abajo)
@@ -110,6 +126,8 @@ node tools/test-sunset.js                    comprueba el calculo del ocaso
 node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
 node tools/test-page.js                      carga la pagina en un DOM y la prueba entera (30 asserts)
 node tools/test-contrast.js                  comprueba el contraste WCAG de la paleta
+node tools/test-seo.js                       audita 40 puntos de SEO y estructura
+node tools/test-loader.js                    comprueba que solo se descarga un idioma
 node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
 ```
 

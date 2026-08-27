@@ -177,3 +177,27 @@ Pendiente, y no lo puedo hacer yo:
       estructurado sigue siendo correcto y util, pero no esperes la tarjeta con
       fecha en los resultados.
 - [ ] **Fotografias.** Sigue siendo el hueco mas grande de la pagina.
+
+## 11. A donde ir: lo unico que falta para que el bloque principal sirva
+
+El bloque de debajo del hero es ahora la accion principal de la pagina. Da la
+hora del ocaso de verdad desde el primer dia, pero lo demas esta vacio.
+
+Por cada ciudad donde tengais gente, rellenad en `js/near.js`:
+
+- [ ] **Nombre de la congregacion**, tal como esta en la puerta.
+- [ ] **Direccion completa** y el enlace del mapa.
+- [ ] **Hora del culto principal.** Confirmadla, no la copieis de otra iglesia.
+- [ ] **Idiomas** en los que se predica ahi.
+- [ ] **Nombre de quien va a esperar fuera.** Solo poned un nombre si esa
+      persona ya dijo que si. Si no hay nadie, dejad el campo fuera: la pagina
+      da la direccion igual, sin prometer compania que no existe.
+
+Con tres ciudades ya funciona. No hace falta tenerlas las veintidos.
+
+## 12. Cuando tengais tres eventos con foto
+
+Mover `#misiones` mas arriba, a la altura de "Quienes somos". Ahora esta
+despues de Ministerios a proposito: una seccion vacia en el sitio donde mas
+gente mira seria peor que no tenerla. Con historial y fotos, se convierte en
+lo mas convincente de la pagina.
