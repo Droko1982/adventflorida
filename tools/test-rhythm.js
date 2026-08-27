@@ -78,6 +78,30 @@ ok(repetidas.length === 0, "sin dos bandas iguales seguidas",
 ok(conDegradado.length <= 4, "el degradado de acento es escaso",
   conDegradado.length + ": " + conDegradado.join(", "));
 
+console.log("\n=== Los menus siguen el orden de la pagina ===\n");
+const orden = secciones.map(s => s.id);
+function enOrden(enlaces) {
+  let ult = -1;
+  const mal = [];
+  for (const a of enlaces) {
+    const id = (a.getAttribute("href") || "").slice(1);
+    const i = orden.indexOf(id);
+    if (i === -1) continue;
+    if (i < ult) mal.push(id);
+    ult = i;
+  }
+  return mal;
+}
+const movil = enOrden([...doc.querySelectorAll(".mobile-nav ul a")]);
+ok(movil.length === 0, "menu movil", movil.length ? "desordenado: " + movil.join(", ") : "en orden");
+const escritorio = enOrden([...doc.querySelectorAll(".main-nav a")]);
+ok(escritorio.length === 0, "menu de escritorio", escritorio.length ? "desordenado: " + escritorio.join(", ") : "en orden");
+/* El pie tiene dos columnas: cada una se comprueba por separado */
+[...doc.querySelectorAll(".footer-col")].forEach((col, i) => {
+  const mal = enOrden([...col.querySelectorAll("a")]);
+  ok(mal.length === 0, "columna " + (i + 1) + " del pie", mal.length ? "desordenada: " + mal.join(", ") : "en orden");
+});
+
 console.log("\n=== Sistema de transiciones ===\n");
 const duraciones = (css.match(/transition:[^;]*/g) || [])
   .flatMap(t => t.match(/\d*\.?\d+m?s/g) || []);

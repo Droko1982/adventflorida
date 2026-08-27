@@ -533,7 +533,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .value-card h3 { font-size: 1.32rem; margin-bottom: 8px; }
 .value-card p { font-size: .93rem; color: var(--text-soft); }
 
-.join { background: var(--bg); }
+.join { background: var(--bg-alt); }
 
 /* ---------- Testimonios en video ---------- */
 .stories { background: var(--bg-alt); }
@@ -656,7 +656,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .gospel {
     background:
         radial-gradient(760px 460px at 84% 4%, var(--accent-soft), transparent 62%),
-        var(--bg-alt);
+        var(--bg);
 }
 .gospel-steps {
     display: grid;
