@@ -1,76 +1,151 @@
 #!/usr/bin/env node
 /* =========================================================
    test-page.js — carga index.html en un DOM real y prueba
-   el widget del sabado, los 9 idiomas, los enlaces del libro
-   y que no quede ninguna clave sin traducir.
+   el reloj del sabado, la seccion de misiones, los nueve
+   idiomas, los enlaces del libro y que no quede ninguna
+   clave sin traducir.
    Autor: Dr. Mauricio Rodriguez Herrera
 
    Necesita jsdom, que NO es dependencia del sitio:
-     npm install --no-save jsdom  (o instalalo en otra carpeta)
+     npm install --no-save jsdom
    ========================================================= */
-const fs = require('fs');
-const path = require('path');
-const { JSDOM } = require('jsdom');
-const ROOT = require('path').resolve(__dirname, '..');
+"use strict";
 
-const html = fs.readFileSync(path.join(ROOT,'index.html'),'utf8');
+const fs = require("fs");
+const path = require("path");
+
+let JSDOM;
+try {
+  ({ JSDOM } = require("jsdom"));
+} catch (e) {
+  console.error("Falta jsdom. Instalalo con:  npm install --no-save jsdom");
+  process.exit(2);
+}
+
+const ROOT = path.resolve(__dirname, "..");
 const errores = [];
-const dom = new JSDOM(html, {
-  runScripts: 'outside-only',
-  url: 'https://droko1982.github.io/adventflorida/',
+
+const dom = new JSDOM(fs.readFileSync(path.join(ROOT, "index.html"), "utf8"), {
+  runScripts: "outside-only",
+  url: "https://droko1982.github.io/adventflorida/",
   pretendToBeVisual: true,
 });
 const { window } = dom;
-window.matchMedia = window.matchMedia || (q => ({ matches:false, addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){} }));
-window.IntersectionObserver = class { observe(){} unobserve(){} disconnect(){} };
-window.onerror = (m)=>errores.push(String(m));
 
-for (const f of ['js/i18n.js','js/i18n2.js','js/i18n3.js','js/sabbath.js','js/main.js']) {
-  try { window.eval(fs.readFileSync(path.join(ROOT,f),'utf8')); }
-  catch(e){ errores.push(f+': '+e.message); }
+window.matchMedia = window.matchMedia || (() => ({
+  matches: false, addListener() {}, removeListener() {},
+  addEventListener() {}, removeEventListener() {},
+}));
+window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
+window.onerror = (m) => errores.push(String(m));
+
+for (const f of ["js/i18n.js", "js/i18n2.js", "js/i18n3.js", "js/sabbath.js", "js/events.js", "js/main.js"]) {
+  try { window.eval(fs.readFileSync(path.join(ROOT, f), "utf8")); }
+  catch (e) { errores.push(f + ": " + e.message); }
 }
-window.document.dispatchEvent(new window.Event('DOMContentLoaded'));
+window.document.dispatchEvent(new window.Event("DOMContentLoaded"));
 
-const $ = s => window.document.querySelector(s);
-const txt = s => { const e=$(s); return e ? e.textContent.trim() : '(no existe)'; };
+const sel = (s) => window.document.querySelector(s);
+const txt = (s) => { const e = sel(s); return e ? e.textContent.trim().replace(/\s+/g, " ") : "(no existe)"; };
+const clic = (s) => sel(s).dispatchEvent(new window.Event("click"));
+const idioma = (code) =>
+  [...window.document.querySelectorAll("#langMenu button")]
+    .find((b) => b.getAttribute("data-lang") === code)
+    .dispatchEvent(new window.Event("click"));
 
-console.log('=== Widget del sabado ===');
-console.log('  ciudades en el selector :', $('#sabCity').options.length);
-console.log('  ciudad seleccionada     :', $('#sabCity').value);
-console.log('  estado                  :', txt('#sabStatusText'));
-console.log('  empieza                 :', txt('#sabStartTime'), '·', txt('#sabStartDay'));
-console.log('  termina                 :', txt('#sabEndTime'), '·', txt('#sabEndDay'));
-
-console.log('\n=== Cambio de ciudad (Pensacola, hora central) ===');
-$('#sabCity').value = 'pensacola';
-$('#sabCity').dispatchEvent(new window.Event('change'));
-console.log('  empieza                 :', txt('#sabStartTime'), '·', txt('#sabStartDay'));
-
-console.log('\n=== Cambio de idioma ===');
-for (const code of ['es','ht','de','ru','uk']) {
-  const btn = [...window.document.querySelectorAll('#langMenu button')].find(b=>b.getAttribute('data-lang')===code);
-  btn.dispatchEvent(new window.Event('click'));
-  console.log('  '+code+': titulo="'+txt('[data-i18n="sab.title"]')+'" | estado="'+txt('#sabStatusText')+'" | empieza '+txt('#sabStartTime'));
+let fallos = 0;
+function comprobar(cond, etiqueta, detalle) {
+  if (!cond) fallos++;
+  console.log("  " + (cond ? "ok  " : "FALLA") + " " + (etiqueta + "                              ").slice(0, 30) + (detalle || ""));
 }
 
-console.log('\n=== Enlace del libro por idioma ===');
-for (const code of ['en','ht','ru']) {
-  const btn = [...window.document.querySelectorAll('#langMenu button')].find(b=>b.getAttribute('data-lang')===code);
-  btn.dispatchEvent(new window.Event('click'));
-  console.log('  '+code+': '+$('#bookPdf').getAttribute('href').slice(0,62));
-  console.log('        aviso: '+txt('#bookLegal').slice(0,72)+'…');
+/* ---------------- Reloj del sabado ---------------- */
+console.log("\n=== Reloj del sabado ===\n");
+comprobar(sel("#sabCity").options.length === 22, "22 ciudades", sel("#sabCity").options.length + " en el selector");
+comprobar(/\d/.test(txt("#sabStartTime")), "hora de inicio", txt("#sabStartTime") + " · " + txt("#sabStartDay"));
+comprobar(/\d/.test(txt("#sabEndTime")), "hora de fin", txt("#sabEndTime") + " · " + txt("#sabEndDay"));
+
+sel("#sabCity").value = "pensacola";
+sel("#sabCity").dispatchEvent(new window.Event("change"));
+comprobar(/\d/.test(txt("#sabStartTime")), "cambio de ciudad", "Pensacola (hora central): " + txt("#sabStartTime"));
+
+/* ---------------- Misiones: arranca sin eventos ---------------- */
+console.log("\n=== Misiones, sin ningun evento ===\n");
+comprobar(!!sel("#misUpcoming .mis-empty"), "estado vacio", txt("#misUpcoming .mis-empty h3"));
+comprobar(!!sel("#misUpcoming .mis-empty .btn"), "invita, no falla", txt("#misUpcoming .mis-empty .btn"));
+comprobar(sel("#misMore").hidden, "boton ver mas oculto");
+comprobar(!sel("#eventSchema"), "sin JSON-LD de eventos");
+
+/* ---------------- Misiones: con eventos de prueba ---------------- */
+console.log("\n=== Misiones, con eventos de prueba ===\n");
+window.FAM_EVENTS.push(
+  { start: "2099-12-05", time: "10:00", type: "health", city: "Orlando", lang: "es", title: "Prueba futura" },
+  { start: "2099-12-20", type: "evangelism", city: "Miami", lang: "es",
+    title: { es: "Con traduccion", en: "Translated" } },
+  { start: "2000-01-01", type: "community", city: "Miami", lang: "es", title: "Pasada A" },
+  { start: "2000-02-01", type: "visit", city: "Tampa", lang: "es", title: "Pasada B" },
+  { start: "2000-03-01", type: "prayer", city: "Naples", lang: "es", title: "Pasada C" },
+  { start: "2000-04-01", type: "literature", city: "Ocala", lang: "es", title: "Pasada D" }
+);
+clic("#tabUp");
+const prox = sel("#misUpcoming").querySelectorAll(".ev-card");
+comprobar(prox.length === 2, "2 proximos", prox.length + " tarjetas");
+comprobar(prox[0].classList.contains("is-next"), "el primero destacado");
+comprobar(txt("#tabUpCount") === "2", "contador de proximos", txt("#tabUpCount"));
+comprobar(!!sel("#eventSchema"), "JSON-LD generado",
+  sel("#eventSchema") ? JSON.parse(sel("#eventSchema").textContent).length + " eventos" : "");
+
+clic("#tabPast");
+comprobar(sel("#misPast").querySelectorAll(".ev-card").length === 3, "pasados limitados a 3");
+comprobar(!sel("#misMore").hidden, "aparece ver mas", txt("#misMoreBtn"));
+const ordenPasados = [...sel("#misPast").querySelectorAll(".ev-card h3")].map((e) => e.textContent.trim());
+comprobar(ordenPasados[0] === "Pasada D", "del mas reciente al mas viejo", ordenPasados.join(" | "));
+clic("#misMoreBtn");
+comprobar(sel("#misPast").querySelectorAll(".ev-card").length === 4, "ver mas los muestra todos");
+
+/* ---------------- Reserva de idioma en los eventos ---------------- */
+console.log("\n=== Eventos escritos en otro idioma ===\n");
+idioma("en");
+clic("#tabUp");
+const c = sel("#misUpcoming").querySelectorAll(".ev-card");
+comprobar(!!c[0].querySelector(".ev-lang-note"), "avisa del idioma original",
+  c[0].querySelector(".ev-lang-note").textContent.trim());
+comprobar(!c[1].querySelector(".ev-lang-note"), "sin aviso si hay traduccion",
+  c[1].querySelector("h3").textContent.trim());
+
+/* ---------------- Los nueve idiomas ---------------- */
+console.log("\n=== Los nueve idiomas ===\n");
+for (const code of ["en", "es", "fr", "ht", "pt", "de", "nl", "ru", "uk"]) {
+  idioma(code);
+  const t1 = txt('[data-i18n="sab.title"]');
+  const t2 = txt('[data-i18n="mis.title"]');
+  comprobar(t1 !== "sab.title" && t2 !== "mis.title", code,
+    t1.slice(0, 32) + " · " + t2.slice(0, 32));
 }
 
-console.log('\n=== Donaciones (GIVE vacio) ===');
-console.log('  boton en linea oculto:', $('#giveOnline').hasAttribute('hidden'));
-console.log('  bloque Zelle oculto  :', $('#giveZelle').hasAttribute('hidden'));
+/* ---------------- Enlaces del libro ---------------- */
+console.log("\n=== Enlace del libro por idioma ===\n");
+for (const [code, esperado] of [["en", "en_SC"], ["ht", "fr_VJC"], ["ru", "allCollection/ru"]]) {
+  idioma(code);
+  const href = sel("#bookPdf").getAttribute("href");
+  comprobar(href.includes(esperado), code, href.slice(-34));
+}
 
-console.log('\n=== Claves sin traducir en el DOM ===');
-const crudas = [...window.document.querySelectorAll('[data-i18n],[data-i18n-html]')]
-  .filter(e => /^[a-z]+(\.[a-zA-Z0-9]+)+$/.test(e.textContent.trim()));
-console.log('  ', crudas.length ? crudas.map(e=>e.textContent.trim()).join(', ') : 'ninguna');
+/* ---------------- Donaciones ---------------- */
+console.log("\n=== Donaciones (GIVE vacio) ===\n");
+comprobar(sel("#giveOnline").hasAttribute("hidden"), "boton en linea oculto");
+comprobar(sel("#giveZelle").hasAttribute("hidden"), "bloque Zelle oculto");
 
-console.log('\n=== Errores de ejecucion ===');
-console.log('  ', errores.length ? errores.join('\n   ') : 'ninguno');
+/* ---------------- Claves crudas ---------------- */
+console.log("\n=== Claves sin traducir en el DOM ===\n");
+const crudas = [...window.document.querySelectorAll("[data-i18n],[data-i18n-html]")]
+  .filter((e) => /^[a-z]+(\.[a-zA-Z0-9]+)+$/.test(e.textContent.trim()))
+  .map((e) => e.textContent.trim());
+comprobar(crudas.length === 0, "ninguna clave visible", crudas.join(", "));
 
-process.exit(errores.length ? 1 : 0);
+/* ---------------- Errores ---------------- */
+console.log("\n=== Errores de ejecucion ===\n");
+comprobar(errores.length === 0, "sin errores", errores.join(" | "));
+
+console.log(fallos === 0 ? "\nTodo correcto.\n" : "\n*** " + fallos + " comprobacion(es) fallida(s) ***\n");
+process.exit(fallos === 0 ? 0 : 1);
