@@ -113,6 +113,10 @@ comprobar(!!c[0].querySelector(".ev-lang-note"), "avisa del idioma original",
   c[0].querySelector(".ev-lang-note").textContent.trim());
 comprobar(!c[1].querySelector(".ev-lang-note"), "sin aviso si hay traduccion",
   c[1].querySelector("h3").textContent.trim());
+comprobar(c[0].querySelector("h3").getAttribute("lang") === "es",
+  "marca lang= en el texto", 'lang="' + c[0].querySelector("h3").getAttribute("lang") + '"');
+comprobar(!c[1].querySelector("h3").getAttribute("lang"),
+  "sin lang= si esta traducido");
 
 /* ---------------- Los nueve idiomas ---------------- */
 console.log("\n=== Los nueve idiomas ===\n");

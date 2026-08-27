@@ -421,15 +421,20 @@
       h += '<img class="ev-photo" src="' + esc(ev.photo) + '" alt="" loading="lazy" decoding="async">';
     }
 
+    /* Si el texto no esta en el idioma que se esta leyendo, hay que
+       marcarlo con lang= o el lector de pantalla lo pronuncia con la
+       voz equivocada: criollo leido como si fuera ingles. */
+    var otro = evNeedsNote(ev) ? ' lang="' + esc(evShownLang(ev)) + '"' : "";
+
     h += '<div class="ev-body"><div class="ev-top">' +
          '<div class="ev-date"><span class="d">' + esc(dia) + '</span>' +
          '<span class="m">' + esc(mes) + '</span><span class="y">' + esc(ano) + '</span></div>' +
          '<div class="ev-head">';
     if (ev.type) h += '<span class="ev-type">' + esc(t("ev.type." + ev.type)) + "</span>";
-    h += "<h3>" + esc(evText(ev.title, ev)) + "</h3></div></div>";
+    h += "<h3" + otro + ">" + esc(evText(ev.title, ev)) + "</h3></div></div>";
 
     var desc = evText(ev.desc, ev);
-    if (desc) h += '<p class="ev-desc">' + esc(desc) + "</p>";
+    if (desc) h += '<p class="ev-desc"' + otro + ">" + esc(desc) + "</p>";
 
     var meta = [];
     if (ev.city)  meta.push("<span>" + icon(ICON_PIN) + esc(ev.city + (ev.place ? " · " + ev.place : "")) + "</span>");
