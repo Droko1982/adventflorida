@@ -3,6 +3,35 @@
 Lo que sigue **no bloquea** el sitio: ya esta publicado y funcional. Son mejoras y
 verificaciones que dependen de informacion que solo tiene el equipo de la organizacion.
 
+## 0. Un correo, y el contacto pasa a ser en linea (lo mas rentable de esta lista)
+
+La pagina ya tiene **dos formularios de verdad**: el de oracion y el nuevo de la
+seccion de contacto. Hoy los dos preparan el mensaje y lo entregan por WhatsApp,
+que es el unico canal comprobado. Con un correo pasan a enviarse **desde la propia
+pagina**, sin que el visitante tenga que salir ni tener WhatsApp instalado.
+
+En `js/main.js`, justo debajo de `GIVE`:
+
+```js
+var CONTACT = { email: "" };   // ponedlo aqui y ya esta
+```
+
+Como activarlo, una sola vez:
+
+1. Poner el correo del ministerio entre las comillas y publicar.
+2. Enviar vosotros mismos un mensaje de prueba desde la pagina.
+3. FormSubmit mandara a ese correo un mensaje con un **enlace de activacion**.
+   Pulsarlo. A partir de ahi todo llega solo, sin servidor y sin coste.
+
+- [ ] **Elegir el correo.** Que sea uno del ministerio al que tenga acceso quien
+      ora, no el personal de nadie: por ahi van a entrar peticiones de oracion
+      con nombres, enfermedades y problemas de familia.
+- [ ] Hacer la prueba de activacion y comprobar que llega.
+
+Mientras el campo siga vacio no se rompe nada ni se promete nada falso: los
+formularios funcionan, y el aviso de privacidad debajo de cada uno **cambia solo**
+para decir en cada caso lo que de verdad pasa con el mensaje.
+
 ## 1. Confirmar con Florida Advent Missionaries (importante)
 
 - [ ] **Datos publicos usados.** Nombre legal, EIN `81-1180614` y direccion
@@ -195,12 +224,20 @@ Por cada ciudad donde tengais gente, rellenad en `js/near.js`:
 
 Con tres ciudades ya funciona. No hace falta tenerlas las veintidos.
 
-## 12. Cuando tengais tres eventos con foto
+Mientras `js/near.js` este vacio, la entradilla de ese bloque **ya no promete un
+nombre**: ofrece solo la hora del ocaso, que si es real, y se ofrece a averiguar
+cual es la congregacion mas cercana. En cuanto pongais la primera ciudad, vuelve
+sola a la version completa. No hay que tocar el texto.
 
-Mover `#misiones` mas arriba, a la altura de "Quienes somos". Ahora esta
-despues de Ministerios a proposito: una seccion vacia en el sitio donde mas
-gente mira seria peor que no tenerla. Con historial y fotos, se convierte en
-lo mas convincente de la pagina.
+## 12. Misiones: se esconde sola mientras este vacia
+
+`#misiones` **no se muestra** mientras `js/events.js` no tenga ni un evento, y con
+ella se esconden sus enlaces del menu, para no dejar anclas que no llevan a nada.
+Al anadir el primer evento reaparece sola.
+
+Cuando tengais tres eventos con foto, merece la pena mover la seccion mas arriba,
+a la altura de "Quienes somos". Ahora esta despues de Ministerios a proposito.
+Con historial y fotos, se convierte en lo mas convincente de la pagina.
 
 ## 13. Once llamadas a la accion compitiendo
 

@@ -1234,6 +1234,26 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 .form-note svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 3px; color: var(--accent); }
 
+/* Trampa para robots. Fuera de la pantalla y no display:none, porque
+   algunos rellenadores automaticos saltan lo que esta oculto del todo. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* El aviso despues de enviar. El color no es lo que informa: el texto
+   dice lo que paso, para quien no distingue colores o usa lector. */
+.form-status {
+    margin: 14px 0 0;
+    padding: 13px 15px;
+    border-radius: 13px;
+    font-size: .95rem;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--line-strong);
+}
+.form-status.is-ok { background: var(--accent-soft); border-color: var(--accent); }
+.form-alt { margin: 12px 0 0; text-align: center; font-size: .93rem; }
+.form-alt a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
 .prayer-aside .verse-card { margin-bottom: 22px; }
 .prayer-list { list-style: none; display: flex; flex-direction: column; gap: 15px; }
 .prayer-list li { display: flex; gap: 12px; font-size: .94rem; color: var(--text-soft); }
@@ -1343,6 +1363,23 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 .contact h2 { font-size: clamp(2.1rem, 4.6vw, 3.2rem); margin-bottom: 16px; }
 .contact .section-lead { max-width: 62ch; margin: 0 auto 30px; }
+.contact-form {
+    max-width: 640px;
+    margin: 0 auto 28px;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 26px;
+    box-shadow: var(--shadow-sm);
+}
+/* Dos columnas cuando caben; una sola en el telefono, sin desbordar */
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    gap: 0 16px;
+}
+
 .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 34px; }
 .contact-meta {
     display: flex; flex-wrap: wrap; gap: 12px 32px;

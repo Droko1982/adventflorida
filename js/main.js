@@ -26,6 +26,38 @@
     zelle:  ""
   };
 
+  /* ---------------------------------------------------------
+     CONTACTO EN LINEA — el otro unico sitio que hay que tocar.
+
+     Pon aqui el correo al que quieres que lleguen los mensajes
+     del formulario de contacto y las peticiones de oracion, y
+     los dos formularios pasan a enviarse desde la propia pagina,
+     sin abrir WhatsApp y sin que el visitante tenga que salir.
+
+       var CONTACT = { email: "hola@floridaadventmissionaries.org" };
+
+     No hace falta servidor ni cuenta de pago: usamos FormSubmit.
+     La PRIMERA vez que alguien envie el formulario, FormSubmit
+     manda a ese correo un mensaje con un enlace de activacion.
+     Hay que pulsarlo una sola vez; a partir de ahi todo llega solo.
+     Conviene hacer esa primera prueba uno mismo.
+
+     Mientras este vacio no se promete nada que no se cumpla: los
+     formularios siguen funcionando, pero preparan el mensaje y lo
+     entregan por WhatsApp, que es el canal que si esta comprobado.
+     El aviso de privacidad debajo de cada formulario cambia solo
+     para decir en cada caso lo que de verdad pasa.
+
+     Ojo: al ser peticiones de oracion, este correo deberia ser uno
+     del ministerio al que tenga acceso quien ora, no el personal
+     de nadie.
+     --------------------------------------------------------- */
+  var CONTACT = { email: "" };
+
+  /* Sin Promise no hay envio asincrono: se cae a WhatsApp, que siempre va. */
+  function online() { return !!CONTACT.email && !!window.Promise; }
+  function endpoint() { return "https://formsubmit.co/ajax/" + encodeURIComponent(CONTACT.email); }
+
   var LS_THEME   = "fam-theme";
   var LS_LANG    = "fam-lang";
   var DEFAULT_LANG = "en";
@@ -128,6 +160,7 @@
     renderStories();
     nearRender();
     renderMissions();
+    renderFormNotes();
     store(LS_LANG, code);
   }
 
@@ -249,20 +282,114 @@
     });
   }
 
+  /* ---------------- Formularios ----------------
+     Un solo motor para los dos: el de oracion y el de contacto.
+     Si hay correo configurado, el mensaje sale desde la pagina y
+     el visitante no tiene que irse a ninguna parte. Si no lo hay,
+     se entrega por WhatsApp igual que antes. */
+
+  /* Mensaje bajo el boton. tono: "ok", "err" o "wait". */
+  function estado(el, texto, tono) {
+    if (!el) return;
+    if (!texto) { el.hidden = true; el.textContent = ""; return; }
+    el.className = "form-status is-" + tono;
+    el.textContent = texto;
+    el.hidden = false;
+  }
+
+  function ocupado(btn, si) {
+    if (!btn) return;
+    btn.disabled = si;
+    var span = btn.querySelector("span");
+    if (!span) return;
+    if (si) {
+      if (!btn.getAttribute("data-label")) btn.setAttribute("data-label", span.textContent);
+      span.textContent = t("form.sending");
+    } else {
+      var prev = btn.getAttribute("data-label");
+      if (prev) span.textContent = prev;
+    }
+  }
+
+  /* Envia por FormSubmit. Devuelve una promesa que resuelve a true/false.
+     Se usa fetch cuando el navegador lo tiene; si no, XMLHttpRequest,
+     para no dejar fuera a nadie con un telefono viejo. */
+  function enviar(asunto, campos) {
+    var cuerpo = { _subject: asunto, _captcha: "false", _template: "table" };
+    Object.keys(campos).forEach(function (k) { if (campos[k]) cuerpo[k] = campos[k]; });
+    var json = JSON.stringify(cuerpo);
+
+    return new Promise(function (resolve) {
+      if (window.fetch) {
+        fetch(endpoint(), {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: json
+        }).then(function (r) { resolve(r.ok); }, function () { resolve(false); });
+        return;
+      }
+      try {
+        var x = new XMLHttpRequest();
+        x.open("POST", endpoint(), true);
+        x.setRequestHeader("Content-Type", "application/json");
+        x.onreadystatechange = function () {
+          if (x.readyState === 4) resolve(x.status >= 200 && x.status < 300);
+        };
+        x.send(json);
+      } catch (e) { resolve(false); }
+    });
+  }
+
+  /* Los avisos de privacidad dicen lo que de verdad ocurre en cada
+     modo, asi que los escribe el JS y no llevan data-i18n. */
+  function renderFormNotes() {
+    var pp = $("#pPrivacy"), cp = $("#cPrivacy"), alt = $("#pAlt");
+    if (pp) pp.textContent = online() ? t("prayer.f.privacyOnline") : t("prayer.f.privacy");
+    if (cp) cp.textContent = online() ? t("contact.f.privacy") : t("prayer.f.privacy");
+    if (alt) alt.hidden = !online();
+    /* Sin correo, el boton de oracion es de WhatsApp y lo dice su icono */
+    var pb = $("#pSend"), icon = pb ? pb.querySelector("[data-wa-icon]") : null;
+    if (pb) {
+      pb.classList.toggle("btn-wa", !online());
+      pb.classList.toggle("btn-primary", online());
+    }
+    if (icon) icon.style.display = online() ? "none" : "";
+  }
+
   function wirePrayerForm() {
     var form = $("#prayerForm");
     if (!form) return;
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if ($("#pHoney") && $("#pHoney").value) return;   /* trampa para robots */
       var name = $("#pName").value.trim();
       var city = $("#pCity").value.trim();
       var sel  = $("#pTopic");
       var topic = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent.trim() : "";
       var msg  = $("#pMsg").value.trim();
+      var box  = $("#pStatus"), btn = $("#pSend");
 
       if (!msg) {
         $("#pMsg").focus();
-        alert(t("prayer.f.needMsg"));
+        estado(box, t("prayer.f.needMsg"), "err");
+        return;
+      }
+
+      var campos = {};
+      campos[t("wa.name")]    = name;
+      campos[t("wa.city")]    = city;
+      campos[t("wa.topic")]   = topic;
+      campos[t("wa.request")] = msg;
+      campos.idioma = currentLang;
+
+      if (online()) {
+        estado(box, "", "wait");
+        ocupado(btn, true);
+        enviar("Peticion de oracion - " + (name || "anonimo"), campos).then(function (ok) {
+          ocupado(btn, false);
+          estado(box, ok ? t("prayer.f.ok") : t("form.err"), ok ? "ok" : "err");
+          if (ok) form.reset();
+        });
         return;
       }
 
@@ -271,6 +398,54 @@
       if (city) lines.push(t("wa.city") + ": " + city);
       if (topic) lines.push(t("wa.topic") + ": " + topic);
       lines.push(t("wa.request") + ": " + msg);
+
+      window.open(waLink(lines.join("\n")), "_blank", "noopener");
+    });
+  }
+
+  function wireContactForm() {
+    var form = $("#contactForm");
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if ($("#cHoney") && $("#cHoney").value) return;
+      var name  = $("#cName").value.trim();
+      var reply = $("#cReply").value.trim();
+      var city  = $("#cCity").value.trim();
+      var sel   = $("#cTopic");
+      var topic = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent.trim() : "";
+      var msg   = $("#cMsg").value.trim();
+      var box   = $("#cStatus"), btn = $("#cSend");
+
+      if (!msg) { $("#cMsg").focus(); estado(box, t("contact.f.needMsg"), "err"); return; }
+      /* Sin forma de contestar, el mensaje no sirve de nada */
+      if (online() && !reply) { $("#cReply").focus(); estado(box, t("contact.f.needReply"), "err"); return; }
+
+      var campos = {};
+      campos[t("wa.name")]  = name;
+      campos.email          = reply;
+      campos[t("wa.city")]  = city;
+      campos[t("wa.topic")] = topic;
+      campos[t("wa.need")]  = msg;
+      campos.idioma = currentLang;
+
+      if (online()) {
+        estado(box, "", "wait");
+        ocupado(btn, true);
+        enviar("Mensaje de la web - " + (topic || "contacto"), campos).then(function (ok) {
+          ocupado(btn, false);
+          estado(box, ok ? t("contact.f.ok") : t("form.err"), ok ? "ok" : "err");
+          if (ok) form.reset();
+        });
+        return;
+      }
+
+      var lines = ["*" + t("wa.general") + "*"];
+      if (name) lines.push(t("wa.name") + ": " + name);
+      if (reply) lines.push(reply);
+      if (city) lines.push(t("wa.city") + ": " + city);
+      if (topic) lines.push(t("wa.topic") + ": " + topic);
+      lines.push(t("wa.need") + ": " + msg);
 
       window.open(waLink(lines.join("\n")), "_blank", "noopener");
     });
@@ -406,6 +581,12 @@
   function nearRender() {
     var out = $("#nearOut"), selC = $("#nearCity"), selL = $("#nearLang");
     if (!out || !selC || !selL || !window.FAM_SUNSET) return;
+
+    /* La entradilla no puede prometer "el nombre de quien te espera"
+       mientras no haya ni una ciudad confirmada. La hora del ocaso si
+       es real desde el primer dia, porque se calcula. */
+    var lead = $("#cerca .section-lead");
+    if (lead) lead.textContent = Object.keys(NEAR).length ? t("near.lead") : t("near.lead0");
 
     var city = window.FAM_SUNSET.city(selC.value);
     var lang = selL.value;
@@ -704,7 +885,23 @@
     eventSchema(s.up);
   }
 
+  /* Una seccion que promete algo y no lo tiene frena la pagina entera.
+     Misiones se esconde sola mientras no haya ni un evento, y con ella
+     sus enlaces del menu, para no dejar anclas que no llevan a nada.
+     En cuanto se anada el primer evento a js/events.js, vuelve sola. */
+  function toggleMissions() {
+    var sec = $("#misiones");
+    if (!sec) return;
+    var hay = EVENTS.length > 0;
+    sec.hidden = !hay;
+    $$('a[href="#misiones"]').forEach(function (a) {
+      var li = a.closest ? a.closest("li") : a.parentNode;
+      (li || a).hidden = !hay;
+    });
+  }
+
   function wireMissions() {
+    toggleMissions();
     var tabUp = $("#tabUp"), tabPast = $("#tabPast");
     if (!tabUp || !tabPast) return;
 
@@ -843,6 +1040,8 @@
     wireNav();
     wireWhatsApp();
     wirePrayerForm();
+    wireContactForm();
+    renderFormNotes();
     wireGiving();
     wireSabbath();
     renderStories();

@@ -103,13 +103,12 @@ pintado** con un script inline, asi que no hay parpadeo blanco. Se recuerda en
 index.html          Pagina unica con todas las secciones
 404.html            Pagina de error con versiculo
 css/styles.css      Sistema de diseno completo (tokens, componentes, responsive)
-js/i18n.js          EN · ES · FR
-js/i18n2.js         HT · PT · DE
-js/i18n3.js         NL · RU · UK
+js/i18n.js          Lista de los 9 idiomas y enlaces del libro
+js/lang/<cod>.js    Un diccionario por idioma (solo se descarga el que se usa)
 js/sabbath.js       Calculo del ocaso (NOAA) y ventana del sabado
 js/near.js          A donde ir por ciudad (el archivo que editan los voluntarios)
 js/events.js        Los eventos de misiones (el archivo que editan los voluntarios)
-js/main.js          Tema, idioma, versiculos, WhatsApp, video, sabado, donaciones
+js/main.js          Tema, idioma, versiculos, sabado, formularios, donaciones
 tools/              Herramientas de mantenimiento y pruebas (ver abajo)
 assets/             Iconos PWA, favicon SVG e imagen Open Graph
 manifest.json       PWA instalable
@@ -124,17 +123,20 @@ Sin dependencias, sin build, sin framework. HTML + CSS + JS vanilla.
 ```
 node tools/test-sunset.js                    comprueba el calculo del ocaso
 node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
-node tools/test-page.js                      carga la pagina en un DOM y la prueba entera (30 asserts)
+node tools/test-page.js                      carga la pagina en un DOM y la prueba entera
+node tools/test-forms.js                     los dos formularios, en sus dos modos
 node tools/test-contrast.js                  comprueba el contraste WCAG de la paleta
+node tools/test-responsive.js                telefono, tableta y escritorio
+node tools/test-rhythm.js                    alternancia de fondos y ritmo de secciones
 node tools/test-seo.js                       audita 40 puntos de SEO y estructura
 node tools/test-loader.js                    comprueba que solo se descarga un idioma
 node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
 ```
 
-`test-page.js` necesita jsdom, que no es dependencia del sitio:
+`test-page.js` y `test-forms.js` necesitan jsdom, que no es dependencia del sitio:
 `npm install --no-save jsdom`.
 
-Para anadir o cambiar textos, **no edites los tres `js/i18n*.js` a mano**: escribe
+Para anadir o cambiar textos, **no edites los `js/lang/*.js` a mano**: escribe
 un parche en `tools/patches/` y pasalo por `patch-i18n.js`. Asi es imposible que
 un idioma se quede atras.
 
@@ -149,10 +151,28 @@ var GIVE = { online: "", zelle: "" };
 Rellena un valor y su boton aparece solo. Mientras esten vacios, la pagina solo
 ofrece WhatsApp y cheque por correo, asi que nunca se muestra un boton roto.
 
+## Contacto en linea
+
+Justo debajo, en el mismo `js/main.js`:
+
+```js
+var CONTACT = { email: "" };
+```
+
+Con un correo ahi, el formulario de contacto y el de peticiones de oracion pasan
+a enviarse **desde la propia pagina** via FormSubmit: sin servidor, sin coste y
+sin que el visitante tenga que salir ni tener WhatsApp. La primera vez que
+alguien envie algo, FormSubmit manda a ese correo un enlace de activacion que hay
+que pulsar una sola vez.
+
+Vacio, los dos formularios siguen funcionando y entregan por WhatsApp. El aviso
+de privacidad debajo de cada uno cambia solo para decir en cada caso lo que de
+verdad pasa con el mensaje.
+
 ## SEO
 
 - `hreflang` cruzado para los 9 idiomas + `x-default`, en `<head>` y en el sitemap.
-- Datos estructurados: `Organization` (con `DonateAction`), `Book`, `FAQPage`, `WebSite`.
+- Datos estructurados: `Organization`, `Book`, `FAQPage`, `WebSite` y `Event` cuando hay eventos.
 - Open Graph y Twitter Card con imagen 1200x630 propia.
 - `<title>` y `meta description` se traducen al cambiar de idioma.
 - Geo-meta de Delray Beach; `areaServed` incluye Florida, EE. UU. y alcance online mundial.

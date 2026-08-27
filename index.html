@@ -330,7 +330,7 @@
     <div class="near-card reveal">
       <span class="eyebrow" data-i18n="near.eyebrow">Wherever you are in Florida</span>
       <h2 data-i18n="near.title">Someone near you would be glad to meet you</h2>
-      <p class="section-lead" data-i18n="near.lead">Choose your city and the language you would rather speak. We will tell you when the Sabbath begins where you live, where to go this Saturday, and the name of the person who will be waiting outside so you do not have to walk in alone.</p>
+      <p class="section-lead">Choose your city and the language you would rather speak. We will tell you when the Sabbath begins where you live, where to go this Saturday, and the name of the person who will be waiting outside so you do not have to walk in alone.</p>
 
       <div class="near-form">
         <div class="field">
@@ -960,13 +960,16 @@
           <label for="pMsg" data-i18n="prayer.f.msg">Your request</label>
           <textarea id="pMsg" name="message" placeholder="You can write as much or as little as you want…" data-i18n-placeholder="prayer.f.msgPh"></textarea>
         </div>
-        <button type="submit" class="btn btn-wa btn-block btn-lg">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+        <div class="hp" aria-hidden="true"><label for="pHoney">Leave this field empty</label><input type="text" id="pHoney" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="btn btn-wa btn-block btn-lg" id="pSend">
+          <svg data-wa-icon viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
           <span data-i18n="prayer.f.send">Send my prayer request</span>
         </button>
+        <p class="form-status" id="pStatus" role="status" aria-live="polite" hidden></p>
+        <p class="form-alt" id="pAlt" hidden><a href="#" data-wa="general" data-i18n="form.or">Prefer WhatsApp? Write to us there</a></p>
         <p class="form-note">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span data-i18n="prayer.f.privacy">This opens WhatsApp with your message ready to send — nothing is stored on this website and nothing is sent until you press send yourself.</span>
+          <span id="pPrivacy">This opens WhatsApp with your message ready to send — nothing is stored on this website and nothing is sent until you press send yourself.</span>
         </p>
       </form>
 
@@ -1100,6 +1103,51 @@
       <span class="eyebrow" data-i18n="contact.eyebrow">Talk to us</span>
       <h2 data-i18n="contact.title">One message is all it takes</h2>
       <p class="section-lead" data-i18n="contact.lead">Whether you want a Bible study, a book, someone to pray with you, or just to ask a question you have carried for years — we would be glad to hear from you. Write in any of our nine languages.</p>
+      <form class="contact-form" id="contactForm" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="cName" data-i18n="contact.f.name">Your name</label>
+            <input type="text" id="cName" name="name" autocomplete="name" placeholder="Maria" data-i18n-placeholder="contact.f.namePh">
+          </div>
+          <div class="field">
+            <label for="cReply" data-i18n="contact.f.reply">Email or phone, so we can answer you</label>
+            <input type="text" id="cReply" name="reply" autocomplete="email" placeholder="maria@email.com" data-i18n-placeholder="contact.f.replyPh">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="cCity" data-i18n="contact.f.city">Your city in Florida</label>
+            <input type="text" id="cCity" name="city" autocomplete="address-level2" placeholder="Orlando" data-i18n-placeholder="contact.f.cityPh">
+          </div>
+          <div class="field">
+            <label for="cTopic" data-i18n="contact.f.topic">What do you need?</label>
+            <select id="cTopic" name="topic">
+              <option value="study"  data-i18n="contact.t.study">A free Bible study</option>
+              <option value="book"   data-i18n="contact.t.book">A copy of Steps to Christ</option>
+              <option value="visit"  data-i18n="contact.t.visit">Someone to visit or call me</option>
+              <option value="times"  data-i18n="contact.t.times">Where and when you meet</option>
+              <option value="prayer" data-i18n="contact.t.prayer">Prayer</option>
+              <option value="help"   data-i18n="contact.t.help">I would like to help</option>
+              <option value="other"  data-i18n="contact.t.other">Something else</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cMsg" data-i18n="contact.f.msg">Your message</label>
+          <textarea id="cMsg" name="message" placeholder="Write in any of our nine languages — we will answer in yours." data-i18n-placeholder="contact.f.msgPh"></textarea>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="cHoney">Leave this field empty</label><input type="text" id="cHoney" name="_honey" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block" id="cSend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M4 6l8 6 8-6"/></svg>
+          <span data-i18n="contact.f.send">Send message</span>
+        </button>
+        <p class="form-status" id="cStatus" role="status" aria-live="polite" hidden></p>
+        <p class="form-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span id="cPrivacy">It comes straight to us. Nothing is stored on this website, you are added to no list, and we will never ask you for money.</span>
+        </p>
+      </form>
+
       <div class="contact-actions">
         <a class="btn btn-wa btn-lg" href="#" data-wa="general">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
