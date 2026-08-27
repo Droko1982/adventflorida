@@ -1037,6 +1037,8 @@
     if (!sec) return;
     var hay = EVENTS.length > 0;
     sec.hidden = !hay;
+    /* Al quitar una banda de en medio, las de abajo quedan al reves */
+    document.documentElement.classList.toggle("no-missions", !hay);
     $$('a[href="#misiones"]').forEach(function (a) {
       var li = a.closest ? a.closest("li") : a.parentNode;
       (li || a).hidden = !hay;

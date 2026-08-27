@@ -343,6 +343,21 @@ button, input, select, textarea { font: inherit; color: inherit; }
 section { padding: 84px 0; }
 .section-alt { background: var(--bg-alt); }
 
+/* Misiones se esconde sola mientras js/events.js no tenga ni un evento,
+   y al desaparecer una banda ALT las de abajo quedaban al reves: dos
+   fondos iguales pegados entre Ministerios y Oracion. Con la seccion
+   oculta, las siguientes invierten su banda y el ritmo se mantiene.
+   Vuelve solo al anadir el primer evento. */
+.no-missions #oracion,
+.no-missions #donar    { background: var(--bg-alt); }
+.no-missions #recursos,
+.no-missions #faq      { background: var(--bg); }
+.no-missions .contact {
+    background:
+        radial-gradient(820px 460px at 12% 0%, var(--accent-soft), transparent 60%),
+        var(--bg-alt);
+}
+
 .eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: .73rem;

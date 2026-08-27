@@ -31,13 +31,50 @@ function ok(cond, etiqueta, detalle) {
 
 /* Extrae el bloque de una regla de clase, degradados incluidos */
 function regla(cls) {
-  const i = css.indexOf("." + cls + " {");
-  if (i === -1) return null;
+  /* La clase tiene que ser el selector entero, no la cola de otro:
+     buscar ".contact {" a pelo encontraba ".no-missions .contact {". */
+  const re = new RegExp("(?:^|[\\n,}])\\s*\\." + cls + "\\s*\\{", "m");
+  const m = re.exec(css);
+  if (!m) return null;
+  const i = m.index + m[0].length;
   return css.slice(i, css.indexOf("}", i));
 }
 
+/* Reglas que solo aplican con la seccion de misiones oculta, que es el
+   estado en el que vive la pagina mientras js/events.js este vacio.
+   Devuelve BASE o ALT si hay una anulacion para esa seccion. */
+const SIN_MIS = (() => {
+  /* Un mapa selector -> banda con todas las reglas .no-missions */
+  const mapa = new Map();
+  /* Sin comentarios: si no, el bloque de arriba se pega al primer
+     selector de la regla y ese selector deja de reconocerse. */
+  const limpio = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  const re = /([^{}]*\.no-missions[^{}]*)\{([^{}]*)\}/g;
+  let m;
+  while ((m = re.exec(limpio))) {
+    const decl = /background:\s*([\s\S]*?);/.exec(m[2]);
+    if (!decl) continue;
+    const b = /var\(--bg-alt\)/.test(decl[1]) ? "ALT" : "BASE";
+    m[1].split(",").forEach((sel) => {
+      const s = sel.trim().replace(/^\.no-missions\s+/, "");
+      if (s) mapa.set(s, b);
+    });
+  }
+  return mapa;
+})();
+
+function anulacion(sec) {
+  if (sec.id && SIN_MIS.has("#" + sec.id)) return SIN_MIS.get("#" + sec.id);
+  for (const c of sec.classList) if (SIN_MIS.has("." + c)) return SIN_MIS.get("." + c);
+  return null;
+}
+
 /* Que banda pinta una seccion: BASE, ALT, o hereda del body (BASE) */
-function banda(sec) {
+function banda(sec, sinMisiones) {
+  if (sinMisiones) {
+    const a = anulacion(sec);
+    if (a) return a;
+  }
   if (sec.classList.contains("section-alt")) return "ALT";
   for (const c of sec.classList) {
     const r = regla(c);
@@ -77,6 +114,24 @@ ok(repetidas.length === 0, "sin dos bandas iguales seguidas",
   repetidas.length ? repetidas.join(", ") : secciones.length + " secciones");
 ok(conDegradado.length <= 4, "el degradado de acento es escaso",
   conDegradado.length + ": " + conDegradado.join(", "));
+
+/* Y ahora el estado en el que la pagina esta HOY: js/events.js vacio,
+   asi que #misiones no se muestra. Al quitar una banda de en medio, las
+   de abajo quedaban al reves y Ministerios y Oracion salian pegadas con
+   el mismo fondo. Esta segunda pasada es la que lo vigila. */
+console.log("\n=== Alternancia con #misiones oculta ===\n");
+const visibles = secciones.filter((s) => s.id !== "misiones");
+let prev2 = null; const rep2 = [];
+for (const s of visibles) {
+  const b = banda(s, true);
+  const id = s.id || "(sin id)";
+  if (prev2 !== null && b === prev2) rep2.push(id);
+  console.log("   " + id.padEnd(14) + b + (prev2 !== null && b === prev2 ? "   <-- igual que la anterior" : ""));
+  prev2 = b;
+}
+console.log();
+ok(rep2.length === 0, "el ritmo aguanta sin misiones",
+  rep2.length ? rep2.join(", ") : visibles.length + " secciones");
 
 console.log("\n=== Los menus siguen el orden de la pagina ===\n");
 const orden = secciones.map(s => s.id);
