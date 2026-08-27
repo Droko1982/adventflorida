@@ -99,7 +99,12 @@
     var dict = I18N[currentLang] || I18N[DEFAULT_LANG] || {};
     if (dict[key] !== undefined) return dict[key];
     var fb = I18N[DEFAULT_LANG] || {};
-    return fb[key] !== undefined ? fb[key] : key;
+    if (fb[key] !== undefined) return fb[key];
+    /* Ni en su idioma ni en ingles: pasa si js/lang/<cod>.js no llego a
+       cargar. Devolver la clave pintaria "prayer.f.ok" en mitad de la
+       pagina; un hueco se nota menos y no confunde a nadie. */
+    if (window.console && console.warn) console.warn("i18n sin traducir:", key);
+    return "";
   }
 
   function applyLang(code) {
@@ -146,7 +151,12 @@
     var bPdf   = $("#bookPdf");
     var bRead  = $("#bookRead");
     var bLegal = $("#bookLegal");
-    if (bTitle && meta.book) bTitle.textContent = meta.book.title;
+    if (bTitle && meta.book) {
+      bTitle.textContent = meta.book.title;
+      /* El titulo esta en el idioma del libro. En kreyol los botones
+         llevan a la edicion francesa, asi que el titulo es frances. */
+      bTitle.setAttribute("lang", code === "ht" ? "fr" : code);
+    }
     if (bPdf && meta.book)   bPdf.setAttribute("href", meta.book.pdf);
     if (bRead && meta.book)  bRead.setAttribute("href", meta.book.read);
     /* El criollo haitiano necesita un aviso propio: el libro no existe
@@ -171,6 +181,7 @@
     nearRender();
     renderMissions();
     renderFormNotes();
+    renderFormStatus();
     store(LS_LANG, code);
   }
 
@@ -180,7 +191,10 @@
   }
 
   function detectLang() {
-    var q = new URLSearchParams(window.location.search).get("lang");
+    /* Igual que en el cargador del head: si el navegador no tiene
+       URLSearchParams, esto no puede tumbar la deteccion entera. */
+    var q = null;
+    try { q = new URLSearchParams(window.location.search).get("lang"); } catch (e) {}
     if (q && known(q)) return q;
     var saved = store(LS_LANG);
     if (saved && known(saved)) return saved;
@@ -214,7 +228,9 @@
       b.innerHTML = '<span class="lang-flag">' + l.flag + '</span>' +
                     '<span class="lang-native"></span>' +
                     '<span class="lang-code">' + l.label + '</span>';
-      $(".lang-native", b).textContent = l.native;
+      var nat = $(".lang-native", b);
+      nat.textContent = l.native;
+      nat.setAttribute("lang", l.code);
       b.addEventListener("click", function () {
         closeLangMenu();
         loadLang(l.code, function (ok) { if (ok) applyLang(l.code); });
@@ -298,27 +314,49 @@
      el visitante no tiene que irse a ninguna parte. Si no lo hay,
      se entrega por WhatsApp igual que antes. */
 
-  /* Mensaje bajo el boton. tono: "ok", "err" o "wait". */
-  function estado(el, texto, tono) {
+  /* Mensaje bajo el boton. tono: "ok" o "err".
+     Se guarda la CLAVE, no el texto, para que al cambiar de idioma el
+     aviso se reescriba en vez de quedarse congelado en el anterior.
+     El orden importa: un aria-live que nace con texto dentro no se
+     anuncia. Hay que mostrar el nodo vacio primero y escribirlo despues,
+     para que el lector de pantalla vea una mutacion de verdad. */
+  function estado(el, clave, tono) {
     if (!el) return;
-    if (!texto) { el.hidden = true; el.textContent = ""; return; }
+    if (!clave) {
+      el.textContent = "";
+      el.className = "form-status";
+      el.removeAttribute("data-i18n-status");
+      return;
+    }
     el.className = "form-status is-" + tono;
-    el.textContent = texto;
-    el.hidden = false;
+    el.setAttribute("data-i18n-status", clave);
+    el.textContent = t(clave);
   }
 
+  /* Igual con el boton: se guarda la clave de su etiqueta, no la cadena,
+     porque si se cambia de idioma mientras esta enviando volveria al
+     texto viejo. */
   function ocupado(btn, si) {
     if (!btn) return;
     btn.disabled = si;
     var span = btn.querySelector("span");
     if (!span) return;
     if (si) {
-      if (!btn.getAttribute("data-label")) btn.setAttribute("data-label", span.textContent);
       span.textContent = t("form.sending");
     } else {
-      var prev = btn.getAttribute("data-label");
-      if (prev) span.textContent = prev;
+      var clave = span.getAttribute("data-i18n");
+      if (clave) span.textContent = t(clave);
     }
+  }
+
+  /* Reescribe en el idioma nuevo lo que ya estaba en pantalla */
+  function renderFormStatus() {
+    $$("[data-i18n-status]").forEach(function (el) {
+      if (!el.hidden) el.textContent = t(el.getAttribute("data-i18n-status"));
+    });
+    $$("button[disabled] span[data-i18n]").forEach(function (span) {
+      span.textContent = t("form.sending");
+    });
   }
 
   /* FormSubmit contesta 200 aunque haya rechazado el envio: el motivo
@@ -338,35 +376,60 @@
   /* Envia por FormSubmit. Devuelve una promesa que resuelve a true/false.
      Se usa fetch cuando el navegador lo tiene; si no, XMLHttpRequest,
      para no dejar fuera a nadie con un telefono viejo. */
+  var ESPERA_MAX = 15000;   /* en una red mala, mejor decirlo que colgarse */
+
   function enviar(asunto, campos) {
     var cuerpo = { _subject: asunto, _captcha: "false", _template: "table" };
     Object.keys(campos).forEach(function (k) { if (campos[k]) cuerpo[k] = campos[k]; });
     var json = JSON.stringify(cuerpo);
 
     return new Promise(function (resolve) {
+      /* Sin corte, una red que no contesta nunca deja el boton en
+         "Enviando..." para siempre y la persona no sabe que hacer. */
+      var cerrado = false;
+      var abortar = null;
+      var reloj = setTimeout(function () {
+        cerrado = true;
+        if (abortar) { try { abortar(); } catch (e) {} }
+        resolve(false);
+      }, ESPERA_MAX);
+      var terminar = function (ok) {
+        if (cerrado) return;
+        cerrado = true;
+        clearTimeout(reloj);
+        resolve(ok);
+      };
+
       if (window.fetch) {
-        fetch(endpoint(), {
+        var opciones = {
           method: "POST",
           headers: { "Content-Type": "application/json", "Accept": "application/json" },
           body: json
-        }).then(function (r) {
-          if (!r.ok) return resolve(false);
-          r.text().then(function (txt) { resolve(aceptado(txt)); },
-                        function () { resolve(true); });
-        }, function () { resolve(false); });
+        };
+        if (window.AbortController) {
+          var ctrl = new AbortController();
+          opciones.signal = ctrl.signal;
+          abortar = function () { ctrl.abort(); };
+        }
+        fetch(endpoint(), opciones).then(function (r) {
+          if (!r.ok) return terminar(false);
+          r.text().then(function (txt) { terminar(aceptado(txt)); },
+                        function () { terminar(true); });
+        }, function () { terminar(false); });
         return;
       }
       try {
         var x = new XMLHttpRequest();
         x.open("POST", endpoint(), true);
         x.setRequestHeader("Content-Type", "application/json");
+        abortar = function () { x.abort(); };
         x.onreadystatechange = function () {
           if (x.readyState === 4) {
-            resolve(x.status >= 200 && x.status < 300 && aceptado(x.responseText));
+            terminar(x.status >= 200 && x.status < 300 && aceptado(x.responseText));
           }
         };
         x.send(json);
-      } catch (e) { resolve(false); }
+      } catch (e) { terminar(false); }
     });
   }
 
@@ -386,6 +449,31 @@
     if (icon) icon.style.display = online() ? "none" : "";
   }
 
+  /* Un correo o un telefono. FormSubmit usa el campo "email" como
+     Reply-To: meterle ahi un telefono deja el correo sin remitente al
+     que responder, asi que cada cosa va a su sitio. */
+  function esCorreo(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+  function ponerRespuesta(campos, valor) {
+    if (!valor) return;
+    if (esCorreo(valor)) campos.email = valor;
+    else campos.Phone = valor;
+  }
+
+  /* Tras un envio correcto, el formulario queda limpio. Volver a pulsar
+     enviaria un mensaje vacio y convertiria el "ya llego" en un error,
+     que es justo lo contrario de lo que acaba de pasar. Se bloquea hasta
+     que la persona vuelva a escribir. */
+  function bloquearHastaEscribir(form, btn, campo) {
+    if (!btn || !campo) return;
+    btn.disabled = true;
+    var soltar = function () {
+      btn.disabled = false;
+      campo.removeEventListener("input", soltar);
+    };
+    campo.addEventListener("input", soltar);
+  }
+
   function wirePrayerForm() {
     var form = $("#prayerForm");
     if (!form) return;
@@ -397,28 +485,34 @@
       var sel  = $("#pTopic");
       var topic = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent.trim() : "";
       var msg  = $("#pMsg").value.trim();
+      var reply = $("#pReply") ? $("#pReply").value.trim() : "";
       var box  = $("#pStatus"), btn = $("#pSend");
 
       if (!msg) {
         $("#pMsg").focus();
-        estado(box, t("prayer.f.needMsg"), "err");
+        estado(box, "prayer.f.needMsg", "err");
         return;
       }
 
-      var campos = {};
-      campos[t("wa.name")]    = name;
-      campos[t("wa.city")]    = city;
-      campos[t("wa.topic")]   = topic;
-      campos[t("wa.request")] = msg;
-      campos.idioma = currentLang;
+      /* Las claves del correo van en ingles fijo: son los rotulos que lee
+         el ministerio, y ademas FormSubmit no tiene por que digerir una
+         clave en cirilico. Lo que se traduce es el contenido. */
+      var campos = {
+        Name: name,
+        City: city,
+        Topic: topic,
+        Request: msg,
+        Language: currentLang
+      };
+      ponerRespuesta(campos, reply);
 
       if (online()) {
-        estado(box, "", "wait");
+        estado(box, "", "ok");
         ocupado(btn, true);
         enviar("Peticion de oracion - " + (name || "anonimo"), campos).then(function (ok) {
           ocupado(btn, false);
-          estado(box, ok ? t("prayer.f.ok") : t("form.err"), ok ? "ok" : "err");
-          if (ok) form.reset();
+          estado(box, ok ? "prayer.f.ok" : "form.err", ok ? "ok" : "err");
+          if (ok) { form.reset(); bloquearHastaEscribir(form, btn, $("#pMsg")); }
         });
         return;
       }
@@ -427,6 +521,7 @@
       if (name) lines.push(t("wa.name") + ": " + name);
       if (city) lines.push(t("wa.city") + ": " + city);
       if (topic) lines.push(t("wa.topic") + ": " + topic);
+      if (reply) lines.push(reply);
       lines.push(t("wa.request") + ": " + msg);
 
       window.open(waLink(lines.join("\n")), "_blank", "noopener");
@@ -447,25 +542,26 @@
       var msg   = $("#cMsg").value.trim();
       var box   = $("#cStatus"), btn = $("#cSend");
 
-      if (!msg) { $("#cMsg").focus(); estado(box, t("contact.f.needMsg"), "err"); return; }
+      if (!msg) { $("#cMsg").focus(); estado(box, "contact.f.needMsg", "err"); return; }
       /* Sin forma de contestar, el mensaje no sirve de nada */
-      if (online() && !reply) { $("#cReply").focus(); estado(box, t("contact.f.needReply"), "err"); return; }
+      if (online() && !reply) { $("#cReply").focus(); estado(box, "contact.f.needReply", "err"); return; }
 
-      var campos = {};
-      campos[t("wa.name")]  = name;
-      campos.email          = reply;
-      campos[t("wa.city")]  = city;
-      campos[t("wa.topic")] = topic;
-      campos[t("wa.need")]  = msg;
-      campos.idioma = currentLang;
+      var campos = {
+        Name: name,
+        City: city,
+        Topic: topic,
+        Message: msg,
+        Language: currentLang
+      };
+      ponerRespuesta(campos, reply);
 
       if (online()) {
-        estado(box, "", "wait");
+        estado(box, "", "ok");
         ocupado(btn, true);
         enviar("Mensaje de la web - " + (topic || "contacto"), campos).then(function (ok) {
           ocupado(btn, false);
-          estado(box, ok ? t("contact.f.ok") : t("form.err"), ok ? "ok" : "err");
-          if (ok) form.reset();
+          estado(box, ok ? "contact.f.ok" : "form.err", ok ? "ok" : "err");
+          if (ok) { form.reset(); bloquearHastaEscribir(form, btn, $("#cMsg")); }
         });
         return;
       }
@@ -684,6 +780,7 @@
     LANGS.forEach(function (l) {
       var o = document.createElement("option");
       o.value = l.code; o.textContent = l.native;
+      o.setAttribute("lang", l.code);
       selL.appendChild(o);
     });
     selL.value = store(LS_NEAR_LANG) || currentLang;
@@ -697,6 +794,11 @@
 
   /* ---------------- Misiones y eventos ---------------- */
   var EVENTS = window.FAM_EVENTS || [];
+
+  /* Los unicos valores de "type" que tienen traduccion en los nueve
+     idiomas. Cualquier otro se ignora en vez de pintar la clave cruda. */
+  var EV_TYPES = ["evangelism", "health", "community", "youth",
+                  "literature", "prayer", "visit"];
   var pastExpanded = false;
   var PAST_VISIBLE = 3;
 
@@ -732,6 +834,12 @@
     if (ev.title && ev.title[currentLang]) return currentLang;
     if (ev.lang && ev.title && ev.title[ev.lang]) return ev.lang;
     if (ev.title && ev.title.en) return "en";
+    /* evText, si no hay ni el idioma actual ni ingles, cae a la primera
+       clave que haya. Este tiene que caer a la misma o el aviso mentiria. */
+    if (ev.title && typeof ev.title === "object") {
+      var k = Object.keys(ev.title);
+      if (k.length) return k[0];
+    }
     return ev.lang || "en";
   }
 
@@ -789,7 +897,12 @@
          '<div class="ev-date"><span class="d">' + esc(dia) + '</span>' +
          '<span class="m">' + esc(mes) + '</span><span class="y">' + esc(ano) + '</span></div>' +
          '<div class="ev-head">';
-    if (ev.type) h += '<span class="ev-type">' + esc(t("ev.type." + ev.type)) + "</span>";
+    /* Lo edita un voluntario desde la web de GitHub: un type mal escrito
+       es cuestion de tiempo, y antes pintaba "ev.type.evangelismo" dentro
+       de la tarjeta. Si no esta en la lista, no se pinta la etiqueta. */
+    if (ev.type && EV_TYPES.indexOf(ev.type) !== -1) {
+      h += '<span class="ev-type">' + esc(t("ev.type." + ev.type)) + "</span>";
+    }
     h += "<h3" + otro + ">" + esc(evText(ev.title, ev)) + "</h3></div></div>";
 
     var desc = evText(ev.desc, ev);

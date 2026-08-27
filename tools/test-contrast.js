@@ -91,6 +91,11 @@ const PARES = [
   ["line-btn", "bg", 3, "borde del boton fantasma"],
   ["line-btn", "surface", 3, "borde del boton fantasma en tarjeta"],
   ["line-btn", "bg-alt", 3, "borde del boton fantasma en fondo alterno"],
+
+  /* El verde de WhatsApp lleva texto blanco en catorce botones. El de la
+     marca (#1FA855) daba 3.09:1: por debajo de AA para texto. */
+  ["wa-ink", "wa", 4.5, "texto del boton de WhatsApp"],
+  ["wa-ink", "wa-hover", 4.5, "texto del boton de WhatsApp al pasar por encima"],
 ];
 
 const TEMAS = [

@@ -92,8 +92,9 @@ function montar(correo, respuesta, token) {
     new window.Event("submit", { bubbles: true, cancelable: true })
   );
   const escribir = (campos) => Object.keys(campos).forEach((k) => { sel(k).value = campos[k]; });
-  /* Las promesas de jsdom se resuelven en microtareas: una vuelta basta */
-  const esperar = () => new Promise((r) => setTimeout(r, 0));
+  /* La promesa del envio se resuelve en microtareas; un turno del bucle
+     de eventos basta para que el .then haya corrido. */
+  const esperar = () => new Promise((r) => setTimeout(r, 20));
 
   return { window, sel, enviar, escribir, esperar, errores, enviados, abiertos };
 }
@@ -126,7 +127,7 @@ console.log("\n=== Sin correo: el modo WhatsApp de siempre ===\n");
   comprobar(p.enviados.length === 0, "tampoco aqui sale nada a la red");
 
   /* Sin correo no se exige un modo de respuesta: WhatsApp ya lo es */
-  comprobar(p.sel("#cStatus").hidden, "sin exigir correo ni telefono", "el propio WhatsApp responde");
+  comprobar(p.sel("#cStatus").textContent === "", "sin exigir correo ni telefono", "el propio WhatsApp responde");
 }
 
 /* =========================================================
@@ -152,8 +153,14 @@ console.log("\n=== Con correo: contacto en linea ===\n");
   const b = cuerpo(p.enviados[0]);
   comprobar(b._captcha === "false" && !!b._subject, "asunto y sin captcha", b._subject);
   comprobar(JSON.stringify(b).indexOf("Oren por mi madre") > -1, "el mensaje viaja entero");
-  comprobar(b.idioma === "en", "se manda en que idioma escribio", b.idioma);
+  comprobar(b.Language === "en", "se manda en que idioma escribio", b.Language);
   comprobar(b._honey === undefined, "la trampa no viaja vacia");
+  /* Los rotulos que lee el ministerio van en ingles fijo. Traducirlos
+     mandaba claves en cirilico a FormSubmit y dejaba el buzon ilegible
+     para quien no lea ese idioma. */
+  const ascii = Object.keys(b).every((k) => !/[^\x20-\x7E]/.test(k));
+  comprobar(ascii, "las claves del correo van en ASCII", Object.keys(b).join(", "));
+  comprobar(b.Request === "Oren por mi madre", "el contenido si va en su idioma");
 }
 
 /* =========================================================
@@ -168,12 +175,22 @@ console.log("\n=== Que ve el visitante despues de enviar ===\n");
     p.enviar("#contactForm");
     comprobar(p.sel("#cSend").disabled, "el boton se bloquea al enviar", "no se envia dos veces");
     await p.esperar();
-    comprobar(!p.sel("#cSend").disabled, "y se desbloquea al terminar");
-    comprobar(!p.sel("#cStatus").hidden && p.sel("#cStatus").classList.contains("is-ok"),
+    comprobar(p.sel("#cStatus").classList.contains("is-ok"),
       "avisa de que llego", p.sel("#cStatus").textContent.slice(0, 44) + "...");
     comprobar(p.sel("#cMsg").value === "", "el formulario se limpia");
     comprobar(p.sel("#cStatus").getAttribute("aria-live") === "polite",
       "el lector de pantalla lo anuncia", 'role="status" aria-live="polite"');
+    /* El texto se escribe DESPUES de quitar hidden. Un aria-live que nace
+       con contenido dentro no se anuncia: hay que darle una mutacion. */
+    comprobar(p.sel("#cStatus").textContent.length > 20, "y el aviso tiene texto de verdad");
+
+    /* Con el formulario ya vacio, volver a pulsar mandaria un mensaje en
+       blanco y el "ya llego" se convertiria en un error. */
+    comprobar(p.sel("#cSend").disabled, "sigue bloqueado tras el exito",
+      "reenviar en vacio convertiria el aviso en un error");
+    p.sel("#cMsg").value = "otra cosa";
+    p.sel("#cMsg").dispatchEvent(new p.window.Event("input", { bubbles: true }));
+    comprobar(!p.sel("#cSend").disabled, "y se suelta en cuanto vuelve a escribir");
   }
   {
     const p = montar("hola@ejemplo.org", false);      /* el servidor rechaza */

@@ -25,6 +25,12 @@
     --shadow:     0 18px 44px -26px rgba(58, 44, 26, .40);
     --shadow-sm:  0 6px 20px -12px rgba(58, 44, 26, .30);
     --ring:       #8A5D0D;
+    /* El verde de la marca de WhatsApp (#1FA855) da 3.09:1 con texto
+       blanco. Oscurecido hasta 5.42:1 sigue leyendose como su verde y
+       ya cumple AA en los catorce botones que lo usan. */
+    --wa:         #0E7A40;
+    --wa-hover:   #0A6334;
+    --wa-ink:     #FFFFFF;
 
     /* Movimiento. Cuatro duraciones, no diez sueltas.
        ease-out para entradas y hover: arranca rapido y frena,
@@ -53,6 +59,9 @@
     --line:       rgba(233, 240, 244, .14);
     --line-strong:rgba(241, 236, 227, .28);
     --line-btn:   rgba(241, 236, 227, .38);
+    --wa:         #0E7A40;
+    --wa-hover:   #0A6334;
+    --wa-ink:     #FFFFFF;
     --shadow:     0 22px 54px -28px rgba(0, 0, 0, .80);
     --shadow-sm:  0 8px 24px -14px rgba(0, 0, 0, .65);
     --ring:       #E3B45C;
@@ -132,7 +141,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
     gap: 9px;
     font-weight: 600;
     font-size: .95rem;
-    line-height: 1;
     padding: 15px 26px;
     border-radius: 999px;
     border: 1.6px solid transparent;
@@ -140,7 +148,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
     background: none;
     transition: transform var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out), background var(--t-base) var(--ease-out),
                 border-color var(--t-base) var(--ease-out), color var(--t-base) var(--ease-out);
-    white-space: nowrap;
+    /* Nada de nowrap: la misma etiqueta mide el doble en aleman o en
+       kreyol que en ingles, y con el body sin scroll horizontal lo que
+       sobresalia se recortaba sin mas. Que parta en dos lineas. */
+    white-space: normal;
+    line-height: 1.25;
+    text-wrap: balance;
     text-align: center;
 }
 .btn:hover { transform: translateY(-2px); }
@@ -153,8 +166,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn-deep:hover { box-shadow: var(--shadow); }
 .btn-ghost    { border-color: var(--line-btn); color: var(--text); }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
-.btn-wa       { background: #1FA855; color: #fff; box-shadow: var(--shadow-sm); }
-.btn-wa:hover { background: #17914a; box-shadow: var(--shadow); }
+.btn-wa       { background: var(--wa); color: var(--wa-ink); box-shadow: var(--shadow-sm); }
+.btn-wa:hover { background: var(--wa-hover); box-shadow: var(--shadow); }
 .btn-lg       { padding: 17px 32px; font-size: 1.02rem; }
 .btn-sm       { padding: 11px 18px; font-size: .86rem; }
 .btn-block    { width: 100%; }
@@ -197,7 +210,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
     min-height: 74px;
 }
 
-.brand { display: flex; align-items: center; gap: 11px; flex-shrink: 0; }
+/* min-width:0 es lo que permite que el nombre se recorte antes de
+   empujar el boton de menu fuera de la pantalla en un movil de 320px. */
+.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.brand-text { min-width: 0; }
+.brand-name, .brand-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .brand-mark { width: 42px; height: 42px; flex-shrink: 0; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.12; }
 .brand-name {
@@ -301,8 +318,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
     padding: 22px;
     overflow-y: auto;
     transform: translateX(100%);
-    transition: transform var(--t-slow) var(--ease);
+    /* Fuera de pantalla no basta: sus 16 enlaces seguian en el recorrido
+       del tabulador, asi que con el menu cerrado el teclado se perdia en
+       ellos. visibility los quita del foco y del lector de pantalla. */
+    visibility: hidden;
+    transition: transform var(--t-slow) var(--ease), visibility 0s linear var(--t-slow);
 }
+.mobile-nav.is-open { visibility: visible; transition-delay: 0s; }
 .mobile-nav.is-open { transform: translateX(0); }
 .mobile-nav-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
 .mobile-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0; }
@@ -456,7 +478,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .near-form select {
     width: 100%;
     background: var(--bg);
-    border: 1.4px solid var(--line);
+    border: 1.4px solid var(--line-btn);
     border-radius: 12px;
     padding: 13px 15px;
     font-size: .95rem;
@@ -1193,6 +1215,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .min-card p { font-size: .9rem; color: var(--text-soft); }
 
 /* ---------- Oracion ---------- */
+.prayer-grid > * { min-width: 0; }
 .prayer-grid {
     display: grid;
     grid-template-columns: 1.02fr .98fr;
@@ -1213,10 +1236,13 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     letter-spacing: .03em;
     margin-bottom: 7px;
 }
+/* Un campo de formulario es un elemento de interfaz: su borde necesita
+   3:1, no el 1.35:1 que daba --line. Con --line-btn se ve donde hay que
+   escribir sin que el formulario grite. */
 .field input, .field select, .field textarea {
     width: 100%;
     background: var(--bg);
-    border: 1.4px solid var(--line);
+    border: 1.4px solid var(--line-btn);
     border-radius: 12px;
     padding: 13px 15px;
     font-size: .95rem;
@@ -1240,6 +1266,16 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 /* El aviso despues de enviar. El color no es lo que informa: el texto
    dice lo que paso, para quien no distingue colores o usa lector. */
+.form-status:empty {
+    /* Sin display:none a proposito: la region tiene que seguir en el
+       arbol de accesibilidad para que el lector anuncie el aviso cuando
+       llegue. Colapsada, no eliminada. */
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+}
 .form-status {
     margin: 14px 0 0;
     padding: 13px 15px;
