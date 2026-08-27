@@ -39,7 +39,8 @@ window.matchMedia = window.matchMedia || (() => ({
 window.IntersectionObserver = class { observe() {} unobserve() {} disconnect() {} };
 window.onerror = (m) => errores.push(String(m));
 
-for (const f of ["js/i18n.js", "js/i18n2.js", "js/i18n3.js", "js/sabbath.js", "js/events.js", "js/main.js"]) {
+const LANGF = fs.readdirSync(path.join(ROOT,"js","lang")).map(f => "js/lang/"+f);
+for (const f of [...LANGF, "js/i18n.js", "js/sabbath.js", "js/events.js", "js/main.js"]) {
   try { window.eval(fs.readFileSync(path.join(ROOT, f), "utf8")); }
   catch (e) { errores.push(f + ": " + e.message); }
 }

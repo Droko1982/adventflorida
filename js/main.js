@@ -32,8 +32,8 @@
   var DEFAULT_LANG = "en";
 
   var LANGS   = window.FAM_LANGS   || [];
-  var I18N    = window.FAM_I18N    || {};
-  var VERSES  = window.FAM_VERSES  || {};
+  var I18N    = window.FAM_I18N = window.FAM_I18N || {};
+  var VERSES  = window.FAM_VERSES = window.FAM_VERSES || {};
   var NO_PDF  = window.FAM_NO_DIRECT_PDF || [];
 
   var currentLang = DEFAULT_LANG;
@@ -62,7 +62,7 @@
   }
 
   function applyLang(code) {
-    if (!I18N[code]) code = DEFAULT_LANG;
+    if (!I18N[code]) return;
     currentLang = code;
     var meta = langMeta(code);
 
@@ -122,17 +122,32 @@
     store(LS_LANG, code);
   }
 
+  function known(code) {
+    for (var i = 0; i < LANGS.length; i++) if (LANGS[i].code === code) return true;
+    return false;
+  }
+
   function detectLang() {
     var q = new URLSearchParams(window.location.search).get("lang");
-    if (q && I18N[q]) return q;
+    if (q && known(q)) return q;
     var saved = store(LS_LANG);
-    if (saved && I18N[saved]) return saved;
+    if (saved && known(saved)) return saved;
     var navs = navigator.languages || [navigator.language || ""];
     for (var i = 0; i < navs.length; i++) {
       var base = String(navs[i]).toLowerCase().split("-")[0];
-      if (I18N[base]) return base;
+      if (known(base)) return base;
     }
     return DEFAULT_LANG;
+  }
+
+  /* Trae el archivo de un idioma si aun no esta en memoria */
+  function loadLang(code, done) {
+    if (I18N[code]) return done(true);
+    var s = document.createElement("script");
+    s.src = "js/lang/" + code + ".js";
+    s.onload  = function () { done(!!I18N[code]); };
+    s.onerror = function () { done(false); };
+    document.head.appendChild(s);
   }
 
   function buildLangMenu() {
@@ -149,8 +164,8 @@
                     '<span class="lang-code">' + l.label + '</span>';
       $(".lang-native", b).textContent = l.native;
       b.addEventListener("click", function () {
-        applyLang(l.code);
         closeLangMenu();
+        loadLang(l.code, function (ok) { if (ok) applyLang(l.code); });
       });
       li.appendChild(b);
       menu.appendChild(li);
@@ -659,8 +674,11 @@
     }
 
     buildLangMenu();
-    applyLang(detectLang());
-    restartVerses();
+    var inicial = detectLang();
+    loadLang(inicial, function (ok) {
+      applyLang(ok ? inicial : DEFAULT_LANG);
+      restartVerses();
+    });
 
     wireNav();
     wireWhatsApp();

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /* =========================================================
    patch-i18n.js — edita los diccionarios de los 9 idiomas
-   sin romper el formato de js/i18n*.js
+   sin romper el formato de js/lang/*.js
    Autor: Dr. Mauricio Rodriguez Herrera
 
    Uso:
-     node tools/patch-i18n.js patches/mi-parche.json
+     node tools/patch-i18n.js tools/patches/mi-parche.json
 
    Formato del parche:
      { "en": { "clave": "valor", ... }, "es": { ... }, ... }
@@ -20,7 +20,8 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT  = path.resolve(__dirname, "..");
-const FILES = ["js/i18n.js", "js/i18n2.js", "js/i18n3.js"].map(f => path.join(ROOT, f));
+const LANG_DIR = path.join(ROOT, "js", "lang");
+const FILES = fs.readdirSync(LANG_DIR).filter(f => f.endsWith(".js")).map(f => path.join(LANG_DIR, f));
 
 const patchPath = process.argv[2];
 if (!patchPath) {

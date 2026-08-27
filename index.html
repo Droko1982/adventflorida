@@ -66,6 +66,33 @@
 })();
 </script>
 
+<script>
+/* Idioma antes del primer pintado.
+   Se descarga UN solo archivo de idioma, el que la persona va a leer,
+   en lugar de los nueve: unos 40 KB en vez de 400 KB.
+
+   Se usa document.write a proposito. En el head, durante el analisis
+   inicial y con un archivo del propio sitio, es sincrono y garantiza
+   que los textos existan antes de que main.js pinte nada. Asi no hay
+   un parpadeo en ingles para quien lee en criollo o en ucraniano. */
+(function () {
+  var L = ["en","es","fr","ht","pt","de","nl","ru","uk"], c = null;
+  try {
+    var q = new URLSearchParams(window.location.search).get("lang");
+    if (q && L.indexOf(q) > -1) c = q;
+  } catch (e) {}
+  if (!c) { try { var s = localStorage.getItem("fam-lang"); if (s && L.indexOf(s) > -1) c = s; } catch (e) {} }
+  if (!c) {
+    var n = navigator.languages || [navigator.language || ""];
+    for (var i = 0; i < n.length; i++) {
+      var b = String(n[i]).toLowerCase().split("-")[0];
+      if (L.indexOf(b) > -1) { c = b; break; }
+    }
+  }
+  document.write('<scr' + 'ipt src="js/lang/' + (c || "en") + '.js"><\/scr' + 'ipt>');
+})();
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -1048,8 +1075,6 @@
 </a>
 
 <script src="js/i18n.js"></script>
-<script src="js/i18n2.js"></script>
-<script src="js/i18n3.js"></script>
 <script src="js/sabbath.js"></script>
 <script src="js/events.js"></script>
 <script src="js/main.js"></script>
