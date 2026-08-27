@@ -404,14 +404,17 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     margin-bottom: 12px;
 }
 .verse-ref { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-.verse-dots { display: flex; gap: 6px; margin-top: 18px; }
+.verse-dots { display: flex; gap: 2px; margin-top: 12px; margin-left: -9px; }
 .verse-dots button {
-    width: 7px; height: 7px; border-radius: 50%;
-    border: 0; padding: 0; cursor: pointer;
+    width: 25px; height: 25px;
+    border: 0; padding: 9px; cursor: pointer;
     background: var(--line-strong);
-    transition: background var(--t-base) var(--ease-out), width var(--t-base) var(--ease-out);
+    background-clip: content-box;
+    border-radius: 50%;
+    transition: background var(--t-base) var(--ease-out);
 }
-.verse-dots button[aria-current="true"] { background: var(--accent); width: 22px; border-radius: 999px; }
+.verse-dots button::after { content: ""; }
+.verse-dots button[aria-current="true"] { background: var(--accent); background-clip: content-box; width: 40px; border-radius: 999px; }
 
 .hero-art { position: relative; }
 .hero-art .halo {
@@ -509,7 +512,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* ---------- Tarjetas de valor ---------- */
 .value-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(232px, 100%), 1fr));
     gap: 18px;
 }
 .value-card {
@@ -540,7 +543,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 .st-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
     gap: 22px;
 }
 /* El primero ocupa dos columnas cuando hay sitio */
@@ -660,7 +663,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 .gospel-steps {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(238px, 100%), 1fr));
     gap: 20px;
     margin-bottom: 44px;
 }
@@ -822,7 +825,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* Por que el sabado */
 .sab-why {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(238px, 100%), 1fr));
     gap: 20px;
     margin-bottom: 52px;
 }
@@ -882,7 +885,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .sab-expect > p { color: var(--text-soft); margin-bottom: 26px; font-size: .97rem; }
 .sab-expect-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
     gap: 20px;
 }
 .sab-expect-grid > div { display: flex; gap: 13px; }
@@ -901,7 +904,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* ---------- Estudios biblicos ---------- */
 .study-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(256px, 100%), 1fr));
     gap: 20px;
     margin-bottom: 44px;
 }
@@ -938,7 +941,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 .steps {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(226px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(226px, 100%), 1fr));
     gap: 26px;
     counter-reset: step;
 }
@@ -992,7 +995,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 
 .mis-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
     gap: 20px;
 }
 
@@ -1096,7 +1099,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* ---------- Ministerios ---------- */
 .min-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(256px, 100%), 1fr));
     gap: 18px;
 }
 .min-card {
@@ -1185,7 +1188,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .give-facts {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
     gap: 16px;
     padding: 24px 0;
     margin-bottom: 30px;
@@ -1241,7 +1244,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* ---------- Recursos ---------- */
 .res-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
     gap: 16px;
 }
 .res-card {
@@ -1365,6 +1368,41 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
         scroll-behavior: auto !important;
     }
     .reveal { opacity: 1; transform: none; }
+}
+
+
+/* ---------- Pantallas tactiles ---------- */
+/* Un raton apunta al pixel; un dedo mide unos nueve milimetros.
+   En vez de engordar los controles para todo el mundo, se agrandan
+   solo donde se toca. Objetivo: 44px, que es lo que recomiendan
+   tanto Apple como Material, por encima de los 24px que exige
+   WCAG 2.5.8 como minimo absoluto. */
+@media (pointer: coarse) {
+    .icon-btn { width: 44px; height: 44px; }
+    .lang-btn { height: 44px; padding: 0 15px; }
+    .btn-sm   { padding: 14px 20px; }
+    .mis-tab  { padding: 14px 22px; }
+    .lang-menu button { padding: 13px 12px; }
+    .field input, .field select, .field textarea, .near-form select { padding: 15px 16px; }
+    .main-nav a { padding: 12px 11px; }
+    .footer-col a, .mobile-nav ul a { display: block; padding-top: 4px; padding-bottom: 4px; }
+    .socials a { width: 44px; height: 44px; }
+    .res-card { padding: 22px; }
+    /* Sin hover real, los efectos de elevacion solo estorban */
+    .value-card:hover, .study-card:hover, .min-card:hover,
+    .ev-card:hover, .st-card:hover, .res-card:hover,
+    .sab-why article:hover, .gospel-step:hover { transform: none; }
+}
+
+/* ---------- Tabletas ---------- */
+/* Entre el movil y el escritorio hay un hueco que casi nadie mira:
+   una tableta en horizontal tiene sitio de sobra para dos columnas. */
+@media (min-width: 700px) and (max-width: 1060px) {
+    .container { padding: 0 32px; }
+    section { padding: 72px 0; }
+    .near-form { grid-template-columns: 1fr 1fr; }
+    .near-form .btn { grid-column: 1 / -1; }
+    .st-grid .st-card.is-lead { grid-column: span 2; }
 }
 
 /* ---------- Responsive ---------- */
