@@ -36,8 +36,10 @@ const SOLO_JS = ["book.legalHt", "sab.now", "sab.next", "near.lead", "near.lead0
   "form.sending", "form.err",
   "book.download", "book.library", "a11y.verseN",
   "st.prev", "st.next", "st.close",
+  "lib.count", "lib.pdf", "lib.read", "lib.listen",
+  "lib.short", "lib.medium", "lib.long", "lib.heavy",
   "mis.title", "mis.lead", "mis.title0", "mis.lead0", "mis.lead.stale", "mis.titlePast"];
-const PREFIJOS_JS = ["ev.type.", "st.play", "st.langNote", "mis.empty", "mis.less", "mis.join", "mis.moreInfo", "mis.langNote", "wa.",
+const PREFIJOS_JS = ["ev.type.", "lib.g.", "st.play", "st.langNote", "mis.empty", "mis.less", "mis.join", "mis.moreInfo", "mis.langNote", "wa.",
   "near.sunsetLine", "near.church", "near.time", "near.mapLink", "near.person", "near.none"];
 const OPCIONALES = ["meta.description", "book.legalAlt", "prayer.f.needMsg"];
 

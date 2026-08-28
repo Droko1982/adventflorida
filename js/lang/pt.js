@@ -473,7 +473,23 @@
     "a11y.nearOut": "Resposta para a sua cidade",
     "st.prev": "Testemunho anterior",
     "st.next": "Próximo testemunho",
-    "st.close": "Fechar o vídeo"
+    "st.close": "Fechar o vídeo",
+    "lib.eyebrow": "A biblioteca inteira",
+    "lib.title": "E todo o resto, também de graça",
+    "lib.lead": "Livros de Ellen G. White e mais alguns títulos, no seu idioma, para ler, baixar ou ouvir sem pagar nada e sem deixar seu nome nem seu e-mail com ninguém. Abrimos estes links um por um e conferimos que funcionam: é isso que diferencia esta página de uma lista copiada da internet.",
+    "lib.count": "{n} obras grátis em {lang}",
+    "lib.pdf": "PDF",
+    "lib.read": "Ler on-line",
+    "lib.listen": "Ouvir",
+    "lib.short": "Uma tarde",
+    "lib.medium": "Algumas tardes",
+    "lib.long": "Meses, não semanas",
+    "lib.heavy": "Arquivo pesado, melhor no Wi-Fi",
+    "lib.g.start": "Comece por aqui",
+    "lib.g.jesus": "A vida de Jesus",
+    "lib.g.story": "A história inteira, desde o começo",
+    "lib.g.daily": "Para o dia a dia",
+    "lib.g.other": "Além de Ellen G. White"
   };
 
 })();

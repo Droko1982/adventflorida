@@ -473,7 +473,23 @@
     "a11y.nearOut": "Antwoord voor uw stad",
     "st.prev": "Vorige getuigenis",
     "st.next": "Volgende getuigenis",
-    "st.close": "Video sluiten"
+    "st.close": "Video sluiten",
+    "lib.eyebrow": "De hele bibliotheek",
+    "lib.title": "En al het andere, ook gratis",
+    "lib.lead": "Boeken van Ellen G. White en meer, in uw taal, om te lezen, te downloaden of te beluisteren — zonder iets te betalen en zonder ergens uw naam of e-mailadres achter te laten. Wij hebben deze links stuk voor stuk zelf geopend en gecontroleerd of ze werken: dat onderscheidt deze pagina van een lijst die van internet is overgeschreven.",
+    "lib.count": "{n} gratis werken in het {lang}",
+    "lib.pdf": "PDF",
+    "lib.read": "Online lezen",
+    "lib.listen": "Beluisteren",
+    "lib.short": "Eén middag",
+    "lib.medium": "Een paar middagen",
+    "lib.long": "Maanden, geen weken",
+    "lib.heavy": "Groot bestand — beter met wifi",
+    "lib.g.start": "Begin hier",
+    "lib.g.jesus": "Het leven van Jezus",
+    "lib.g.story": "Het hele verhaal, vanaf het begin",
+    "lib.g.daily": "Voor het dagelijks leven",
+    "lib.g.other": "Niet alleen Ellen G. White"
   };
 
 })();

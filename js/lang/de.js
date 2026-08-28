@@ -473,7 +473,23 @@
     "a11y.nearOut": "Antwort für Ihre Stadt",
     "st.prev": "Vorheriges Zeugnis",
     "st.next": "Nächstes Zeugnis",
-    "st.close": "Video schließen"
+    "st.close": "Video schließen",
+    "lib.eyebrow": "Die ganze Bibliothek",
+    "lib.title": "Und alles Übrige, ebenfalls kostenlos",
+    "lib.lead": "Bücher von Ellen G. White und mehr, in Ihrer Sprache, zum Lesen, Herunterladen oder Anhören — ohne etwas zu bezahlen und ohne irgendwo Ihren Namen oder Ihre E-Mail-Adresse zu hinterlassen. Wir haben jeden dieser Links einzeln geöffnet und geprüft, ob er funktioniert: genau das unterscheidet diese Seite von einer aus dem Internet kopierten Liste.",
+    "lib.count": "{n} kostenlose Werke auf {lang}",
+    "lib.pdf": "PDF",
+    "lib.read": "Online lesen",
+    "lib.listen": "Anhören",
+    "lib.short": "Ein Nachmittag",
+    "lib.medium": "Ein paar Nachmittage",
+    "lib.long": "Monate, keine Wochen",
+    "lib.heavy": "Große Datei — besser mit WLAN",
+    "lib.g.start": "Hier anfangen",
+    "lib.g.jesus": "Das Leben Jesu",
+    "lib.g.story": "Die ganze Geschichte, von Anfang an",
+    "lib.g.daily": "Für den Alltag",
+    "lib.g.other": "Über Ellen G. White hinaus"
   };
 
 })();

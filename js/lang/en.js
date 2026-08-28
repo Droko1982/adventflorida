@@ -473,7 +473,23 @@
     "a11y.nearOut": "Answer for your city",
     "st.prev": "Previous testimony",
     "st.next": "Next testimony",
-    "st.close": "Close the video"
+    "st.close": "Close the video",
+    "lib.eyebrow": "The whole library",
+    "lib.title": "And everything else, free too",
+    "lib.lead": "Books by Ellen G. White and more, in your language, to read, download or listen to — without paying anything and without leaving your name or your email with anybody. We opened these links ourselves, one by one, and checked that they work: that is what separates this page from a list copied off the internet.",
+    "lib.count": "{n} free works in {lang}",
+    "lib.pdf": "PDF",
+    "lib.read": "Read online",
+    "lib.listen": "Listen",
+    "lib.short": "One afternoon",
+    "lib.medium": "A few afternoons",
+    "lib.long": "Months, not weeks",
+    "lib.heavy": "Large file — better on Wi-Fi",
+    "lib.g.start": "Start here",
+    "lib.g.jesus": "The life of Jesus",
+    "lib.g.story": "The whole story, from the beginning",
+    "lib.g.daily": "For everyday life",
+    "lib.g.other": "Beyond Ellen G. White"
   };
 
 })();

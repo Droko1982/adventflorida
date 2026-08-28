@@ -576,6 +576,18 @@
         <p class="give-legal" data-i18n="book.legal" id="bookLegal">Files are hosted by the Ellen G. White Estate. If your language is not yet linked directly, the button opens the full free library where you can choose it.</p>
       </div>
     </div>
+
+    <!-- La biblioteca entera. La pinta js/main.js desde js/library.js,
+         que solo trae enlaces comprobados uno a uno. -->
+    <div class="lib reveal" id="biblioteca">
+      <div class="lib-head">
+        <span class="eyebrow" data-i18n="lib.eyebrow">The whole library</span>
+        <h3 data-i18n="lib.title">Everything else, also free</h3>
+        <p class="section-lead" data-i18n="lib.lead">Ellen White's books and more, in your language, with nothing to pay and nobody to hand your details to. Every link here was checked one by one.</p>
+        <p class="lib-count" id="libCount"></p>
+      </div>
+      <div class="lib-groups" id="libGrid"></div>
+    </div>
   </div>
 </section>
 
@@ -1255,6 +1267,7 @@
 <script src="js/videos.js"></script>
 <script src="js/near.js"></script>
 <script src="js/events.js"></script>
+<script src="js/library.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

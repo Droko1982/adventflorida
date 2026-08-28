@@ -1696,3 +1696,95 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     body { background: #fff; color: #000; }
     .reveal { opacity: 1; transform: none; }
 }
+
+
+/* ---------- La biblioteca ----------
+   Diecisiete obras no caben como diecisiete botones sueltos: se agrupan
+   por para que sirve cada una, y cada ficha dice de un vistazo lo unico
+   que de verdad se pregunta quien elige un libro gratis: de que va, quien
+   lo escribio y cuanto me va a costar leerlo. */
+.lib { margin-top: clamp(56px, 8vw, 92px); }
+.lib-head { max-width: 720px; margin: 0 auto clamp(34px, 5vw, 52px); text-align: center; }
+.lib-head .eyebrow::before { display: none; }
+.lib-head h3 {
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+    margin-bottom: 14px;
+}
+.lib-count {
+    margin-top: 18px;
+    font-size: .84rem;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.lib-group + .lib-group { margin-top: clamp(34px, 5vw, 52px); }
+.lib-g {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    padding-bottom: 11px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+.lib-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(258px, 100%), 1fr));
+    gap: 16px;
+}
+
+.lib-card {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 19px 20px 20px;
+    transition: border-color var(--t-base) var(--ease-out), box-shadow var(--t-base) var(--ease-out);
+}
+.lib-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+.lib-t {
+    font-size: 1.09rem;
+    line-height: 1.22;
+    /* Sin esto, un titulo largo en aleman o en ruso rompe la rejilla */
+    overflow-wrap: anywhere;
+}
+.lib-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.lib-pill {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: .67rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--text-soft);
+    border: 1px solid var(--line);
+}
+.lib-pill.lib-egw {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-color: var(--accent);
+    text-transform: none;
+    letter-spacing: .02em;
+}
+.lib-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 4px; }
+.lib-links .btn { flex: 1 1 auto; }
+.lib-mb { font-weight: 400; opacity: .78; font-size: .8em; }
+.lib-warn {
+    font-size: .76rem;
+    line-height: 1.45;
+    color: var(--text-soft);
+    margin: 0;
+}
+
+@media (max-width: 620px) {
+    .lib-grid { grid-template-columns: 1fr; }
+    .lib-card { padding: 17px 18px 18px; }
+}

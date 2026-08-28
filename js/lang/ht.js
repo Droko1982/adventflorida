@@ -473,7 +473,23 @@
     "a11y.nearOut": "Repons pou vil ou a",
     "st.prev": "Temwayaj anvan an",
     "st.next": "Temwayaj k ap vini an",
-    "st.close": "Fèmen videyo a"
+    "st.close": "Fèmen videyo a",
+    "lib.eyebrow": "Tout bibliyotèk la",
+    "lib.title": "E tout rès la, gratis tou",
+    "lib.lead": "Liv Ellen G. White ak lòt bagay ankò, nan lang ou, pou li, telechaje oswa koute san peye anyen e san bay pèsonn non ou ni imèl ou. Nou ouvè chak lyen youn apre lòt e nou verifye yo mache: se sa ki fè paj sa a diferan de yon lis yo kopye sou entènèt.",
+    "lib.count": "{n} liv gratis an {lang}",
+    "lib.pdf": "PDF",
+    "lib.read": "Li sou entènèt",
+    "lib.listen": "Koute",
+    "lib.short": "Yon apremidi",
+    "lib.medium": "Kèk apremidi",
+    "lib.long": "Se mwa, pa semèn",
+    "lib.heavy": "Gwo fichye, pi bon ak wifi",
+    "lib.g.start": "Kòmanse isit la",
+    "lib.g.jesus": "Lavi Jezi",
+    "lib.g.story": "Tout istwa a, depi nan kòmansman",
+    "lib.g.daily": "Pou lavi chak jou",
+    "lib.g.other": "Pa sèlman Ellen G. White"
   };
 
 })();

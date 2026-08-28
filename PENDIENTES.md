@@ -129,6 +129,32 @@ ningun boton roto. No hay que tocar nada mas.
 - [ ] Confirmar que si pueden **enviar ejemplares impresos gratis** por toda
       Florida (el sitio lo promete en `book.p4` y en el boton de WhatsApp).
 
+## 3.b La biblioteca
+
+La seccion del libro ya no ofrece solo *El camino a Cristo*: lleva **16 obras**,
+casi todas de Elena White, mas la Biblia completa, las lecciones de Escuela
+Sabatica y los folletos GLOW. **124 ediciones**, y cada enlace se pidio de
+verdad antes de publicarlo: codigo, tamano y, en los PDF, los primeros bytes
+del archivo. De 227 direcciones comprobadas entraron las que pasaron.
+
+Cada idioma ve solo lo que existe en su lengua, y el numero se dice sin
+adornos: ingles, espanol, frances, portugues y ruso 16; aleman 15; ucraniano
+14; neerlandes 12; **kreyol ayisyen 3**.
+
+Esas tres en kreyol son lo mas importante que trajo esta busqueda: hasta ahora
+ese idioma no tenia NADA propio en toda la pagina. Ahora tiene la Biblia
+completa, las lecciones de Escuela Sabatica y un texto de Elena White
+publicado por su propio Estate.
+
+- [ ] **Si algun enlace se cae**, quitarlo de `js/library.js` y la obra
+      desaparece sola de ese idioma. Si desaparece de todos, desaparece la
+      obra. No hay que tocar nada mas.
+- [ ] Las lecciones de Escuela Sabatica en kreyol son del trimestre de
+      **julio-septiembre de 2021**: es lo ultimo que hay traducido. Conviene
+      mirar de vez en cuando si sale uno nuevo.
+- [ ] Los audiolibros oficiales solo estaban en ingles y su enlace no paso la
+      comprobacion, asi que no se publicaron.
+
 ## 4. Dominio propio (recomendado)
 
 Hoy vive en `droko1982.github.io/adventflorida/`. Con un dominio como

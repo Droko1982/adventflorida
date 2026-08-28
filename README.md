@@ -108,6 +108,7 @@ js/lang/<cod>.js    Un diccionario por idioma (solo se descarga el que se usa)
 js/sabbath.js       Calculo del ocaso (NOAA) y ventana del sabado
 js/near.js          A donde ir por ciudad (el archivo que editan los voluntarios)
 js/events.js        Los eventos de misiones (el archivo que editan los voluntarios)
+js/library.js       La biblioteca gratuita: 16 obras, 124 ediciones comprobadas
 js/main.js          Tema, idioma, versiculos, sabado, formularios, donaciones
 tools/              Herramientas de mantenimiento y pruebas (ver abajo)
 assets/             Iconos PWA, favicon SVG e imagen Open Graph

@@ -186,6 +186,7 @@
     renderMissions();
     renderFormNotes();
     renderFormStatus();
+    renderLibrary();
     store(LS_LANG, code);
   }
 
@@ -784,6 +785,64 @@
     if (seguir) {
       var vuelve = grid.querySelector('.st-thumb[data-video="' + seguir + '"]');
       if (vuelve) playVideo(vuelve);
+    }
+  }
+
+  /* ---------------- La biblioteca ----------------
+     Solo se pinta lo que existe en el idioma que se esta leyendo. Una
+     obra que no tiene edicion en ese idioma no aparece: preferimos una
+     lista mas corta y verdadera que una larga llena de enlaces que
+     llevan a otra lengua sin avisar. */
+  var LIBROS = window.FAM_LIBRARY || [];
+  var LIB_GRUPOS = ["start", "jesus", "story", "daily", "other"];
+
+  function libFicha(o, ed) {
+    var h = '<article class="lib-card">' +
+      '<h4 class="lib-t">' + esc(ed.t) + "</h4>";
+
+    var etiquetas = [];
+    /* Si por lo que sea no hay texto, no se pinta una pastilla vacia */
+    var cuanto = o.largo ? t("lib." + o.largo) : "";
+    if (cuanto) etiquetas.push('<span class="lib-pill">' + esc(cuanto) + "</span>");
+    if (o.egw) etiquetas.push('<span class="lib-pill lib-egw">Ellen G. White</span>');
+    if (etiquetas.length) h += '<p class="lib-tags">' + etiquetas.join("") + "</p>";
+
+    h += '<div class="lib-links">';
+    if (ed.pdf) {
+      h += '<a class="btn btn-sm btn-ghost" href="' + esc(ed.pdf) + '" target="_blank" rel="noopener">' +
+        esc(t("lib.pdf")) + (ed.mb ? ' <span class="lib-mb">' + ed.mb + ' MB</span>' : "") + "</a>";
+    }
+    if (ed.leer) {
+      h += '<a class="btn btn-sm btn-ghost" href="' + esc(ed.leer) + '" target="_blank" rel="noopener">' +
+        esc(t(o.audio ? "lib.listen" : "lib.read")) + "</a>";
+    }
+    h += "</div>";
+    /* Un aviso donde de verdad hace falta: 10 MB con datos contados duele */
+    if (ed.mb && ed.mb >= 4) h += '<p class="lib-warn">' + esc(t("lib.heavy")) + "</p>";
+    return h + "</article>";
+  }
+
+  function renderLibrary() {
+    var caja = $("#libGrid");
+    if (!caja || !LIBROS.length) return;
+
+    var hay = LIBROS.filter(function (o) { return !!o.ed[currentLang]; });
+    var html = "";
+    LIB_GRUPOS.forEach(function (g) {
+      var enGrupo = hay.filter(function (o) { return o.grupo === g; });
+      if (!enGrupo.length) return;
+      html += '<div class="lib-group"><h4 class="lib-g">' + esc(t("lib.g." + g)) + "</h4>" +
+        '<div class="lib-grid">' +
+        enGrupo.map(function (o) { return libFicha(o, o.ed[currentLang]); }).join("") +
+        "</div></div>";
+    });
+    caja.innerHTML = html;
+
+    var cuenta = $("#libCount");
+    if (cuenta) {
+      cuenta.textContent = t("lib.count")
+        .replace("{n}", String(hay.length))
+        .replace("{lang}", langName(currentLang));
     }
   }
 
