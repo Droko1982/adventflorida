@@ -105,9 +105,19 @@ const mainJs = fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf8");
 const imgs = [...html.matchAll(/<img[^>]*>/g)].map(m => m[0]);
 const imgsJs = [...mainJs.matchAll(/<img class[^;]{0,200}/g)].map(m => m[0]);
 const todas = imgs.concat(imgsJs);
-ok(todas.length > 0 && todas.every(i => /loading=.{0,3}lazy/.test(i)),
+/* El emblema de la cabecera es lo primero que se ve: diferirlo lo
+   pintaria tarde y movería la maqueta. Se exige lo contrario. */
+const marca = todas.filter(i => /brand-(claro|oscuro)/.test(i));
+const resto = todas.filter(i => !/brand-(claro|oscuro)/.test(i));
+ok(resto.length > 0 && resto.every(i => /loading=.{0,3}lazy/.test(i)),
   "imagenes con carga diferida",
-  todas.length + " (" + imgs.length + " en el HTML, " + imgsJs.length + " desde JS)");
+  resto.length + " (" + (imgs.length - marca.length) + " en el HTML, " + imgsJs.length + " desde JS)");
+ok(marca.length > 0 && marca.every(i => !/loading=.{0,3}lazy/.test(i)),
+  "el emblema NO se difiere", marca.length + " copias, una con fetchpriority");
+ok(marca.some(i => /fetchpriority=.{0,3}high/.test(i)), "y el de la cabecera va primero");
+/* Sin width y height el navegador no reserva el hueco y la cabecera salta */
+ok(todas.every(i => /width=/.test(i) && /height=/.test(i)) || marca.every(i => /width=/.test(i)),
+  "el emblema reserva su sitio", "sin saltos de maqueta al cargar");
 
 console.log(fallos === 0 ? "\nAguanta en telefono, tableta y escritorio.\n"
                          : "\n*** " + fallos + " problema(s) ***\n");

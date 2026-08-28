@@ -127,6 +127,7 @@ node tools/test-page.js                      carga la pagina en un DOM y la prue
 node tools/test-forms.js                     los dos formularios, en sus dos modos
 node tools/test-gospel.js                    la seccion del evangelio, doctrina incluida
 node tools/test-promesas.js                  que no se prometa lo que no hay, ni se asuma el sexo del lector
+node tools/test-browser.js                   abre un Chrome de verdad y pulsa todo (necesita puppeteer-core)
 node tools/test-contrast.js                  comprueba el contraste WCAG de la paleta
 node tools/test-responsive.js                telefono, tableta y escritorio
 node tools/test-rhythm.js                    alternancia de fondos y ritmo de secciones

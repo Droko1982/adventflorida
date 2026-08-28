@@ -1219,22 +1219,42 @@
       $$(".reveal", sec).forEach(function (el) { el.classList.add("is-visible"); });
     }
 
+    /* Salta de golpe y comprueba que ha aterrizado donde tocaba, hasta
+       cuatro veces. Hacen falta las dos cosas:
+         - si habia un desplazamiento suave en vuelo (porque la persona
+           pulso dos veces, o venia de otro enlace), ese sigue corriendo
+           despues del salto y arrastra la pagina a medio camino;
+         - y si algo de arriba cambia de alto al cargarse, el destino se
+           mueve unos pixeles justo despues de llegar.
+       Cortar la animacion y volver a medir arregla las dos. */
+    function aterrizar(destino, intentos) {
+      var y = Math.max(0, destino.getBoundingClientRect().top + window.pageYOffset - 92);
+      /* behavior:"auto" NO es instantaneo: quiere decir "lo que mande el
+         CSS", y el CSS dice smooth. Hay que apagar la propiedad. */
+      var antes = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, window.pageYOffset);   /* corta lo que estuviera en vuelo */
+      window.scrollTo(0, y);
+      document.documentElement.style.scrollBehavior = antes;
+      if (intentos <= 0) return;
+      var otra = function () {
+        if (Math.abs(destino.getBoundingClientRect().top - 92) > 2) {
+          aterrizar(destino, intentos - 1);
+        }
+      };
+      if (window.requestAnimationFrame) window.requestAnimationFrame(otra);
+      else setTimeout(otra, 16);
+    }
+
     function irA(destino, id) {
       revelar(destino);
       var alto = window.innerHeight || 800;
-      var y = destino.getBoundingClientRect().top + window.pageYOffset - 92;
       var lejos = Math.abs(destino.getBoundingClientRect().top) > alto * SALTO_LARGO;
-      y = Math.max(0, y);
 
       if (lejos || !suave()) {
-        /* Ojo con behavior:"auto": NO quiere decir instantaneo, quiere
-           decir "lo que mande el CSS", y el CSS de aqui dice smooth. Se
-           apaga la propiedad un momento, que funciona en todos lados. */
-        var antes = document.documentElement.style.scrollBehavior;
-        document.documentElement.style.scrollBehavior = "auto";
-        window.scrollTo(0, y);
-        document.documentElement.style.scrollBehavior = antes;
+        aterrizar(destino, 4);
       } else {
+        var y = Math.max(0, destino.getBoundingClientRect().top + window.pageYOffset - 92);
         try { window.scrollTo({ top: y, behavior: "smooth" }); }
         catch (e) { window.scrollTo(0, y); }
       }

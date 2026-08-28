@@ -215,7 +215,22 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
 .brand-text { min-width: 0; }
 .brand-name, .brand-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.brand-mark { width: 42px; height: 42px; flex-shrink: 0; }
+/* El emblema del ministerio, sacado de su canal oficial de YouTube: la
+   unica copia publica que existe. Va en dos versiones porque el azul
+   marino del original no se veria sobre el fondo del tema oscuro; en esa
+   version pasa al crema del tema y el dorado se queda igual. */
+.brand-mark {
+    display: block;
+    height: 42px;
+    flex-shrink: 0;
+    line-height: 0;
+}
+.brand-mark img { height: 42px; width: auto; display: block; }
+/* La especificidad importa: .brand-mark img es 0-1-1 y se comia un
+   .brand-oscuro suelto, que es 0-1-0. Las dos reglas van al mismo peso. */
+.brand-mark .brand-oscuro { display: none; }
+[data-theme="dark"] .brand-mark .brand-claro { display: none; }
+[data-theme="dark"] .brand-mark .brand-oscuro { display: block; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.12; }
 .brand-name {
     font-family: 'Cormorant Garamond', Georgia, serif;
