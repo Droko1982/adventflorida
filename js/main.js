@@ -131,10 +131,17 @@
     var rights = $("[data-i18n='footer.rights']");
     if (rights) rights.textContent = t("footer.rights").replace("{year}", new Date().getFullYear());
 
-    /* Titulo y descripcion */
-    document.title = "Florida Advent Missionaries · " + t("value.1.t");
-    var desc = $("#metaDescription");
-    if (desc) desc.setAttribute("content", t("meta.description"));
+    /* Titulo y descripcion. El titulo del libro va delante: es lo que
+       se busca desde fuera de Florida. La marca la pone Google aparte,
+       desde los datos estructurados. */
+    var tit = (meta && meta.book && meta.book.title ? meta.book.title + " · " : "") + t("value.1.t");
+    document.title = tit;
+    var poner = function (id, v) { var e = $("#" + id); if (e && v) e.setAttribute("content", v); };
+    poner("metaDescription", t("meta.description"));
+    poner("metaOgTitle", tit);
+    poner("metaTwTitle", tit);
+    poner("metaOgDesc", t("meta.description"));
+    poner("metaTwDesc", t("meta.description"));
     var ogLocale = $("meta[property='og:locale']");
     if (ogLocale && meta.locale) ogLocale.setAttribute("content", meta.locale);
 

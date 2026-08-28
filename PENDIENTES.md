@@ -155,15 +155,37 @@ publicado por su propio Estate.
 - [ ] Los audiolibros oficiales solo estaban en ingles y su enlace no paso la
       comprobacion, asi que no se publicaron.
 
-## 4. Dominio propio (recomendado)
+## 4. Dominio propio: un solo comando
 
-Hoy vive en `droko1982.github.io/adventflorida/`. Con un dominio como
-`floridaadventmissionaries.org`:
+Hoy el sitio vive en una direccion de GitHub. El dia que se compre el dominio,
+esto es lo unico que hay que ejecutar:
 
-1. Crear el archivo `CNAME` en la raiz con el dominio.
-2. Apuntar los DNS a GitHub Pages.
-3. Buscar y reemplazar `https://droko1982.github.io/adventflorida/` en
-   `index.html`, `sitemap.xml` y `robots.txt`.
+```
+node tools/cambiar-dominio.js  midominio.org
+```
+
+Son **132 direcciones repartidas en 12 archivos**, y el sitemap se lleva 99 de
+ellas: a mano se olvida una y el canonical o el hreflang se quedan apuntando al
+sitio viejo, que es peor que no haber cambiado nada. La herramienta las cambia
+todas, crea el archivo `CNAME`, pone al dia la fecha del sitemap y luego
+imprime en pantalla los pasos que quedan: los cuatro registros DNS de GitHub
+Pages, donde escribir el dominio en GitHub y como dar de alta el sitio nuevo en
+Search Console.
+
+Con `--prueba` enseña lo que haria sin tocar nada.
+
+Probado de verdad, no solo escrito: se hizo una copia del repo, se migro con la
+herramienta, se sirvio desde la raiz de un dominio y se abrio en Chrome. Cero
+peticiones fallidas, cero errores de JavaScript, el canonical y los diez
+hreflang ya en el dominio nuevo, y la pagina 404 con sus estilos y su enlace de
+vuelta funcionando, que era justo lo que se rompia antes.
+
+- [ ] Comprar el dominio.
+- [ ] Ejecutar el comando y seguir los pasos que imprime.
+- [ ] Dar de alta el sitio NUEVO en Search Console y enviar el sitemap.
+
+La direccion vieja seguira redirigiendo sola a la nueva, asi que los enlaces ya
+compartidos por WhatsApp no se rompen y no hay que reenviar nada a nadie.
 
 ## 5. Posicionamiento (cuando el dominio este listo)
 

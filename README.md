@@ -135,6 +135,7 @@ node tools/test-rhythm.js                    alternancia de fondos y ritmo de se
 node tools/test-seo.js                       audita 40 puntos de SEO y estructura
 node tools/test-loader.js                    comprueba que solo se descarga un idioma
 node tools/patch-i18n.js <parche.json>       edita los 9 diccionarios sin romper el formato
+node tools/cambiar-dominio.js <dominio>      cambia el sitio de direccion (--prueba para ver antes)
 ```
 
 `test-page.js`, `test-forms.js` y `test-gospel.js` necesitan jsdom, que no es dependencia del sitio:
