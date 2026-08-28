@@ -252,7 +252,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
     display: block;
     padding: 9px 9px;
     font-size: .84rem;
-    font-weight: 500;
+    /* 600 y no 500: era el unico sitio de toda la hoja que usaba el 500
+       y obligaba a descargar una fuente entera para ocho enlaces. */
+    font-weight: 600;
     color: var(--text-soft);
     border-radius: 8px;
     transition: color var(--t-base) var(--ease-out), background var(--t-base) var(--ease-out);
