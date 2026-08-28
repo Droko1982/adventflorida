@@ -646,6 +646,9 @@
 
     sel.addEventListener("change", function () {
       store(LS_CITY, sel.value);
+      /* Que el otro bloque siga la misma ciudad: los dos leen LS_CITY */
+      var otro = $("#nearCity");
+      if (otro && otro.value !== sel.value) { otro.value = sel.value; nearRender(); }
       renderSabbath();
     });
 
@@ -932,7 +935,12 @@
     selL.value = store(LS_NEAR_LANG) || currentLang;
     if (!selL.value) selL.value = currentLang;
 
-    selC.addEventListener("change", function () { store(LS_CITY, selC.value); nearRender(); });
+    selC.addEventListener("change", function () {
+      store(LS_CITY, selC.value);
+      nearRender();
+      var otro = $("#sabCity");
+      if (otro && otro.value !== selC.value) { otro.value = selC.value; renderSabbath(); }
+    });
     selL.addEventListener("change", function () { store(LS_NEAR_LANG, selL.value); nearRender(); });
 
     nearRender();
@@ -1382,6 +1390,18 @@
     }
   }
 
+  /* La burbuja de WhatsApp se retira mientras la accion principal del
+     hero esta a la vista, porque le robaba el toque. */
+  function wireFloat() {
+    var burbuja = $(".wa-float"), hero = $("#inicio");
+    if (!burbuja || !hero) return;
+    if (!("IntersectionObserver" in window)) return;
+    var obs = new IntersectionObserver(function (e) {
+      burbuja.classList.toggle("is-tapada", e[0].isIntersecting);
+    }, { threshold: 0.25 });
+    obs.observe(hero);
+  }
+
   /* ---------------- Reveal ---------------- */
   function wireReveal() {
     var items = $$(".reveal");
@@ -1432,5 +1452,6 @@
     wireNear();
     wireMissions();
     wireReveal();
+    wireFloat();
   });
 })();

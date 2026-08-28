@@ -94,8 +94,22 @@ comprobar(sel("#nearLang").options.length === 9, "9 idiomas");
 comprobar(/\d/.test(txt("#nearOut .near-line")), "da la hora del ocaso", txt("#nearOut .near-line").slice(0, 46) + "…");
 comprobar(!!sel("#nearOut .muted"), "sin datos, lo dice con franqueza");
 comprobar(!sel("#nearOut .near-where"), "no inventa una direccion");
-comprobar(decodeURIComponent(sel("#nearCta").getAttribute("href")).includes("Delray Beach"),
+/* Arriba se cambio el reloj del sabado a Pensacola. Los dos bloques
+   comparten la ciudad guardada, asi que este tiene que haberla seguido:
+   antes se quedaban descolgados y daban dos horas distintas de ocaso en
+   la misma pantalla, con once minutos de diferencia. */
+comprobar(sel("#nearCity").value === sel("#sabCity").value,
+  "las dos ciudades van juntas", sel("#sabCity").value + " = " + sel("#nearCity").value);
+comprobar(decodeURIComponent(sel("#nearCta").getAttribute("href")).includes("Pensacola"),
   "WhatsApp con la ciudad puesta");
+
+/* Y al reves: cambiar aqui tiene que arrastrar el reloj */
+sel("#nearCity").value = "miami";
+sel("#nearCity").dispatchEvent(new window.Event("change"));
+comprobar(sel("#sabCity").value === "miami", "y en el otro sentido tambien",
+  "near=miami -> sab=" + sel("#sabCity").value);
+sel("#nearCity").value = "delray";
+sel("#nearCity").dispatchEvent(new window.Event("change"));
 
 window.FAM_NEAR.orlando = {
   church: "Iglesia de prueba", address: "123 Main St, Orlando, FL",

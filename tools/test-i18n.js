@@ -30,6 +30,7 @@ const keys = new Set();
 for (const m of html.matchAll(/data-i18n(?:-html|-placeholder|-aria)?="([^"]+)"/g)) keys.add(m[1]);
 
 /* Claves que no aparecen en el HTML porque las pone el JS al renderizar */
+const DEFAULT = "en";
 const SOLO_JS = ["book.legalHt", "sab.now", "sab.next", "near.lead", "near.lead0",
   "prayer.f.privacy", "prayer.f.privacyOnline", "prayer.f.ok",
   "contact.f.privacy", "contact.f.ok", "contact.f.needMsg", "contact.f.needReply",
@@ -42,6 +43,9 @@ const SOLO_JS = ["book.legalHt", "sab.now", "sab.next", "near.lead", "near.lead0
 const PREFIJOS_JS = ["ev.type.", "lib.g.", "st.play", "st.langNote", "mis.empty", "mis.less", "mis.join", "mis.moreInfo", "mis.langNote", "wa.",
   "near.sunsetLine", "near.church", "near.time", "near.mapLink", "near.person", "near.none"];
 const OPCIONALES = ["meta.description", "book.legalAlt", "prayer.f.needMsg"];
+/* Iguales en los nueve a proposito: un telefono y una linea legal con el
+   nombre registrado y el EIN. Traducirlos seria un error. */
+const IGUAL_A_PROPOSITO = ["contact.cta", "footer.rights", "contact.langs"];
 
 let fallos = 0;
 
@@ -52,13 +56,30 @@ for (const l of LANGS) {
   const d = I18N[l.code];
   if (!d) { console.log("  FALLA " + l.code + ": sin diccionario"); fallos++; continue; }
   const faltan = [...keys].filter(k => d[k] === undefined);
+  /* Que la clave exista no basta: una traduccion vaciada dejaba pasar
+     esta prueba con un "todo correcto" mientras la pagina enseñaba un
+     hueco donde iba la respuesta. Comprobado metiendo faq.a1 = "". */
+  const vacias = Object.keys(d).filter(k => typeof d[k] !== "string" || !d[k].trim());
+  /* Y una que se quedo en ingles dentro de otro idioma tampoco vale.
+     Se compara contra el ingles, saltando lo que es igual a proposito:
+     nombres propios, siglas y las etiquetas de una sola palabra. */
+  const en = I18N[DEFAULT] || {};
+  const copiadas = l.code === DEFAULT ? [] : Object.keys(d).filter(k => {
+    if (IGUAL_A_PROPOSITO.includes(k)) return false;
+    const a = String(d[k] || ""), b = String(en[k] || "");
+    if (!a || !b || a !== b) return false;
+    if (a.split(/\s+/).length < 4) return false;      /* etiquetas cortas */
+    return true;
+  });
   const versos = (VERSES[l.code] || []).length;
-  const ok = faltan.length === 0 && versos === 4;
+  const ok = faltan.length === 0 && versos === 4 && vacias.length === 0 && copiadas.length === 0;
   if (!ok) fallos++;
   console.log(
     "  " + (ok ? "ok  " : "FALLA") + " " + l.code.padEnd(4) +
     String(Object.keys(d).length).padStart(4) + " claves · " + versos + " versiculos" +
-    (faltan.length ? "  FALTAN: " + faltan.join(", ") : "")
+    (faltan.length ? "  FALTAN: " + faltan.join(", ") : "") +
+    (vacias.length ? "  VACIAS: " + vacias.slice(0, 4).join(", ") : "") +
+    (copiadas.length ? "  SIN TRADUCIR: " + copiadas.slice(0, 4).join(", ") : "")
   );
 }
 

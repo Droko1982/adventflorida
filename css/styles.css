@@ -546,9 +546,12 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     align-items: end;
     margin-bottom: 8px;
 }
-.near-form .field { margin-bottom: 0; }
+.near-form .field { margin-bottom: 0; min-width: 0; }
 .near-form select {
     width: 100%;
+    /* Sin esto el desplegable se dimensiona por su opcion mas larga y a
+       texto 200% saca 23 px de barra horizontal (WCAG 1.4.4). */
+    min-width: 0;
     background: var(--bg);
     border: 1.4px solid var(--line-btn);
     border-radius: 12px;
@@ -1354,6 +1357,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 /* Un campo de formulario es un elemento de interfaz: su borde necesita
    3:1, no el 1.35:1 que daba --line. Con --line-btn se ve donde hay que
    escribir sin que el formulario grite. */
+.field select { min-width: 0; }
 .field input, .field select, .field textarea {
     width: 100%;
     background: var(--bg);
@@ -1597,13 +1601,22 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     z-index: 45;
     width: 58px; height: 58px;
     border-radius: 50%;
-    background: #1FA855;
-    color: #fff;
+    background: var(--wa);
+    color: var(--wa-ink);
     display: grid; place-items: center;
-    box-shadow: 0 14px 34px -12px rgba(31,168,85,.75);
+    box-shadow: 0 14px 34px -12px rgba(14, 122, 64, .70);
     transition: transform var(--t-base) var(--ease-out);
 }
 .wa-float:hover { transform: scale(1.08); }
+/* Mientras el hero esta a la vista, la burbuja se retira. Su toque se
+   comia el del boton principal: medido, la esquina del boton devolvia el
+   SVG de WhatsApp y no el enlace de "Pide un estudio biblico". Un atajo
+   no puede taparle el sitio a la accion a la que quiere llevar. */
+.wa-float.is-tapada {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(14px) scale(.9);
+}
 .wa-float svg { width: 29px; height: 29px; position: relative; z-index: 2; }
 .wa-float::after {
     content: ""; position: absolute; inset: 0;

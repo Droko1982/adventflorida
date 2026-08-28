@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html class="no-missions" lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,19 +90,101 @@
     }
   }
   c = c || "en";
+  /* Una sola fuente de verdad. El pintado de abajo y main.js leen esto
+     en vez de repetir la eleccion, para que no puedan divergir. */
+  window.FAM_LANG = c;
 
   /* El canonical tiene que seguir al idioma. Si las nueve variantes
      ?lang= declaran el mismo canonical que la raiz, Google descarta
      ocho de ellas y solo indexa la inglesa, y el hreflang no sirve
-     de nada. */
-  var url = "https://droko1982.github.io/adventflorida/" + (c === "en" ? "" : "?lang=" + c);
-  var canon = document.querySelector('link[rel="canonical"]');
-  if (canon) canon.setAttribute("href", url);
-  var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute("content", url);
+     de nada.
 
-  document.write('<scr' + 'ipt src="js/lang/' + c + '.js"><\/scr' + 'ipt>');
+     PERO la raiz NO puede canonicalizarse sola a ?lang=es porque el
+     navegador de quien entra este en espanol: entonces la direccion
+     que se comparte por WhatsApp deja de existir para Google. Solo se
+     toca el canonical cuando el idioma viene pedido en la propia
+     direccion; si se dedujo del navegador o de la visita anterior, la
+     raiz se queda siendo la raiz. */
+  if (q) {
+    var url = "https://droko1982.github.io/adventflorida/" + (c === "en" ? "" : "?lang=" + c);
+    var canon = document.querySelector('link[rel="canonical"]');
+    if (canon) canon.setAttribute("href", url);
+    var ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute("content", url);
+  }
+
+  /* Los DOS de una vez: la lista de idiomas y el diccionario. Son las
+     mismas peticiones que antes (i18n.js se descargaba igual al final),
+     pero llegan a tiempo de pintar. */
+  document.write('<scr' + 'ipt src="js/i18n.js"><\/scr' + 'ipt>' +
+                 '<scr' + 'ipt src="js/lang/' + c + '.js"><\/scr' + 'ipt>');
 })();
+</script>
+
+<script>
+/* ---------------------------------------------------------------
+   Pintar en el idioma de la persona ANTES del primer fotograma.
+
+   El diccionario ya esta descargado arriba, pero quien lo aplicaba era
+   applyLang(), dentro de main.js, que es el ultimo script del body y no
+   corre hasta DOMContentLoaded. Medido en un Chrome real a 390x844 con
+   red lenta: la pagina se veia ENTERA EN INGLES entre 3,8 s (kreyol) y
+   19 s (ucraniano) antes de cambiar de idioma. Para alguien que llega
+   por WhatsApp y decide en segundos, eso anula el motivo entero de
+   tener nueve idiomas.
+
+   Esta funcion se llama tres veces mientras el HTML se analiza, asi que
+   cada trozo sale ya traducido en cuanto existe. main.js lo vuelve a
+   aplicar al final sin conflicto: el resultado es identico.
+   --------------------------------------------------------------- */
+window.FAM_PAINT = function (raiz) {
+  var c = window.FAM_LANG;
+  var d = window.FAM_I18N && window.FAM_I18N[c];
+  /* Si el diccionario no llego, no se toca nada y la pagina se queda en
+     ingles, que es lo que ya hay escrito en el HTML. */
+  if (!c || !d) return;
+  raiz = raiz || document;
+
+  var pon = function (sel, hacer) {
+    var n = raiz.querySelectorAll(sel), i;
+    for (i = 0; i < n.length; i++) hacer(n[i]);
+  };
+  pon("[data-i18n]", function (el) {
+    var v = d[el.getAttribute("data-i18n")];
+    if (v !== undefined) el.textContent = v;
+  });
+  pon("[data-i18n-html]", function (el) {
+    var v = d[el.getAttribute("data-i18n-html")];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  pon("[data-i18n-placeholder]", function (el) {
+    var v = d[el.getAttribute("data-i18n-placeholder")];
+    if (v !== undefined) el.setAttribute("placeholder", v);
+  });
+  pon("[data-i18n-aria]", function (el) {
+    var v = d[el.getAttribute("data-i18n-aria")];
+    if (v !== undefined) el.setAttribute("aria-label", v);
+  });
+
+  document.documentElement.setAttribute("lang", c);
+
+  /* La pastilla del idioma, que no lleva data-i18n */
+  var L = window.FAM_LANGS || [], i, m = null;
+  for (i = 0; i < L.length; i++) if (L[i].code === c) m = L[i];
+  if (m) {
+    var f = document.getElementById("langFlag"), k = document.getElementById("langCode");
+    if (f) f.textContent = m.flag;
+    if (k) k.textContent = m.label;
+  }
+
+  /* El tema ya se fija antes de pintar, pero el icono lo cambiaba
+     applyTheme() en main.js: sobre fondo oscuro se veia el sol durante
+     los mismos segundos. */
+  var oscuro = document.documentElement.getAttribute("data-theme") === "dark";
+  var sol = document.getElementById("iconSun"), luna = document.getElementById("iconMoon");
+  if (sol)  sol.style.display  = oscuro ? "none" : "";
+  if (luna) luna.style.display = oscuro ? "" : "none";
+};
 </script>
 
 <script type="application/ld+json">
@@ -219,7 +301,7 @@
         <li><a href="#creencias"   data-i18n="nav.beliefs">Beliefs</a></li>
         <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
         <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
-        <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
+        <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
         <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
         <li><a href="#contacto"    data-i18n="nav.contact">Contact</a></li>
       </ul>
@@ -269,7 +351,7 @@
     <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
     <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
     <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
-    <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
+    <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
     <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
     <li><a href="#recursos"    data-i18n="nav.resources">Resources</a></li>
     <li><a href="#donar"       data-i18n="nav.give">Give</a></li>
@@ -282,6 +364,7 @@
   </a>
 </div>
 
+<script>window.FAM_PAINT && FAM_PAINT();</script>
 <main id="main">
 
 <!-- ============ HERO ============ -->
@@ -318,6 +401,7 @@
     </div>
   </div>
 </section>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
 
 <!-- ============ ALGUIEN CERCA DE TI ============ -->
 <section class="near" id="cerca">
@@ -326,7 +410,7 @@
       <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg></span>
       <span class="eyebrow" data-i18n="near.eyebrow">Wherever you are in Florida</span>
       <h2 class="section-title" data-i18n="near.title">Someone near you would be glad to meet you</h2>
-      <p class="section-lead">Choose your city and the language you would rather speak. We will tell you when the Sabbath begins where you live, where to go this Saturday, and the name of the person who will be waiting outside so you do not have to walk in alone.</p>
+      <p class="section-lead">Choose your city and we will tell you exactly when the Sabbath begins and ends where you live — that part is worked out from the sun, so it is right from today. We have not confirmed an address for a single city yet, and we would rather say so than send you to the wrong door on a Saturday morning. Tell us where you are and we will find out which congregation is closest and what language it preaches in.</p>
 
       <div class="near-form">
         <div class="field">
@@ -903,7 +987,7 @@
 </section>
 
 <!-- ============ MISIONES ============ -->
-<section class="missions" id="misiones">
+<section hidden class="missions" id="misiones">
   <div class="container">
 
     <div class="section-head center reveal">
@@ -1235,7 +1319,7 @@
           <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
           <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
           <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
-          <li><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
+          <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
         </ul>
       </div>
 
@@ -1262,7 +1346,7 @@
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
 </a>
 
-<script src="js/i18n.js"></script>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
 <script src="js/sabbath.js"></script>
 <script src="js/videos.js"></script>
 <script src="js/near.js"></script>
