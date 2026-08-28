@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.ht = {
-    "meta.description": "Florida Advent Missionaries: yon gwoup misyonè adventis layik k ap sèvi tout Florid la. Etid biblik gratis, lapriyè, ak liv Vin Jwenn Kris la nan 9 lang.",
+    "meta.description": "Li liv Vin Jwenn Kris la ak lòt liv Ellen White gratis an PDF, mande lapriyè, epi etidye Bib la pa apèl videyo nenpòt kote, oswa an pèsòn nan Florid.",
     "a11y.skip": "Ale nan kontni an",
     "a11y.heroArt": "Yon Bib ouvè anba yon solèy k ap leve ak yon kwa",
     "a11y.bookArt": "Liv Vin Jwenn Kris la",

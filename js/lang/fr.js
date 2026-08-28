@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.fr = {
-    "meta.description": "Florida Advent Missionaries : groupe missionnaire adventiste laïc au service de toute la Floride. Études bibliques gratuites, prière et le livre Vers Jésus en 9 langues.",
+    "meta.description": "Lisez Vers Jésus et d'autres livres d'Ellen White gratuits en PDF, demandez une prière et étudiez la Bible par appel vidéo, ou sur place en Floride.",
     "a11y.skip": "Aller au contenu",
     "a11y.heroArt": "Une Bible ouverte sous un lever de soleil et une croix",
     "a11y.bookArt": "Le livre Vers Jésus",

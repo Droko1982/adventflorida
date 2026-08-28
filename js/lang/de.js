@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.de = {
-    "meta.description": "Florida Advent Missionaries: eine adventistische Laien-Missionsgruppe für ganz Florida. Kostenlose Bibelstunden, Gebet und das Buch Der bessere Weg in 9 Sprachen.",
+    "meta.description": "Der bessere Weg und mehr von Ellen White gratis als PDF, dazu Gebet und Bibelstunden per Videoanruf, wo immer Sie leben, oder persönlich in Florida.",
     "a11y.skip": "Zum Inhalt springen",
     "a11y.heroArt": "Eine aufgeschlagene Bibel unter einem Sonnenaufgang und einem Kreuz",
     "a11y.bookArt": "Das Buch Der bessere Weg",

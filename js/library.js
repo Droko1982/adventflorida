@@ -51,12 +51,12 @@ window.FAM_LIBRARY = [
         "leer": "https://text.egwwritings.org/book/b11121"
       },
       "de": {
-        "t": "Der bessere Weg zu einem neuen Leben",
+        "t": "Der bessere Weg",
         "pdf": "https://media4.egwwritings.org/pdf/de_BW(SC).pdf",
         "leer": "https://text.egwwritings.org/book/b801"
       },
       "nl": {
-        "t": "Schreden Naar Christus",
+        "t": "Schreden naar Christus",
         "pdf": "https://media4.egwwritings.org/pdf/nl_SC(SC).pdf",
         "leer": "https://text.egwwritings.org/book/b11389"
       },

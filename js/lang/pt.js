@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.pt = {
-    "meta.description": "Florida Advent Missionaries: grupo missionário adventista leigo que atende toda a Flórida. Estudos bíblicos gratuitos, oração e o livro Caminho a Cristo em 9 idiomas.",
+    "meta.description": "Leia Caminho a Cristo e mais livros de Ellen White grátis em PDF, peça oração e estude a Bíblia por videochamada, ou em pessoa se você mora na Flórida.",
     "a11y.skip": "Ir para o conteúdo",
     "a11y.heroArt": "Uma Bíblia aberta sob um nascer do sol e uma cruz",
     "a11y.bookArt": "O livro Caminho a Cristo",

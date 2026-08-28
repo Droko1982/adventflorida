@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.en = {
-    "meta.description": "Free Bible studies, prayer and the book Steps to Christ, in nine languages, anywhere in Florida. Jesus Christ is our guide and Saviour.",
+    "meta.description": "Read Steps to Christ and more Ellen White books free in PDF, ask for prayer, and study the Bible by video wherever you live, or in person in Florida.",
     "a11y.skip": "Skip to content",
     "a11y.heroArt": "An open Bible beneath a rising sun and a cross",
     "a11y.bookArt": "The book Steps to Christ",

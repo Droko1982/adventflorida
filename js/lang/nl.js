@@ -18,7 +18,7 @@
   ];
 
   window.FAM_I18N.nl = {
-    "meta.description": "Florida Advent Missionaries: een adventistische lekenzendingsgroep voor heel Florida. Gratis bijbelstudies, gebed en het boek Schreden naar Christus in 9 talen.",
+    "meta.description": "Lees Schreden naar Christus en meer van Ellen White gratis als PDF, vraag om gebed en volg bijbelstudie via video, of persoonlijk als u in Florida woont.",
     "a11y.skip": "Naar de inhoud",
     "a11y.heroArt": "Een opengeslagen Bijbel onder een zonsopgang en een kruis",
     "a11y.bookArt": "Het boek Schreden naar Christus",

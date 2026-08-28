@@ -171,6 +171,46 @@ for (const [clave, marca] of [["near.none", "{city}"], ["a11y.verseN", "{n}"],
     faltan.length ? "falta en " + faltan.join(", ") : "en los nueve");
 }
 
+/* =========================================================
+   4. Llamar al libro por su nombre, el mismo que el del enlace
+   ========================================================= */
+console.log("\n=== El libro se llama igual en el texto y en el enlace ===\n");
+{
+  const win = {};
+  new Function("window", fs.readFileSync(path.join(ROOT, "js", "i18n.js"), "utf8"))(win);
+  const LANGS = win.FAM_LANGS || [];
+
+  for (const m of LANGS) {
+    const d = D[m.code];
+    const texto = Object.keys(d).map((k) => d[k]).join(" | ");
+    const hay = texto.indexOf(m.book.title) !== -1;
+
+    if (m.code === "ht") {
+      /* Excepcion deliberada y explicada: el libro no existe en kreyol,
+         asi que los botones llevan a la edicion francesa. El texto lo
+         nombra en kreyol y el enlace en frances a proposito. Lo que NO
+         puede faltar es el aviso que lo explica. */
+      const aviso = d["book.legalHt"] || "";
+      ok(aviso.length > 60, "ht: el aviso explica por que va al frances",
+        aviso.slice(0, 52) + "...");
+      continue;
+    }
+    ok(hay, m.code + ": el texto usa el titulo del enlace", m.book.title);
+  }
+
+  /* Y que ninguna ficha de la biblioteca contradiga ese titulo */
+  const wl = {};
+  new Function("window", fs.readFileSync(path.join(ROOT, "js", "library.js"), "utf8"))(wl);
+  const steps = (wl.FAM_LIBRARY || []).filter((o) => o.slug === "steps-to-christ")[0];
+  if (steps) {
+    const chocan = LANGS
+      .filter((m) => steps.ed[m.code] && steps.ed[m.code].t !== m.book.title)
+      .map((m) => m.code + ": \"" + steps.ed[m.code].t + "\" vs \"" + m.book.title + "\"");
+    ok(chocan.length === 0, "la biblioteca dice el mismo titulo",
+      chocan.join(" · ") || LANGS.length + " idiomas de acuerdo");
+  }
+}
+
 console.log(fallos === 0 ? "\nNo se promete nada que no se pueda cumplir.\n"
                          : "\n*** " + fallos + " problema(s) ***\n");
 process.exit(fallos === 0 ? 0 : 1);
