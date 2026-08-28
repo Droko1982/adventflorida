@@ -1801,3 +1801,55 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     .lib-grid { grid-template-columns: 1fr; }
     .lib-card { padding: 17px 18px 18px; }
 }
+
+
+/* ---------- Los bloques plegables del sabado ----------
+   La seccion medía 12,75 pantallas de movil y se llevaba un tercio de
+   todo el texto de la pagina. No se ha quitado nada: se pliega, igual
+   que Creencias y Preguntas. Lo unico que la pagina tiene de irrepetible
+   -- la hora exacta del ocaso en tu ciudad -- se queda siempre abierto. */
+.sab-fold {
+    max-width: 820px;
+    margin: 0 auto 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+}
+.sab-fold summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    cursor: pointer;
+    list-style: none;
+    transition: background var(--t-base) var(--ease-out);
+}
+.sab-fold summary::-webkit-details-marker { display: none; }
+.sab-fold summary:hover { background: var(--surface-2); }
+.sab-fold-t {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.3rem, 2.6vw, 1.72rem);
+    font-weight: 600;
+    line-height: 1.2;
+}
+.sab-fold .acc-chev {
+    width: 21px; height: 21px;
+    flex-shrink: 0;
+    color: var(--accent);
+    transition: transform var(--t-base) var(--ease-out);
+}
+.sab-fold[open] .acc-chev { transform: rotate(180deg); }
+.sab-fold[open] summary { border-bottom: 1px solid var(--line); }
+.sab-fold-body { padding: 22px; }
+.sab-fold-body > .section-lead { margin-bottom: 26px; }
+/* Dentro de un plegable, los bloques ya no necesitan sus margenes de banda */
+.sab-fold-body .sab-why,
+.sab-fold-body .narrow { margin: 0 auto !important; }
+.sab-fold-body .give-grace { margin: 22px auto 0 !important; }
+
+@media (max-width: 620px) {
+    .sab-fold summary { padding: 17px 18px; }
+    .sab-fold-body { padding: 18px; }
+}
