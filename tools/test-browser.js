@@ -63,7 +63,8 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
       const t = m.text();
       /* Un file:// sin red no puede traer las miniaturas de YouTube ni
          las fuentes de Google: eso no es un fallo de la pagina. */
-      if (/ytimg|fonts\.g|ERR_(NAME|INTERNET|CONNECTION)|Failed to load resource/i.test(t)) return;
+      if (!ENVIVO && /ytimg|fonts\.g|ERR_(NAME|INTERNET|CONNECTION)|Failed to load resource/i.test(t)) return;
+      if (ENVIVO && /youtube|ytimg|doubleclick|googleads/i.test(t)) return;
       errores.push("consola: " + t.slice(0, 120));
     });
     await page.goto(URL, { waitUntil: "domcontentloaded" });
