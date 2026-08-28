@@ -133,6 +133,42 @@ const porVisita = kb("index.html") + kb("css/styles.css") + kb("js/i18n.js") +
 aviso(porVisita < 300, "peso por visita (peor caso)", porVisita + " KB");
 aviso(kb("index.html") < 120, "html", kb("index.html") + " KB");
 
+/* ---------- La biblioteca en el HTML servido ----------
+   Los titulos de los libros son los terminos con busqueda mundial de
+   verdad: "El camino a Cristo PDF gratis" se busca en todo el mundo
+   hispanohablante, "Florida Advent Missionaries" no se busca en ninguna
+   parte. Si esos titulos viven solo en js/library.js, un rastreador que
+   no ejecute JavaScript no ve ni uno. Van tambien como datos
+   estructurados, y esto vigila que no se queden atras. */
+console.log("\n=== La biblioteca en los datos estructurados ===\n");
+{
+  const win = {};
+  new Function("window", fs.readFileSync(path.join(ROOT, "js", "library.js"), "utf8"))(win);
+  const LIB = win.FAM_LIBRARY || [];
+  const bloques = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
+    .map((m) => { try { return JSON.parse(m[1]); } catch (e) { return null; } });
+  const lista = bloques.find((b) => b && b["@type"] === "ItemList");
+
+  ok(!!lista, "hay un ItemList de la biblioteca");
+  if (lista) {
+    ok(lista.itemListElement.length === LIB.length,
+      "declara todas las obras", lista.itemListElement.length + " de " + LIB.length);
+
+    /* Cada titulo de cada idioma tiene que aparecer en los bytes servidos */
+    const titulos = new Set();
+    LIB.forEach((o) => Object.keys(o.ed).forEach((l) => titulos.add(o.ed[l].t)));
+    const fuera = [...titulos].filter((t) => html.indexOf(t) === -1);
+    ok(fuera.length === 0, "los titulos estan en el HTML",
+      fuera.length ? fuera.slice(0, 3).join(" | ") : titulos.size + " titulos de 9 idiomas");
+
+    /* Y que no declare una obra que ya no exista */
+    const inventadas = lista.itemListElement
+      .filter((x) => !titulos.has(x.name)).map((x) => x.name);
+    ok(inventadas.length === 0, "no declara obras que no estan",
+      inventadas.join(", ") || "ninguna de mas");
+  }
+}
+
 console.log(fallos === 0 ? "\nSin errores." + (avisos ? "  (" + avisos + " aviso[s])" : "") + "\n"
                          : "\n*** " + fallos + " error(es), " + avisos + " aviso(s) ***\n");
 process.exit(fallos === 0 ? 0 : 1);
