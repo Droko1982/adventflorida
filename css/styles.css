@@ -377,6 +377,48 @@ section { padding: 84px 0; }
 h2.section-title { font-size: clamp(2rem, 4.4vw, 3.1rem); margin-bottom: 16px; }
 .section-lead { color: var(--text-soft); font-size: 1.05rem; }
 
+/* ---------- Distintivo de seccion ----------
+   Diecisiete secciones con la misma cabecera se confunden entre si al
+   bajar: no se sabe si has cambiado de sitio o sigues en el mismo. Cada
+   una lleva ahora su propio icono, que dice de que va antes de leer una
+   sola palabra y sirve de punto de referencia al desplazarse.
+   Ni llama ni logotipo adventista: esto es un ministerio laico. */
+.sec-badge {
+    display: grid;
+    place-items: center;
+    width: 52px; height: 52px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    background: var(--accent-soft);
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+    flex-shrink: 0;
+}
+.section-head.center .sec-badge { margin-left: auto; margin-right: auto; }
+.sec-badge svg { width: 25px; height: 25px; }
+
+/* Un filete corto bajo el titulo: cierra la cabecera y separa lo que se
+   anuncia de lo que viene. */
+.section-head .section-lead::after,
+.near-card .section-lead::after,
+.give-card .section-lead::after,
+.contact .section-lead::after {
+    content: "";
+    display: block;
+    width: 58px; height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+    margin: 26px 0 0;
+    opacity: .55;
+}
+.section-head.center .section-lead::after,
+.contact .section-lead::after { margin-left: auto; margin-right: auto; }
+
+@media (max-width: 620px) {
+    .sec-badge { width: 46px; height: 46px; border-radius: 14px; margin-bottom: 13px; }
+    .sec-badge svg { width: 22px; height: 22px; }
+}
+
 /* ---------- Hero ---------- */
 .hero {
     position: relative;
@@ -479,7 +521,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     max-width: 860px;
     margin: 0 auto;
 }
-.near-card h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin-bottom: 12px; }
+.near-card h2 { margin-bottom: 14px; }
 .near-card > p.section-lead { margin-bottom: 26px; font-size: 1rem; }
 
 .near-form {
@@ -1367,7 +1409,6 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     box-shadow: var(--shadow-sm);
 }
 .give-card h2 {
-    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
     margin-bottom: 16px;
 }
 .give-card .section-lead { margin-bottom: 30px; }
@@ -1458,7 +1499,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
         var(--bg);
     text-align: center;
 }
-.contact h2 { font-size: clamp(2.1rem, 4.6vw, 3.2rem); margin-bottom: 16px; }
+.contact h2 { margin-bottom: 16px; }
 .contact .section-lead { max-width: 62ch; margin: 0 auto 30px; }
 .contact-form {
     max-width: 640px;

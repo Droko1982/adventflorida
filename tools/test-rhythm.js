@@ -133,6 +133,51 @@ console.log();
 ok(rep2.length === 0, "el ritmo aguanta sin misiones",
   rep2.length ? rep2.join(", ") : visibles.length + " secciones");
 
+/* =========================================================
+   Cada seccion tiene que distinguirse de la de al lado
+   ========================================================= */
+console.log("\n=== Distintivo y titulo de cada seccion ===\n");
+
+const conTitulo = secciones.filter((s) => s.id !== "inicio");
+const sinInsignia = conTitulo.filter((s) => !s.querySelector(".sec-badge")).map((s) => s.id);
+ok(sinInsignia.length === 0, "todas llevan su insignia",
+  sinInsignia.length ? "falta en " + sinInsignia.join(", ") : conTitulo.length + " secciones");
+
+/* Dos secciones con el mismo icono no se distinguen: seria peor que nada */
+const dibujos = new Map();
+const repes = [];
+for (const s of conTitulo) {
+  const b = s.querySelector(".sec-badge svg");
+  if (!b) continue;
+  const d = b.innerHTML.replace(/\s+/g, "");
+  if (dibujos.has(d)) repes.push(s.id + " = " + dibujos.get(d));
+  else dibujos.set(d, s.id);
+}
+ok(repes.length === 0, "ningun icono repetido",
+  repes.length ? repes.join(", ") : dibujos.size + " iconos distintos");
+
+/* El icono es decorativo: el titulo ya dice de que va la seccion */
+const sinOcultar = conTitulo
+  .map((s) => s.querySelector(".sec-badge"))
+  .filter(Boolean)
+  .filter((b) => b.getAttribute("aria-hidden") !== "true").length;
+ok(sinOcultar === 0, "los iconos no hablan al lector", "son decorativos, el titulo ya lo dice");
+
+/* Un solo tamano de titulo. Antes "cerca" y "donar" salian a 37 px por
+   estar dentro de una tarjeta, y se leian como secciones de segunda. */
+const sinClase = conTitulo
+  .filter((s) => { const h = s.querySelector("h2"); return h && !h.classList.contains("section-title"); })
+  .map((s) => s.id);
+ok(sinClase.length === 0, "todos los h2 son section-title",
+  sinClase.length ? sinClase.join(", ") : conTitulo.length + " titulos");
+
+/* Y que nadie vuelva a pisar ese tamano desde otra regla */
+const pisan = [...css.matchAll(/([^{}]*\bh2\b[^{}]*)\{([^{}]*font-size[^{}]*)\}/g)]
+  .map((m) => m[1].trim())
+  .filter((sel) => sel !== "h2.section-title" && !/^h1, h2/.test(sel));
+ok(pisan.length === 0, "sin reglas que cambien ese tamano",
+  pisan.length ? pisan.join(" | ") : "solo manda h2.section-title");
+
 console.log("\n=== Los menus siguen el orden de la pagina ===\n");
 const orden = secciones.map(s => s.id);
 function enOrden(enlaces) {
