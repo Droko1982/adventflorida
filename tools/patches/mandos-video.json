@@ -1,0 +1,47 @@
+{
+  "en": {
+    "st.prev": "Previous testimony",
+    "st.next": "Next testimony",
+    "st.close": "Close the video"
+  },
+  "es": {
+    "st.prev": "Testimonio anterior",
+    "st.next": "Testimonio siguiente",
+    "st.close": "Cerrar el vídeo"
+  },
+  "fr": {
+    "st.prev": "Témoignage précédent",
+    "st.next": "Témoignage suivant",
+    "st.close": "Fermer la vidéo"
+  },
+  "ht": {
+    "st.prev": "Temwayaj anvan an",
+    "st.next": "Temwayaj k ap vini an",
+    "st.close": "Fèmen videyo a"
+  },
+  "pt": {
+    "st.prev": "Testemunho anterior",
+    "st.next": "Próximo testemunho",
+    "st.close": "Fechar o vídeo"
+  },
+  "de": {
+    "st.prev": "Vorheriges Zeugnis",
+    "st.next": "Nächstes Zeugnis",
+    "st.close": "Video schließen"
+  },
+  "nl": {
+    "st.prev": "Vorige getuigenis",
+    "st.next": "Volgende getuigenis",
+    "st.close": "Video sluiten"
+  },
+  "ru": {
+    "st.prev": "Предыдущее свидетельство",
+    "st.next": "Следующее свидетельство",
+    "st.close": "Закрыть видео"
+  },
+  "uk": {
+    "st.prev": "Попереднє свідчення",
+    "st.next": "Наступне свідчення",
+    "st.close": "Закрити відео"
+  }
+}

@@ -470,7 +470,10 @@
     "a11y.closeMenu": "Close menu",
     "a11y.verses": "Bible verses",
     "a11y.verseN": "Show verse {n}",
-    "a11y.nearOut": "Answer for your city"
+    "a11y.nearOut": "Answer for your city",
+    "st.prev": "Previous testimony",
+    "st.next": "Next testimony",
+    "st.close": "Close the video"
   };
 
 })();

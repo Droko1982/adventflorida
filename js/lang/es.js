@@ -470,7 +470,10 @@
     "a11y.closeMenu": "Cerrar el menú",
     "a11y.verses": "Versículos bíblicos",
     "a11y.verseN": "Ver el versículo {n}",
-    "a11y.nearOut": "Respuesta para tu ciudad"
+    "a11y.nearOut": "Respuesta para tu ciudad",
+    "st.prev": "Testimonio anterior",
+    "st.next": "Testimonio siguiente",
+    "st.close": "Cerrar el vídeo"
   };
 
 })();

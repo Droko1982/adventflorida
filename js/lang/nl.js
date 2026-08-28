@@ -470,7 +470,10 @@
     "a11y.closeMenu": "Menu sluiten",
     "a11y.verses": "Bijbelverzen",
     "a11y.verseN": "Vers {n} tonen",
-    "a11y.nearOut": "Antwoord voor uw stad"
+    "a11y.nearOut": "Antwoord voor uw stad",
+    "st.prev": "Vorige getuigenis",
+    "st.next": "Volgende getuigenis",
+    "st.close": "Video sluiten"
   };
 
 })();

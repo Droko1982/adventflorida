@@ -635,7 +635,50 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 .st-card.is-lead .st-play { width: 74px; height: 74px; }
 .st-card.is-lead .st-play svg { width: 28px; height: 28px; }
 
-.st-thumb iframe { width: 100%; height: 100%; border: 0; }
+/* ---------- Reproductor de testimonios ----------
+   Antes el iframe sustituia al boton y no habia salida: ni cerrar, ni
+   pasar al siguiente, ni volver a la miniatura. Ahora el reproductor
+   trae sus mandos y la miniatura sigue debajo, escondida, esperando. */
+.st-player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+}
+.st-player iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.st-ctrls {
+    position: absolute;
+    top: 8px; right: 8px;
+    z-index: 3;
+    display: flex;
+    gap: 6px;
+}
+.st-ctrl {
+    /* 40px reales: por encima del minimo de WCAG 2.5.8 y comodo con el
+       pulgar encima de un video que ya esta sonando. */
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    background: rgba(10, 23, 32, .74);
+    color: #fff;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background var(--t-fast) var(--ease-out), transform var(--t-fast) var(--ease-out);
+}
+.st-ctrl:hover { background: rgba(10, 23, 32, .94); transform: scale(1.08); }
+.st-ctrl:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.st-ctrl svg { width: 19px; height: 19px; }
+/* El aspa cierra: que se distinga de las flechas sin depender del color */
+.st-ctrl.st-close { background: rgba(140, 24, 24, .82); }
+.st-ctrl.st-close:hover { background: rgba(168, 28, 28, .96); }
+
+/* Mientras suena, la tarjeta no se levanta ni hace zoom: molesta */
+.st-card.is-playing { transform: none; }
+.st-card.is-playing:hover { transform: none; box-shadow: var(--shadow-sm); }
 
 .st-body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .st-who {

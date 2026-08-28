@@ -660,22 +660,97 @@
   /* Se enlaza la miniatura de YouTube y solo se carga el
      reproductor al pulsar, con el dominio sin cookies. Nada
      se descarga ni se re-publica. */
+  /* Antes esto reemplazaba el boton por el iframe y lo destruia: una vez
+     empezado un testimonio no habia forma de salir de el, ni de pasar al
+     siguiente, ni de volver a la miniatura. Ahora el boton se queda
+     escondido al lado y el reproductor trae sus mandos. */
+
+  function cerrarVideo(card) {
+    if (!card) return;
+    var caja = $(".st-player", card), btn = $(".st-thumb", card);
+    if (caja) caja.parentNode.removeChild(caja);
+    if (btn) btn.hidden = false;
+    card.classList.remove("is-playing");
+    return btn;
+  }
+
+  function cerrarTodos(menos) {
+    $$("#stGrid .st-card.is-playing").forEach(function (c) {
+      if (c !== menos) cerrarVideo(c);
+    });
+  }
+
+  function tarjetas() { return $$("#stGrid .st-card"); }
+
+  /* Salta al siguiente testimonio, o al anterior con paso -1 */
+  function pasarVideo(card, paso) {
+    var todas = tarjetas();
+    var i = todas.indexOf(card);
+    if (i === -1) return;
+    var siguiente = todas[(i + paso + todas.length) % todas.length];
+    cerrarVideo(card);
+    var btn = $(".st-thumb", siguiente);
+    if (btn) playVideo(btn);
+  }
+
+  function mando(clase, etiqueta, svg, alPulsar) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "st-ctrl " + clase;
+    b.setAttribute("aria-label", etiqueta);
+    b.title = etiqueta;
+    b.innerHTML = svg;
+    b.addEventListener("click", alPulsar);
+    return b;
+  }
+
+  var SVG_CERRAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var SVG_ANT    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+  var SVG_SIG    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+
   function playVideo(btn) {
-    var wrap = document.createElement("div");
-    wrap.className = "st-thumb is-playing";
+    var card = btn.closest ? btn.closest(".st-card") : btn.parentNode;
+    if (!card) return;
+    cerrarTodos(card);                 /* uno a la vez, no cuatro sonando */
+
+    var caja = document.createElement("div");
+    caja.className = "st-player";
+
     var frame = document.createElement("iframe");
     frame.setAttribute("src", "https://www.youtube-nocookie.com/embed/" +
       btn.getAttribute("data-video") + "?autoplay=1&rel=0");
     frame.setAttribute("title", btn.getAttribute("data-title"));
     frame.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
     frame.setAttribute("allowfullscreen", "");
-    wrap.appendChild(frame);
-    btn.parentNode.replaceChild(wrap, btn);
+    caja.appendChild(frame);
+
+    var barra = document.createElement("div");
+    barra.className = "st-ctrls";
+    var varias = tarjetas().length > 1;
+    if (varias) barra.appendChild(mando("st-prev", t("st.prev"), SVG_ANT,
+      function () { pasarVideo(card, -1); }));
+    if (varias) barra.appendChild(mando("st-next", t("st.next"), SVG_SIG,
+      function () { pasarVideo(card, 1); }));
+    barra.appendChild(mando("st-close", t("st.close"), SVG_CERRAR, function () {
+      var v = cerrarVideo(card);
+      if (v) v.focus();               /* el foco vuelve de donde salio */
+    }));
+    caja.appendChild(barra);
+
+    btn.hidden = true;
+    card.classList.add("is-playing");
+    card.insertBefore(caja, btn);
   }
 
   function renderStories() {
     var grid = $("#stGrid");
     if (!grid || !VIDEOS.length) return;
+
+    /* Cambiar de idioma reconstruye la rejilla entera. Si habia un
+       testimonio sonando, se cortaba a media frase: se anota cual era
+       para volver a ponerlo al terminar. */
+    var sonando = grid.querySelector(".st-card.is-playing .st-thumb");
+    var seguir = sonando ? sonando.getAttribute("data-video") : null;
 
     grid.innerHTML = VIDEOS.map(function (v, i) {
       var lang = v.lang || "en";
@@ -705,6 +780,11 @@
     $$("#stGrid button.st-thumb").forEach(function (b) {
       b.addEventListener("click", function () { playVideo(b); });
     });
+
+    if (seguir) {
+      var vuelve = grid.querySelector('.st-thumb[data-video="' + seguir + '"]');
+      if (vuelve) playVideo(vuelve);
+    }
   }
 
   /* ---------------- Alguien cerca de ti ---------------- */
@@ -1114,6 +1194,74 @@
     if (closeBtn) closeBtn.addEventListener("click", closeMenu);
     $$("#mobileNav a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
+    /* ---- Ir a una seccion ----
+       La pagina mide 15.000 px en el movil. Con scroll-behavior: smooth,
+       pulsar "Sabado" desde arriba era mas de dos segundos de vuelo por
+       delante de quince pantallas, y cualquier roce o segundo toque
+       cancelaba la animacion y dejaba a la persona tirada a medio camino:
+       exactamente la sensacion de "le doy y no me lleva".
+
+       Ahora: los saltos cortos siguen deslizandose, que se agradece y
+       ayuda a situarse; los largos van directos. */
+    var SALTO_LARGO = 2.5;          /* en pantallas de alto */
+
+    function suave() {
+      try {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+      } catch (e) {}
+      return true;
+    }
+
+    /* Al aterrizar de golpe, lo que hay debajo no puede estar en blanco:
+       el observador tarda un fotograma en revelarlo. */
+    function revelar(sec) {
+      if (sec.classList.contains("reveal")) sec.classList.add("is-visible");
+      $$(".reveal", sec).forEach(function (el) { el.classList.add("is-visible"); });
+    }
+
+    function irA(destino, id) {
+      revelar(destino);
+      var alto = window.innerHeight || 800;
+      var y = destino.getBoundingClientRect().top + window.pageYOffset - 92;
+      var lejos = Math.abs(destino.getBoundingClientRect().top) > alto * SALTO_LARGO;
+      y = Math.max(0, y);
+
+      if (lejos || !suave()) {
+        /* Ojo con behavior:"auto": NO quiere decir instantaneo, quiere
+           decir "lo que mande el CSS", y el CSS de aqui dice smooth. Se
+           apaga la propiedad un momento, que funciona en todos lados. */
+        var antes = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(0, y);
+        document.documentElement.style.scrollBehavior = antes;
+      } else {
+        try { window.scrollTo({ top: y, behavior: "smooth" }); }
+        catch (e) { window.scrollTo(0, y); }
+      }
+
+      /* pushState y no location.hash: cambiar el hash provocaria un
+         segundo salto del navegador encima del que acabamos de hacer. */
+      try { history.pushState(null, "", "#" + id); } catch (e) {}
+
+      /* Sin esto, quien navega con teclado sigue con el foco en el menu
+         y el siguiente tabulador le devuelve al principio de la pagina. */
+      if (!destino.hasAttribute("tabindex")) destino.setAttribute("tabindex", "-1");
+      try { destino.focus({ preventScroll: true }); } catch (e) { destino.focus(); }
+    }
+
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+      if (!a) return;
+      var href = a.getAttribute("href");
+      if (!href || href === "#" || a.hasAttribute("data-wa")) return;
+      var id = href.slice(1);
+      var destino = document.getElementById(id);
+      if (!destino || destino.hidden) return;
+      e.preventDefault();
+      closeMenu();
+      irA(destino, id);
+    });
+
     window.addEventListener("scroll", function () {
       if (header) header.classList.toggle("is-stuck", window.scrollY > 8);
     }, { passive: true });
@@ -1131,7 +1279,12 @@
       if (langWrap && !langWrap.contains(e.target)) closeLangMenu();
     });
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") { closeLangMenu(); closeMenu(); }
+      if (e.key === "Escape") {
+        closeLangMenu();
+        closeMenu();
+        var sonando = document.querySelector("#stGrid .st-card.is-playing");
+        if (sonando) { var v = cerrarVideo(sonando); if (v) v.focus(); }
+      }
     });
 
     /* Enlace activo en el menu */

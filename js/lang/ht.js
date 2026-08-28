@@ -470,7 +470,10 @@
     "a11y.closeMenu": "Fèmen meni an",
     "a11y.verses": "Vèsè biblik",
     "a11y.verseN": "Wè vèsè {n}",
-    "a11y.nearOut": "Repons pou vil ou a"
+    "a11y.nearOut": "Repons pou vil ou a",
+    "st.prev": "Temwayaj anvan an",
+    "st.next": "Temwayaj k ap vini an",
+    "st.close": "Fèmen videyo a"
   };
 
 })();

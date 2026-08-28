@@ -470,7 +470,10 @@
     "a11y.closeMenu": "Menü schließen",
     "a11y.verses": "Bibelverse",
     "a11y.verseN": "Vers {n} anzeigen",
-    "a11y.nearOut": "Antwort für Ihre Stadt"
+    "a11y.nearOut": "Antwort für Ihre Stadt",
+    "st.prev": "Vorheriges Zeugnis",
+    "st.next": "Nächstes Zeugnis",
+    "st.close": "Video schließen"
   };
 
 })();
