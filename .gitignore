@@ -5,3 +5,7 @@ node_modules/
 *.log
 .vscode/
 .idea/
+# Guiones sueltos de comprobacion: viven en el scratchpad, no en el repo
+/shot.js
+/*.tmp.js
+node_modules/
