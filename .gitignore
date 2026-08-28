@@ -1,11 +1,15 @@
 .DS_Store
 Thumbs.db
 desktop.ini
-node_modules/
 *.log
 .vscode/
 .idea/
+
+# jsdom y puppeteer-core hacen falta para las suites de tools/, pero no
+# son dependencias del sitio: el sitio no lleva ni una.
+node_modules/
+package-lock.json
+
 # Guiones sueltos de comprobacion: viven en el scratchpad, no en el repo
 /shot.js
 /*.tmp.js
-node_modules/
