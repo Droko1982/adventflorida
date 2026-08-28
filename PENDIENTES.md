@@ -41,6 +41,25 @@ var CONTACT = {
 Ojo con el buzon: por ahi entran peticiones de oracion con nombres, enfermedades
 y problemas de familia. Que solo lo lea quien tenga que leerlo.
 
+## 0.b El logotipo: tenemos el emblema, falta el rotulo
+
+La pagina lleva ya el emblema de verdad del ministerio -- la A azul
+marino con las tres alas doradas -- en la cabecera, en los cuatro iconos
+y en la imagen que sale al compartir el enlace por WhatsApp.
+
+Se saco del avatar del canal oficial de YouTube, que es la unica copia
+publica que existe. **Y esta recortado**: YouTube guarda un cuadrado que
+corta el rotulo "FLORIDA ADVENT MISSIONARIES" por la derecha. Se busco
+sin recortar en el banner del canal, en Facebook y en buscadores, y no
+aparece en ninguna parte.
+
+- [ ] **Pasar el archivo original del logotipo** (idealmente vectorial:
+      `.svg`, `.ai` o `.eps`; si no, un PNG grande con fondo
+      transparente). Son dos archivos que sustituir en `assets/`:
+      `logo.png` para el tema claro y `logo-dark.png` para el oscuro,
+      este ultimo con el azul en un tono claro para que se lea sobre
+      fondo oscuro. Todo lo demas ya esta puesto.
+
 ## 1. Confirmar con Florida Advent Missionaries (importante)
 
 - [ ] **Datos publicos usados.** Nombre legal, EIN `81-1180614` y direccion
