@@ -168,10 +168,22 @@ for (const code of ["en", "es", "fr", "ht", "pt", "de", "nl", "ru", "uk"]) {
 
 /* ---------------- Enlaces del libro ---------------- */
 console.log("\n=== Enlace del libro por idioma ===\n");
-for (const [code, esperado] of [["en", "en_SC"], ["ht", "fr_VJC"], ["ru", "allCollection/ru"]]) {
+/* Los nueve llevan ya a un PDF directo. El kreyol al frances, porque el
+   libro no existe en kreyol y la pagina lo dice. Ruso y ucraniano
+   tenian su PDF desde 2026: antes abrian el catalogo con un boton que
+   decia "Descargar el PDF". */
+for (const [code, esperado] of [["en", "en_SC"], ["es", "es_CC(SC)"], ["fr", "fr_VJ(SC)"],
+                                ["ht", "fr_VJ(SC)"], ["pt", "pt_CC(SC)"], ["de", "de_BW(SC)"],
+                                ["nl", "nl_SC(SC)"], ["ru", "%D0%9F%D0%A5(SC)"], ["uk", "%D0%94%D0%A5(SC)"]]) {
   idioma(code);
   const href = sel("#bookPdf").getAttribute("href");
-  comprobar(href.includes(esperado), code, href.slice(-34));
+  comprobar(href.includes(esperado) && href.endsWith(".pdf"), code, href.slice(-36));
+}
+/* Y el boton de leer tiene que abrir la obra, no el catalogo del idioma */
+for (const code of ["en", "es", "fr", "ht", "pt", "de", "nl", "ru", "uk"]) {
+  idioma(code);
+  const href = sel("#bookRead").getAttribute("href");
+  comprobar(/\/book\/b\d+$/.test(href), code + " · leer abre la obra", href.slice(-30));
 }
 
 /* ---------------- Donaciones ---------------- */

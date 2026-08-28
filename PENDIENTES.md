@@ -110,14 +110,24 @@ ningun boton roto. No hay que tocar nada mas.
 - [ ] Opcional: dejar una nota para donantes con DAF que enlace a B Charitable,
       etiquetada claramente como "solo fondos asesorados por donantes".
 
-## 3. Steps to Christ
+## 3. Steps to Christ — resuelto en los nueve idiomas
 
-- [x] PDF directo verificado en 6 idiomas: EN, ES, FR, PT, DE, NL.
-- [ ] **HT, RU y UK** abren la biblioteca por idioma en lugar del PDF directo.
-      Si consiguen el enlace exacto, se pone en `js/i18n.js` -> `FAM_LANGS[].book.pdf`
-      y se quita ese codigo de `FAM_NO_DIRECT_PDF`.
-- [ ] Confirmar que si pueden **enviar ejemplares impresos gratis** por toda Florida
-      (el sitio lo promete en `book.p4` y en el boton de WhatsApp).
+- [x] **PDF directo en los nueve.** Ruso y ucraniano ya lo tienen: hasta ahora
+      su boton decia "Descargar el PDF" y abria el catalogo del idioma.
+      Comprobados uno a uno el 28 de agosto de 2026, con peticion real y
+      mirando los primeros bytes del archivo, no solo el codigo HTTP.
+- [x] **El boton de leer abre la obra**, no el catalogo. Portugues y
+      neerlandes iban al catalogo.
+- [x] **Aleman descuadrado.** Servia el PDF de *Der bessere Weg zu einem
+      neuen Leben* y el boton de leer abria *Der Weg zu Christus*, que es
+      otra edicion distinta. Ya van emparejados.
+- [x] **Titulo ucraniano corregido**: es *Дорога до Христа*, no *Шлях до Христа*.
+- [ ] **El criollo haitiano sigue sin el libro.** Confirmado otra vez: la
+      etiqueta "ht" de egwwritings es un criollo de base portuguesa, no el
+      kreyol de Haiti, y su catalogo no sirve ni una obra. Los botones llevan
+      a la edicion francesa y la pagina lo dice con todas las letras.
+- [ ] Confirmar que si pueden **enviar ejemplares impresos gratis** por toda
+      Florida (el sitio lo promete en `book.p4` y en el boton de WhatsApp).
 
 ## 4. Dominio propio (recomendado)
 
