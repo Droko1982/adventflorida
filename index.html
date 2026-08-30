@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-missions" lang="en" data-theme="light">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,6 +63,124 @@
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", t);
   } catch (e) {}
+})();
+</script>
+
+<script>
+/* ---------------------------------------------------------------
+   La pagina en cuatro partes, elegida ANTES del primer pintado.
+
+   Eran diecisiete secciones en un solo desplazamiento de 15.000 px:
+   quien llegaba buscando el libro tenia que pasar por delante de la
+   oracion, del sabado y de los ministerios para encontrarlo. Ahora se
+   muestra una parte cada vez y el menu son cuatro puertas, no ocho
+   saltos dentro del mismo tobogan.
+
+   Va aqui arriba y no en main.js a proposito: si la parte se eligiera
+   al final, el navegador llegaria a pintar las cuatro y se veria el
+   parpadeo de la pagina entera antes de encogerse.
+
+   El atributo solo lo pone el JS. Sin JS no hay atributo, la regla de
+   la hoja de estilo no engancha y se ve todo seguido: es lo que ven los
+   rastreadores que no ejecutan JavaScript, y en particular el de
+   WhatsApp y el de Facebook, que son los que arman la vista previa del
+   enlace cuando alguien lo comparte.
+
+   Ojo con una frase facil que aqui estuvo escrita y era falsa:
+   "es lo que ve un buscador". Googlebot SI ejecuta JavaScript, asi que
+   ve lo mismo que una persona: una parte pintada y tres en display:none.
+   Medido: 27.730 de 36.699 caracteres, el 76 %, quedan ocultos para el.
+   Sigue indexandolos —su politica sobre contenido en pestanas lo dice
+   desde la indexacion movil primero— pero conviene saberlo y no dormirse:
+   si alguna vez cae el trafico de una seccion concreta, esto es lo
+   primero que hay que mirar.
+   --------------------------------------------------------------- */
+(function () {
+  /* Unica fuente de verdad del reparto: main.js lee esto mismo. El
+     orden de cada lista es el orden en que estan en el HTML. */
+  window.FAM_PARTES = [
+    { id: "quienes",  secs: ["inicio", "cerca", "quienes", "testimonios", "ministerios", "unirse", "misiones"] },
+    { id: "fe",       secs: ["cristo", "creencias", "sabado"] },
+    { id: "recursos", secs: ["libro", "biblioteca", "estudios", "recursos"] },
+    { id: "contacto", secs: ["oracion", "faq", "donar", "contacto"] }
+  ];
+
+  /* La primera de cada lista es la puerta de esa parte: es a donde apunta
+     su enlace del menu. No se guarda aparte a proposito, porque un segundo
+     sitio donde escribirla es un segundo sitio del que se puede olvidar
+     uno. tools/test-rhythm.js comprueba que los enlaces del menu y estas
+     listas siguen diciendo lo mismo. */
+
+  /* En que parte vive una seccion. Acepta tanto "#sabado" como
+     "#parte-fe", porque las dos formas van a circular por WhatsApp. */
+  window.FAM_PARTE_DE = function (id) {
+    var P = window.FAM_PARTES, i;
+    if (!id) return null;
+    id = String(id).replace(/^#/, "");
+    for (i = 0; i < P.length; i++) {
+      if (P[i].id === id || "parte-" + P[i].id === id) return P[i].id;
+      if (P[i].secs.indexOf(id) > -1) return P[i].id;
+    }
+    return null;
+  };
+
+  /* ---- La red de seguridad ----
+     Este script esconde tres cuartas partes del sitio, y hasta aqui quien
+     podia volver a ensenarlas era js/main.js, que es el ultimo archivo del
+     cuerpo. Eso deja una ventana muy fea:
+
+       medido en un movil a 400 kbps, el boton del hero se puede pulsar a
+       los 7,5 s y main.js no termina de montarse hasta los 10,5.
+
+     En esos tres segundos —y para siempre si main.js no llega, que en un
+     movil con mala cobertura pasa— pulsar "Pide un estudio biblico"
+     cambiaba la direccion y no llevaba a ningun sitio: la seccion de
+     destino estaba en display:none y no habia nadie para sacarla. Antes de
+     partir la pagina eso no podia ocurrir, porque todo estaba a la vista.
+     Es una regresion que se paga en gente que se va.
+
+     Con lo de abajo el reparto funciona con SOLO este script. Los enlaces
+     del menu son anclas de verdad: al pulsarlos cambia el fragmento, salta
+     hashchange, y aqui se abre la parte que toca y se baja a la seccion.
+     Cuando main.js si llega se adelanta con pushState, que NO dispara
+     hashchange, asi que los dos no se pisan nunca. */
+  var raiz = document.documentElement;
+
+  function abrirLaParte(tambienSaltar) {
+    var p = null;
+    try { p = window.FAM_PARTE_DE(window.location.hash); } catch (e) {}
+    raiz.setAttribute("data-parte", p || window.FAM_PARTES[0].id);
+
+    if (!tambienSaltar) return;
+    /* El navegador intenta bajar al ancla ANTES de que este script la
+       saque de display:none, asi que ese salto suyo se pierde. Se rehace
+       aqui a mano y no con scrollIntoView(), que aterrizaba 18 px mas
+       abajo: los 92 px son la misma cuenta que usa main.js, y las dos
+       vias tienen que dejar la seccion en el mismo sitio. */
+    var id = String(window.location.hash || "").replace(/^#/, "");
+    var el = id && document.getElementById(id);
+    if (!el) return;
+    try {
+      var y = el.getBoundingClientRect().top + window.pageYOffset - 92;
+      /* La hoja de estilo pide scroll-behavior: smooth, y aqui eso no
+         conviene: la parte acaba de aparecer entera de golpe, asi que la
+         animacion no acompana a nada, solo llega tarde. Sin apagarla, el
+         salto se quedaba a medias 11 px. main.js hace esto mismo. */
+      var antes = raiz.style.scrollBehavior;
+      raiz.style.scrollBehavior = "auto";
+      window.scrollTo(0, y < 0 ? 0 : y);
+      raiz.style.scrollBehavior = antes;
+    } catch (e) {}
+  }
+
+  try {
+    window.addEventListener("hashchange", function () { abrirLaParte(true); });
+    abrirLaParte(false);
+  } catch (e) {
+    /* Si algo de esto falla, la pagina entera de una vez es mucho mejor
+       que tres cuartas partes escondidas y sin quien las abra. */
+    try { raiz.removeAttribute("data-parte"); } catch (e2) {}
+  }
 })();
 </script>
 
@@ -794,7 +912,7 @@ window.FAM_PAINT = function (raiz) {
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a class="brand" href="#inicio" data-i18n-aria="a11y.brand" aria-label="Florida Advent Missionaries">
+    <a class="brand" href="#quienes" data-i18n-aria="a11y.brand" aria-label="Florida Advent Missionaries">
       <span class="brand-mark" aria-hidden="true"><img class="brand-claro" src="assets/logo.png" alt="" width="107" height="132" decoding="async" fetchpriority="high"><img class="brand-oscuro" src="assets/logo-dark.png" alt="" width="107" height="132" decoding="async"></span>
       <span class="brand-text">
         <span class="brand-name">Florida Advent</span>
@@ -802,16 +920,15 @@ window.FAM_PAINT = function (raiz) {
       </span>
     </a>
 
+    <!-- Cuatro puertas, no ocho saltos dentro del mismo tobogan. Cada
+         enlace apunta a la primera seccion de su parte, asi que sin JS
+         sigue siendo un ancla que funciona. -->
     <nav class="main-nav" data-i18n-aria="a11y.navMain" aria-label="Main">
       <ul>
-        <li><a href="#cristo"      data-i18n="nav.christ">Jesus Christ</a></li>
-        <li><a href="#libro"       data-i18n="nav.book">Free book</a></li>
-        <li><a href="#creencias"   data-i18n="nav.beliefs">Beliefs</a></li>
-        <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
-        <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
-        <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
-        <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
-        <li><a href="#contacto"    data-i18n="nav.contact">Contact</a></li>
+        <li><a href="#inicio"  data-parte="quienes"  data-i18n="part.about">Who we are</a></li>
+        <li><a href="#cristo"  data-parte="fe"       data-i18n="part.faith">Jesus and our faith</a></li>
+        <li><a href="#libro"   data-parte="recursos" data-i18n="part.free">Free resources</a></li>
+        <li><a href="#oracion" data-parte="contacto" data-i18n="part.connect">Talk to us</a></li>
       </ul>
     </nav>
 
@@ -849,23 +966,49 @@ window.FAM_PAINT = function (raiz) {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
-  <ul>
-    <li><a href="#quienes"     data-i18n="nav.about">About us</a></li>
-    <li><a href="#testimonios" data-i18n="nav.stories">Stories</a></li>
-    <li><a href="#cristo"      data-i18n="nav.christ">Jesus Christ</a></li>
-    <li><a href="#unirse"      data-i18n="nav.join">Join us</a></li>
-    <li><a href="#libro"       data-i18n="nav.book">Free book</a></li>
-    <li><a href="#creencias"   data-i18n="nav.beliefs">Beliefs</a></li>
-    <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
-    <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
-    <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
-    <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
-    <li><a href="#oracion"     data-i18n="nav.prayer">Prayer</a></li>
-    <li><a href="#recursos"    data-i18n="nav.resources">Resources</a></li>
-    <li><a href="#donar"       data-i18n="nav.give">Give</a></li>
-    <li><a href="#faq"         data-i18n="nav.faq">FAQ</a></li>
-    <li><a href="#contacto"    data-i18n="nav.contact">Contact</a></li>
-  </ul>
+  <!-- Las quince entradas sueltas de antes no decian que tenia que ver
+       una cosa con otra. Ahora cada grupo es una parte, con su nombre
+       arriba, y se ve de un vistazo que el libro y los estudios viven
+       juntos. -->
+  <div class="mnav-group">
+    <a class="mnav-part" href="#inicio" data-parte="quienes" data-i18n="part.about">Who we are</a>
+    <ul>
+      <li><a href="#cerca"       data-i18n="nav.near">Near you</a></li>
+      <li><a href="#quienes"     data-i18n="nav.about">About us</a></li>
+      <li><a href="#testimonios" data-i18n="nav.stories">Stories</a></li>
+      <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
+      <li><a href="#unirse"      data-i18n="nav.join">Join us</a></li>
+      <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
+    </ul>
+  </div>
+
+  <div class="mnav-group">
+    <a class="mnav-part" href="#cristo" data-parte="fe" data-i18n="part.faith">Jesus and our faith</a>
+    <ul>
+      <li><a href="#cristo"    data-i18n="nav.christ">Jesus Christ</a></li>
+      <li><a href="#creencias" data-i18n="nav.beliefs">Beliefs</a></li>
+      <li><a href="#sabado"    data-i18n="nav.sabbath">Sabbath</a></li>
+    </ul>
+  </div>
+
+  <div class="mnav-group">
+    <a class="mnav-part" href="#libro" data-parte="recursos" data-i18n="part.free">Free resources</a>
+    <ul>
+      <li><a href="#libro"    data-i18n="nav.book">Free book</a></li>
+      <li><a href="#estudios" data-i18n="nav.studies">Bible studies</a></li>
+      <li><a href="#recursos" data-i18n="nav.resources">Resources</a></li>
+    </ul>
+  </div>
+
+  <div class="mnav-group">
+    <a class="mnav-part" href="#oracion" data-parte="contacto" data-i18n="part.connect">Talk to us</a>
+    <ul>
+      <li><a href="#oracion"  data-i18n="nav.prayer">Prayer</a></li>
+      <li><a href="#faq"      data-i18n="nav.faq">FAQ</a></li>
+      <li><a href="#donar"    data-i18n="nav.give">Give</a></li>
+      <li><a href="#contacto" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+  </div>
   <a class="btn btn-wa btn-block" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="general">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
     <span data-i18n="cta.whatsapp">Chat on WhatsApp</span>
@@ -874,6 +1017,11 @@ window.FAM_PAINT = function (raiz) {
 
 <script>window.FAM_PAINT && FAM_PAINT();</script>
 <main id="main">
+
+<!-- ============================================================
+     PARTE 1 · QUIENES SOMOS
+     ============================================================ -->
+<div class="part" id="parte-quienes">
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="inicio">
@@ -909,7 +1057,6 @@ window.FAM_PAINT = function (raiz) {
     </div>
   </div>
 </section>
-<script>window.FAM_PAINT && FAM_PAINT();</script>
 
 <!-- ============ ALGUIEN CERCA DE TI ============ -->
 <section class="near" id="cerca">
@@ -1008,6 +1155,117 @@ window.FAM_PAINT = function (raiz) {
   </div>
 </section>
 
+<!-- ============ MINISTERIOS ============ -->
+<section id="ministerios">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V4.8a1.4 1.4 0 012.8 0v6.2"/><path d="M11.8 10.8V3.6a1.4 1.4 0 012.8 0v7.4"/><path d="M14.6 11.4V5.8a1.4 1.4 0 012.8 0V14c0 3.9-2.6 7-6.2 7-3.3 0-5-1.9-6.4-4.6l-1.4-2.7a1.4 1.4 0 012.3-1.6L9 15"/></svg></span>
+      <span class="eyebrow" data-i18n="min.eyebrow">Ministries</span>
+      <h2 class="section-title" data-i18n="min.title">Where our hands are working</h2>
+      <p class="section-lead" data-i18n="min.lead">Florida is many worlds in one state. These are the doors God has opened for us — and every one of them needs more people.</p>
+    </div>
+    <div class="min-grid">
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg></div><div><h3 data-i18n="min.1.t">Bible work</h3><p data-i18n="min.1.d">Door to door, table to table. Literature, studies and honest conversations in the neighbourhoods where we live.</p></div></article>
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></div><div><h3 data-i18n="min.2.t">Health ministry</h3><p data-i18n="min.2.d">Free blood pressure and sugar screenings, cooking classes and stop-smoking programmes in parks and community centres.</p></div></article>
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-1.6a3.4 3.4 0 00-3.4-3.4H6.4A3.4 3.4 0 003 18.4V20"/><circle cx="9.5" cy="7.4" r="3.4"/><path d="M21 20v-1.6a3.4 3.4 0 00-2.6-3.3"/></svg></div><div><h3 data-i18n="min.3.t">Youth &amp; students</h3><p data-i18n="min.3.d">Campus groups, music, sport and small groups where young people can ask the hard questions without being judged.</p></div></article>
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div><h3 data-i18n="min.4.t">Community help</h3><p data-i18n="min.4.d">Food and clothing for families in need, help after hurricanes, and support for neighbours nobody else is checking on.</p></div></article>
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M9 4v16M4 9h5M4 15h5"/></svg></div><div><h3 data-i18n="min.5.t">Prison ministry</h3><p data-i18n="min.5.d">Bible courses by mail, visits and a letter that says someone still remembers your name. Grace reaches inside the walls too.</p></div></article>
+      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg></div><div><h3 data-i18n="min.6.t">Nine languages</h3><p data-i18n="min.6.d">Florida speaks the world. We study in English, Spanish, Creole, French, Portuguese, German, Dutch, Russian and Ukrainian.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ UNIRSE A LA MISION ============ -->
+<section class="join" id="unirse">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 3.5L2.5 10.2l7 2.6 2.6 7z"/><path d="M21.5 3.5L9.5 12.8"/></svg></span>
+      <span class="eyebrow" data-i18n="join.eyebrow">Go yourself</span>
+      <h2 class="section-title" data-i18n="join.title">Nobody in those videos planned this either</h2>
+      <p class="section-lead" data-i18n="join.lead">Every one of them was doing something else. What changed was not their training or their free time — someone asked, and they said yes. If watching them stirred something in you, that is worth paying attention to rather than explaining away.</p>
+    </div>
+
+    <div class="sab-why">
+      <article class="reveal">
+        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h3 data-i18n="join.1.t">You do not need to be qualified</h3>
+        <p data-i18n="join.1.d">A content creator, a woman minding two dogs, someone who could not get out of bed. None of them had training. What they had was a moment when they stopped explaining why not.</p>
+      </article>
+      <article class="reveal">
+        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg></div>
+        <h3 data-i18n="join.2.t">You do not have to leave Florida to start</h3>
+        <p data-i18n="join.2.d">Some of our work goes abroad and some of it happens on a street four blocks from here. Both count. If a passport is out of reach right now, that closes nothing.</p>
+      </article>
+      <article class="reveal">
+        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0112 5.6 5.4 5.4 0 0121.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg></div>
+        <h3 data-i18n="join.3.t">Asking is not committing</h3>
+        <p data-i18n="join.3.d">Write and ask what it would actually involve. You will get a straight answer about time, cost and what is expected, and then you decide. Nobody is going to keep calling you.</p>
+      </article>
+    </div>
+
+    <p class="give-grace reveal" style="max-width:760px;margin:36px auto 32px" lang="en" data-i18n="join.quote">“If you have never been a missionary, you have missed the best part of being a Christian.”</p>
+    <p class="reveal" style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:-22px;margin-bottom:38px" data-i18n="join.quoteWho">Derick Morgan · Vice President</p>
+
+    <div class="gospel-cta reveal">
+      <h3 data-i18n="join.cta.t">Would you like to know what it takes?</h3>
+      <p data-i18n="join.cta.d">Tell us a little about yourself and what you could give — a week, a weekend, an evening. We will tell you honestly what is coming up and whether there is a place for you in it.</p>
+      <a class="btn btn-primary btn-lg" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="join">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+        <span data-i18n="join.cta.btn">I would like to know how to start</span>
+      </a>
+      <p style="font-size:.82rem;opacity:.8;max-width:58ch;margin:22px auto 0" data-i18n="join.cta.note">We do not publish trip dates or costs on this page, because they change and we would rather tell you the real ones than leave an old number here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MISIONES ============ -->
+<section hidden class="missions" id="misiones">
+  <div class="container">
+
+    <div class="section-head center reveal">
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2 5.2-5.2 2 2-5.2z"/></svg></span>
+      <span class="eyebrow" data-i18n="mis.eyebrow">Out on mission</span>
+      <h2 class="section-title">Where we have been, and where we are going next</h2>
+      <p class="section-lead">This is the honest record of what we actually do: the streets we knocked on, the tables we set up in a park, the evenings we spent in someone's living room. If something here is near you, come. You do not need an invitation and you do not need to be an Adventist.</p>
+    </div>
+
+    <div class="mis-tabs reveal" role="tablist">
+      <button class="mis-tab" id="tabUp" type="button" role="tab" aria-selected="true" aria-controls="misUpcoming">
+        <span data-i18n="mis.tabUp">Coming up</span><span class="count" id="tabUpCount"></span>
+      </button>
+      <button class="mis-tab" id="tabPast" type="button" role="tab" aria-selected="false" aria-controls="misPast">
+        <span data-i18n="mis.tabPast">Already done</span><span class="count" id="tabPastCount"></span>
+      </button>
+    </div>
+
+    <div class="mis-grid reveal" id="misUpcoming" role="tabpanel" aria-labelledby="tabUp"></div>
+    <div class="mis-grid reveal" id="misPast" role="tabpanel" aria-labelledby="tabPast" hidden></div>
+
+    <div class="mis-more" id="misMore" hidden>
+      <button class="btn btn-ghost btn-sm" id="misMoreBtn" type="button" data-i18n="mis.more">Show more</button>
+    </div>
+
+    <div class="narrow reveal" style="margin:44px auto 0">
+      <div class="value-card" style="border-left:4px solid var(--accent)">
+        <h3 style="font-size:1.34rem;margin-bottom:9px" data-i18n="mis.need.t">Is there a need on your street?</h3>
+        <p style="font-size:.95rem;color:var(--text-soft);margin-bottom:18px" data-i18n="mis.need.d">A neighbour nobody checks on. A family that lost everything in the last storm. A block where nobody has ever been offered a Bible study. Tell us and we will come — you do not have to organise anything, and you do not have to be there when we do.</p>
+        <a class="btn btn-wa btn-sm" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="need">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+          <span data-i18n="mis.need.cta">Tell us about it</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
+
+<!-- ============================================================
+     PARTE 2 · JESUS Y LO QUE CREEMOS
+     ============================================================ -->
+<div class="part" id="parte-fe">
+
 <!-- ============ CRISTO (EL EVANGELIO) ============ -->
 <section class="gospel" id="cristo">
   <div class="container">
@@ -1070,115 +1328,6 @@ window.FAM_PAINT = function (raiz) {
         <a class="btn btn-primary btn-lg" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="decision" data-i18n="christ.cta.btn">I want to know Jesus</a>
         <a class="btn btn-ghost btn-lg" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="questions" data-i18n="christ.cta.btn2">I have questions first</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ UNIRSE A LA MISION ============ -->
-<section class="join" id="unirse">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 3.5L2.5 10.2l7 2.6 2.6 7z"/><path d="M21.5 3.5L9.5 12.8"/></svg></span>
-      <span class="eyebrow" data-i18n="join.eyebrow">Go yourself</span>
-      <h2 class="section-title" data-i18n="join.title">Nobody in those videos planned this either</h2>
-      <p class="section-lead" data-i18n="join.lead">Every one of them was doing something else. What changed was not their training or their free time — someone asked, and they said yes. If watching them stirred something in you, that is worth paying attention to rather than explaining away.</p>
-    </div>
-
-    <div class="sab-why">
-      <article class="reveal">
-        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
-        <h3 data-i18n="join.1.t">You do not need to be qualified</h3>
-        <p data-i18n="join.1.d">A content creator, a woman minding two dogs, someone who could not get out of bed. None of them had training. What they had was a moment when they stopped explaining why not.</p>
-      </article>
-      <article class="reveal">
-        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg></div>
-        <h3 data-i18n="join.2.t">You do not have to leave Florida to start</h3>
-        <p data-i18n="join.2.d">Some of our work goes abroad and some of it happens on a street four blocks from here. Both count. If a passport is out of reach right now, that closes nothing.</p>
-      </article>
-      <article class="reveal">
-        <div class="value-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7.5-4.7-9.4-9A5.4 5.4 0 0112 5.6 5.4 5.4 0 0121.4 12c-1.9 4.3-9.4 9-9.4 9z"/></svg></div>
-        <h3 data-i18n="join.3.t">Asking is not committing</h3>
-        <p data-i18n="join.3.d">Write and ask what it would actually involve. You will get a straight answer about time, cost and what is expected, and then you decide. Nobody is going to keep calling you.</p>
-      </article>
-    </div>
-
-    <p class="give-grace reveal" style="max-width:760px;margin:36px auto 32px" lang="en" data-i18n="join.quote">“If you have never been a missionary, you have missed the best part of being a Christian.”</p>
-    <p class="reveal" style="text-align:center;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:-22px;margin-bottom:38px" data-i18n="join.quoteWho">Derick Morgan · Vice President</p>
-
-    <div class="gospel-cta reveal">
-      <h3 data-i18n="join.cta.t">Would you like to know what it takes?</h3>
-      <p data-i18n="join.cta.d">Tell us a little about yourself and what you could give — a week, a weekend, an evening. We will tell you honestly what is coming up and whether there is a place for you in it.</p>
-      <a class="btn btn-primary btn-lg" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="join">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
-        <span data-i18n="join.cta.btn">I would like to know how to start</span>
-      </a>
-      <p style="font-size:.82rem;opacity:.8;max-width:58ch;margin:22px auto 0" data-i18n="join.cta.note">We do not publish trip dates or costs on this page, because they change and we would rather tell you the real ones than leave an old number here.</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============ LIBRO: STEPS TO CHRIST ============ -->
-<section id="libro">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5S9.5 4.5 4 5v13c5.5-.5 8 1.5 8 1.5s2.5-2 8-1.5V5c-5.5-.5-8 1.5-8 1.5z"/><path d="M12 6.5v13"/></svg></span>
-      <span class="eyebrow" data-i18n="book.eyebrow">Our gift to you</span>
-      <h2 class="section-title" data-i18n="book.title">Steps to Christ — free, in your language</h2>
-      <p class="section-lead" data-i18n="book.lead">A small book that has quietly changed millions of lives since 1892. In thirteen short chapters it answers the question that matters most: how does a real person actually come to Jesus and stay with Him? Read it online, download the PDF, or let us mail you a printed copy — all at no cost.</p>
-    </div>
-
-    <div class="book-grid reveal" style="margin-bottom:44px">
-      <div>
-        <h3 class="serif" style="font-size:1.9rem;margin-bottom:14px" data-i18n="book.why.t">Why this little book?</h3>
-        <p style="color:var(--text-soft);margin-bottom:22px" data-i18n="book.why.d">Because it does not argue — it invites. It speaks to the person who feels far from God, the one who has tried and failed, the one who prays and wonders if anyone hears. It has been translated into more than 160 languages and given away by hand for over a century, and it is still the first book we place in someone's hands.</p>
-        <ul class="prayer-list" style="margin-bottom:26px">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p1">Thirteen short chapters — about ten minutes each</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p2">Public domain: free to read, copy and share forever</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p3">Written by Ellen G. White, a founder of the Adventist movement</span></li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p4">We will mail you a printed copy anywhere in Florida, free</span></li>
-        </ul>
-        <p style="font-size:.86rem;color:var(--text-soft)" data-i18n-html="book.chapters"><strong>Chapters:</strong> God's Love for Man · The Sinner's Need of Christ · Repentance · Confession · Consecration · Faith and Acceptance · The Test of Discipleship · Growing Up Into Christ · The Work and the Life · A Knowledge of God · The Privilege of Prayer · What to Do With Doubt · Rejoicing in the Lord</p>
-      </div>
-
-      <div class="verse-card" style="border-left-color:var(--deep)">
-        <svg viewBox="0 0 300 200" style="margin-bottom:22px" role="img" aria-label="The book Steps to Christ" data-i18n-aria="a11y.bookArt">
-          <rect x="86" y="22" width="128" height="164" rx="7" fill="var(--deep)"/>
-          <rect x="94" y="30" width="112" height="148" rx="4" fill="none" stroke="var(--accent)" stroke-width="1.6" opacity=".65"/>
-          <path d="M144 58h12M150 48v28" stroke="var(--accent)" stroke-width="4.6" stroke-linecap="round"/>
-          <path d="M112 96h76M120 110h60M126 124h48" stroke="#fff" stroke-width="3.4" stroke-linecap="round" opacity=".82"/>
-          <path d="M124 150h52" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
-          <rect x="80" y="186" width="140" height="6" rx="3" fill="var(--accent)" opacity=".3"/>
-        </svg>
-        <h3 class="serif" style="font-size:1.5rem;margin-bottom:6px" id="bookTitleLocal">Steps to Christ</h3>
-        <p style="font-size:.88rem;color:var(--text-soft);margin-bottom:20px" data-i18n="book.author">Ellen G. White · 1892 · Public domain</p>
-
-        <a class="btn btn-primary btn-block" id="bookPdf" href="https://media4.egwwritings.org/pdf/en_SC.pdf" target="_blank" rel="noopener" style="margin-bottom:10px">
-          <svg id="bookPdfIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          <span id="bookPdfLabel">Download the PDF</span>
-        </a>
-        <a class="btn btn-ghost btn-block" id="bookRead" href="https://text.egwwritings.org/book/b108" target="_blank" rel="noopener" style="margin-bottom:10px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg>
-          <span data-i18n="book.read">Read it online now</span>
-        </a>
-        <a class="btn btn-wa btn-block" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="book">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
-          <span data-i18n="book.printed">Ask for a free printed copy</span>
-        </a>
-        <p class="give-legal" data-i18n="book.legal" id="bookLegal">Files are hosted by the Ellen G. White Estate. If your language is not yet linked directly, the button opens the full free library where you can choose it.</p>
-      </div>
-    </div>
-
-    <!-- La biblioteca entera. La pinta js/main.js desde js/library.js,
-         que solo trae enlaces comprobados uno a uno. -->
-    <div class="lib reveal" id="biblioteca">
-      <div class="lib-head">
-        <span class="eyebrow" data-i18n="lib.eyebrow">The whole library</span>
-        <h3 data-i18n="lib.title">Everything else, also free</h3>
-        <p class="section-lead" data-i18n="lib.lead">Ellen White's books and more, in your language, with nothing to pay and nobody to hand your details to. Every link here was checked one by one.</p>
-        <p class="lib-count" id="libCount"></p>
-      </div>
-      <div class="lib-groups" id="libGrid"></div>
     </div>
   </div>
 </section>
@@ -1419,6 +1568,78 @@ window.FAM_PAINT = function (raiz) {
 
   </div>
 </section>
+</div>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
+
+<!-- ============================================================
+     PARTE 3 · RECURSOS GRATIS
+     ============================================================ -->
+<div class="part" id="parte-recursos">
+
+<!-- ============ LIBRO: STEPS TO CHRIST ============ -->
+<section id="libro">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5S9.5 4.5 4 5v13c5.5-.5 8 1.5 8 1.5s2.5-2 8-1.5V5c-5.5-.5-8 1.5-8 1.5z"/><path d="M12 6.5v13"/></svg></span>
+      <span class="eyebrow" data-i18n="book.eyebrow">Our gift to you</span>
+      <h2 class="section-title" data-i18n="book.title">Steps to Christ — free, in your language</h2>
+      <p class="section-lead" data-i18n="book.lead">A small book that has quietly changed millions of lives since 1892. In thirteen short chapters it answers the question that matters most: how does a real person actually come to Jesus and stay with Him? Read it online, download the PDF, or let us mail you a printed copy — all at no cost.</p>
+    </div>
+
+    <div class="book-grid reveal" style="margin-bottom:44px">
+      <div>
+        <h3 class="serif" style="font-size:1.9rem;margin-bottom:14px" data-i18n="book.why.t">Why this little book?</h3>
+        <p style="color:var(--text-soft);margin-bottom:22px" data-i18n="book.why.d">Because it does not argue — it invites. It speaks to the person who feels far from God, the one who has tried and failed, the one who prays and wonders if anyone hears. It has been translated into more than 160 languages and given away by hand for over a century, and it is still the first book we place in someone's hands.</p>
+        <ul class="prayer-list" style="margin-bottom:26px">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p1">Thirteen short chapters — about ten minutes each</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p2">Public domain: free to read, copy and share forever</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p3">Written by Ellen G. White, a founder of the Adventist movement</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="book.p4">We will mail you a printed copy anywhere in Florida, free</span></li>
+        </ul>
+        <p style="font-size:.86rem;color:var(--text-soft)" data-i18n-html="book.chapters"><strong>Chapters:</strong> God's Love for Man · The Sinner's Need of Christ · Repentance · Confession · Consecration · Faith and Acceptance · The Test of Discipleship · Growing Up Into Christ · The Work and the Life · A Knowledge of God · The Privilege of Prayer · What to Do With Doubt · Rejoicing in the Lord</p>
+      </div>
+
+      <div class="verse-card" style="border-left-color:var(--deep)">
+        <svg viewBox="0 0 300 200" style="margin-bottom:22px" role="img" aria-label="The book Steps to Christ" data-i18n-aria="a11y.bookArt">
+          <rect x="86" y="22" width="128" height="164" rx="7" fill="var(--deep)"/>
+          <rect x="94" y="30" width="112" height="148" rx="4" fill="none" stroke="var(--accent)" stroke-width="1.6" opacity=".65"/>
+          <path d="M144 58h12M150 48v28" stroke="var(--accent)" stroke-width="4.6" stroke-linecap="round"/>
+          <path d="M112 96h76M120 110h60M126 124h48" stroke="#fff" stroke-width="3.4" stroke-linecap="round" opacity=".82"/>
+          <path d="M124 150h52" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"/>
+          <rect x="80" y="186" width="140" height="6" rx="3" fill="var(--accent)" opacity=".3"/>
+        </svg>
+        <h3 class="serif" style="font-size:1.5rem;margin-bottom:6px" id="bookTitleLocal">Steps to Christ</h3>
+        <p style="font-size:.88rem;color:var(--text-soft);margin-bottom:20px" data-i18n="book.author">Ellen G. White · 1892 · Public domain</p>
+
+        <a class="btn btn-primary btn-block" id="bookPdf" href="https://media4.egwwritings.org/pdf/en_SC.pdf" target="_blank" rel="noopener" style="margin-bottom:10px">
+          <svg id="bookPdfIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span id="bookPdfLabel">Download the PDF</span>
+        </a>
+        <a class="btn btn-ghost btn-block" id="bookRead" href="https://text.egwwritings.org/book/b108" target="_blank" rel="noopener" style="margin-bottom:10px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg>
+          <span data-i18n="book.read">Read it online now</span>
+        </a>
+        <a class="btn btn-wa btn-block" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="book">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
+          <span data-i18n="book.printed">Ask for a free printed copy</span>
+        </a>
+        <p class="give-legal" data-i18n="book.legal" id="bookLegal">Files are hosted by the Ellen G. White Estate. If your language is not yet linked directly, the button opens the full free library where you can choose it.</p>
+      </div>
+    </div>
+
+    <!-- La biblioteca entera. La pinta js/main.js desde js/library.js,
+         que solo trae enlaces comprobados uno a uno. -->
+    <div class="lib reveal" id="biblioteca">
+      <div class="lib-head">
+        <span class="eyebrow" data-i18n="lib.eyebrow">The whole library</span>
+        <h3 data-i18n="lib.title">Everything else, also free</h3>
+        <p class="section-lead" data-i18n="lib.lead">Ellen White's books and more, in your language, with nothing to pay and nobody to hand your details to. Every link here was checked one by one.</p>
+        <p class="lib-count" id="libCount"></p>
+      </div>
+      <div class="lib-groups" id="libGrid"></div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ ESTUDIOS BÍBLICOS ============ -->
 <section class="section-alt" id="estudios">
@@ -1489,66 +1710,56 @@ window.FAM_PAINT = function (raiz) {
   </div>
 </section>
 
-<!-- ============ MINISTERIOS ============ -->
-<section id="ministerios">
+<!-- ============ RECURSOS ============ -->
+<section id="recursos">
   <div class="container">
     <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V4.8a1.4 1.4 0 012.8 0v6.2"/><path d="M11.8 10.8V3.6a1.4 1.4 0 012.8 0v7.4"/><path d="M14.6 11.4V5.8a1.4 1.4 0 012.8 0V14c0 3.9-2.6 7-6.2 7-3.3 0-5-1.9-6.4-4.6l-1.4-2.7a1.4 1.4 0 012.3-1.6L9 15"/></svg></span>
-      <span class="eyebrow" data-i18n="min.eyebrow">Ministries</span>
-      <h2 class="section-title" data-i18n="min.title">Where our hands are working</h2>
-      <p class="section-lead" data-i18n="min.lead">Florida is many worlds in one state. These are the doors God has opened for us — and every one of them needs more people.</p>
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg></span>
+      <span class="eyebrow" data-i18n="res.eyebrow">Free resources</span>
+      <h2 class="section-title" data-i18n="res.title">Keep going on your own</h2>
+      <p class="section-lead" data-i18n="res.lead">Trusted places to read, watch and listen — all free, most of them in many languages.</p>
     </div>
-    <div class="min-grid">
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg></div><div><h3 data-i18n="min.1.t">Bible work</h3><p data-i18n="min.1.d">Door to door, table to table. Literature, studies and honest conversations in the neighbourhoods where we live.</p></div></article>
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg></div><div><h3 data-i18n="min.2.t">Health ministry</h3><p data-i18n="min.2.d">Free blood pressure and sugar screenings, cooking classes and stop-smoking programmes in parks and community centres.</p></div></article>
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 20v-1.6a3.4 3.4 0 00-3.4-3.4H6.4A3.4 3.4 0 003 18.4V20"/><circle cx="9.5" cy="7.4" r="3.4"/><path d="M21 20v-1.6a3.4 3.4 0 00-2.6-3.3"/></svg></div><div><h3 data-i18n="min.3.t">Youth &amp; students</h3><p data-i18n="min.3.d">Campus groups, music, sport and small groups where young people can ask the hard questions without being judged.</p></div></article>
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div><h3 data-i18n="min.4.t">Community help</h3><p data-i18n="min.4.d">Food and clothing for families in need, help after hurricanes, and support for neighbours nobody else is checking on.</p></div></article>
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M9 4v16M4 9h5M4 15h5"/></svg></div><div><h3 data-i18n="min.5.t">Prison ministry</h3><p data-i18n="min.5.d">Bible courses by mail, visits and a letter that says someone still remembers your name. Grace reaches inside the walls too.</p></div></article>
-      <article class="min-card reveal"><div class="min-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18 15 15 0 010-18z"/></svg></div><div><h3 data-i18n="min.6.t">Nine languages</h3><p data-i18n="min.6.d">Florida speaks the world. We study in English, Spanish, Creole, French, Portuguese, German, Dutch, Russian and Ukrainian.</p></div></article>
+    <div class="res-grid">
+      <a class="res-card reveal" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg></span>
+        <span><h3 data-i18n="res.1.t">Read the Bible free</h3><p data-i18n="res.1.d">BibleGateway · hundreds of languages</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="res-card reveal" href="https://egwwritings.org/" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14M3 5h6a3 3 0 013 2 3 3 0 013-2h6v14h-6a3 3 0 00-3 2 3 3 0 00-3-2H3z"/></svg></span>
+        <span><h3 data-i18n="res.2.t">Ellen G. White library</h3><p data-i18n="res.2.d">Steps to Christ and more · 150+ languages</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="res-card reveal" href="https://hopetv.org/global-networks" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 3l4 3 4-3"/></svg></span>
+        <span><h3 data-i18n="res.3.t">Hope Channel</h3><p data-i18n="res.3.d">Free Christian television, on demand</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="res-card reveal" href="https://www.adventist.org/beliefs/" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>
+        <span><h3 data-i18n="res.4.t">The 28 beliefs</h3><p data-i18n="res.4.d">The official statement, with Bible texts</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="res-card reveal" href="https://www.adventist.org/find-a-church/" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg></span>
+        <span><h3 data-i18n="res.5.t">Find a church</h3><p data-i18n="res.5.d">Official directory · search by city</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="res-card reveal" href="https://www.youtube.com/@FloridaAdventMissionaries" target="_blank" rel="noopener">
+        <span class="res-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 00-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 002.4 7.2 26 26 0 002 12a26 26 0 00.4 4.8 2.5 2.5 0 001.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 001.8-1.8A26 26 0 0022 12a26 26 0 00-.4-4.8zM10 15V9l5.2 3z"/></svg></span>
+        <span><h3 data-i18n="res.6.t">Our YouTube channel</h3><p data-i18n="res.6.d">Sermons, testimonies and mission updates</p></span>
+        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
     </div>
   </div>
 </section>
+</div>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
 
-<!-- ============ MISIONES ============ -->
-<section hidden class="missions" id="misiones">
-  <div class="container">
-
-    <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.6 8.4l-2 5.2-5.2 2 2-5.2z"/></svg></span>
-      <span class="eyebrow" data-i18n="mis.eyebrow">Out on mission</span>
-      <h2 class="section-title">Where we have been, and where we are going next</h2>
-      <p class="section-lead">This is the honest record of what we actually do: the streets we knocked on, the tables we set up in a park, the evenings we spent in someone's living room. If something here is near you, come. You do not need an invitation and you do not need to be an Adventist.</p>
-    </div>
-
-    <div class="mis-tabs reveal" role="tablist">
-      <button class="mis-tab" id="tabUp" type="button" role="tab" aria-selected="true" aria-controls="misUpcoming">
-        <span data-i18n="mis.tabUp">Coming up</span><span class="count" id="tabUpCount"></span>
-      </button>
-      <button class="mis-tab" id="tabPast" type="button" role="tab" aria-selected="false" aria-controls="misPast">
-        <span data-i18n="mis.tabPast">Already done</span><span class="count" id="tabPastCount"></span>
-      </button>
-    </div>
-
-    <div class="mis-grid reveal" id="misUpcoming" role="tabpanel" aria-labelledby="tabUp"></div>
-    <div class="mis-grid reveal" id="misPast" role="tabpanel" aria-labelledby="tabPast" hidden></div>
-
-    <div class="mis-more" id="misMore" hidden>
-      <button class="btn btn-ghost btn-sm" id="misMoreBtn" type="button" data-i18n="mis.more">Show more</button>
-    </div>
-
-    <div class="narrow reveal" style="margin:44px auto 0">
-      <div class="value-card" style="border-left:4px solid var(--accent)">
-        <h3 style="font-size:1.34rem;margin-bottom:9px" data-i18n="mis.need.t">Is there a need on your street?</h3>
-        <p style="font-size:.95rem;color:var(--text-soft);margin-bottom:18px" data-i18n="mis.need.d">A neighbour nobody checks on. A family that lost everything in the last storm. A block where nobody has ever been offered a Bible study. Tell us and we will come — you do not have to organise anything, and you do not have to be there when we do.</p>
-        <a class="btn btn-wa btn-sm" href="https://wa.me/17862392331" target="_blank" rel="noopener" data-wa="need">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.2-.7.2-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.6-2.1-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.7-1.6-.9-2.2-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3a8.2 8.2 0 1115.4-4.1 8.2 8.2 0 01-8.2 8z"/></svg>
-          <span data-i18n="mis.need.cta">Tell us about it</span>
-        </a>
-      </div>
-    </div>
-
-  </div>
-</section>
+<!-- ============================================================
+     PARTE 4 · CONTACTO Y APOYO
+     ============================================================ -->
+<div class="part" id="parte-contacto">
 
 <!-- ============ ORACIÓN ============ -->
 <section id="oracion">
@@ -1621,46 +1832,21 @@ window.FAM_PAINT = function (raiz) {
   </div>
 </section>
 
-<!-- ============ RECURSOS ============ -->
-<section class="section-alt" id="recursos">
-  <div class="container">
+<!-- ============ FAQ ============ -->
+<section class="section-alt" id="faq">
+  <div class="container narrow">
     <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg></span>
-      <span class="eyebrow" data-i18n="res.eyebrow">Free resources</span>
-      <h2 class="section-title" data-i18n="res.title">Keep going on your own</h2>
-      <p class="section-lead" data-i18n="res.lead">Trusted places to read, watch and listen — all free, most of them in many languages.</p>
+      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 014.7 1.1c0 1.7-2.3 2-2.3 3.5"/><path d="M12 17.3h.01"/></svg></span>
+      <span class="eyebrow" data-i18n="faq.eyebrow">Frequently asked</span>
+      <h2 class="section-title" data-i18n="faq.title">Before you write to us</h2>
     </div>
-    <div class="res-grid">
-      <a class="res-card reveal" href="https://www.biblegateway.com/" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 012-2h13v18H6a2 2 0 01-2-1.5z"/></svg></span>
-        <span><h3 data-i18n="res.1.t">Read the Bible free</h3><p data-i18n="res.1.d">BibleGateway · hundreds of languages</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="res-card reveal" href="https://egwwritings.org/" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14M3 5h6a3 3 0 013 2 3 3 0 013-2h6v14h-6a3 3 0 00-3 2 3 3 0 00-3-2H3z"/></svg></span>
-        <span><h3 data-i18n="res.2.t">Ellen G. White library</h3><p data-i18n="res.2.d">Steps to Christ and more · 150+ languages</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="res-card reveal" href="https://hopetv.org/global-networks" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M8 3l4 3 4-3"/></svg></span>
-        <span><h3 data-i18n="res.3.t">Hope Channel</h3><p data-i18n="res.3.d">Free Christian television, on demand</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="res-card reveal" href="https://www.adventist.org/beliefs/" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>
-        <span><h3 data-i18n="res.4.t">The 28 beliefs</h3><p data-i18n="res.4.d">The official statement, with Bible texts</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="res-card reveal" href="https://www.adventist.org/find-a-church/" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="2.8"/></svg></span>
-        <span><h3 data-i18n="res.5.t">Find a church</h3><p data-i18n="res.5.d">Official directory · search by city</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-      <a class="res-card reveal" href="https://www.youtube.com/@FloridaAdventMissionaries" target="_blank" rel="noopener">
-        <span class="res-ico"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 00-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 002.4 7.2 26 26 0 002 12a26 26 0 00.4 4.8 2.5 2.5 0 001.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 001.8-1.8A26 26 0 0022 12a26 26 0 00-.4-4.8zM10 15V9l5.2 3z"/></svg></span>
-        <span><h3 data-i18n="res.6.t">Our YouTube channel</h3><p data-i18n="res.6.d">Sermons, testimonies and mission updates</p></span>
-        <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
+    <div class="accordion">
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q1">Is everything really free?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a1">Yes. Bible studies, the books, the visits and the prayers cost you nothing, ever. We will never ask you for money — not at the first study and not at the last one.</div></details>
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q2">Do I have to become an Adventist?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a2">No. Many people study with us for years and stay in their own church, or in none. Our goal is that you meet Jesus. What you do after that is between you and Him.</div></details>
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q3">I live far from Delray Beach. Can you still help?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a3">Yes — we serve the whole state, from Pensacola to Key West. If no missionary is near your town, we will study with you by video call and put you in touch with the nearest congregation.</div></details>
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q4">What if I do not speak English well?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a4">Write to us in your own language. We work in English, Spanish, Haitian Creole, French, Portuguese, German, Dutch, Russian and Ukrainian, and we will find someone who speaks yours.</div></details>
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q5">I have doubts and hard questions. Is that a problem?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a5">Not at all — bring them. Faith that has never been questioned is not very strong. We would rather talk honestly about a hard question than pretend it does not exist.</div></details>
+      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q6">Are you the official Adventist Church?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a6">We are an independent group of lay members who support the work of the Seventh-day Adventist Church. We are not a conference office and we do not speak for the denomination — we simply share the same faith and point people to a local church.</div></details>
     </div>
   </div>
 </section>
@@ -1708,25 +1894,6 @@ window.FAM_PAINT = function (raiz) {
 
       <p class="give-legal" data-i18n="give.card.mail">Prefer to give by mail? Cheques can be sent to the address below, payable to Florida Advent Missionaries Inc.</p>
       <p class="give-legal" data-i18n="give.card.legal">Florida Advent Missionaries Inc. · EIN 81-1180614 · 206 SW 7th St, Delray Beach, FL 33444. No goods or services are provided in exchange for contributions.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section class="section-alt" id="faq">
-  <div class="container narrow">
-    <div class="section-head center reveal">
-      <span class="sec-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 014.7 1.1c0 1.7-2.3 2-2.3 3.5"/><path d="M12 17.3h.01"/></svg></span>
-      <span class="eyebrow" data-i18n="faq.eyebrow">Frequently asked</span>
-      <h2 class="section-title" data-i18n="faq.title">Before you write to us</h2>
-    </div>
-    <div class="accordion">
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q1">Is everything really free?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a1">Yes. Bible studies, the books, the visits and the prayers cost you nothing, ever. We will never ask you for money — not at the first study and not at the last one.</div></details>
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q2">Do I have to become an Adventist?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a2">No. Many people study with us for years and stay in their own church, or in none. Our goal is that you meet Jesus. What you do after that is between you and Him.</div></details>
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q3">I live far from Delray Beach. Can you still help?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a3">Yes — we serve the whole state, from Pensacola to Key West. If no missionary is near your town, we will study with you by video call and put you in touch with the nearest congregation.</div></details>
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q4">What if I do not speak English well?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a4">Write to us in your own language. We work in English, Spanish, Haitian Creole, French, Portuguese, German, Dutch, Russian and Ukrainian, and we will find someone who speaks yours.</div></details>
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q5">I have doubts and hard questions. Is that a problem?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a5">Not at all — bring them. Faith that has never been questioned is not very strong. We would rather talk honestly about a hard question than pretend it does not exist.</div></details>
-      <details class="acc-item reveal"><summary><span class="acc-pill">?</span><span class="acc-label" data-i18n="faq.q6">Are you the official Adventist Church?</span><svg class="acc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary><div class="acc-body" data-i18n="faq.a6">We are an independent group of lay members who support the work of the Seventh-day Adventist Church. We are not a conference office and we do not speak for the denomination — we simply share the same faith and point people to a local church.</div></details>
     </div>
   </div>
 </section>
@@ -1800,6 +1967,8 @@ window.FAM_PAINT = function (raiz) {
     </div>
   </div>
 </section>
+</div>
+<script>window.FAM_PAINT && FAM_PAINT();</script>
 
 </main>
 
@@ -1810,7 +1979,7 @@ window.FAM_PAINT = function (raiz) {
 
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="#inicio">
+        <a class="brand" href="#quienes">
           <span class="brand-mark" aria-hidden="true"><img class="brand-claro" src="assets/logo.png" alt="" width="107" height="132" decoding="async"><img class="brand-oscuro" src="assets/logo-dark.png" alt="" width="107" height="132" decoding="async"></span>
           <span class="brand-text">
             <span class="brand-name">Florida Advent</span>
@@ -1831,28 +2000,45 @@ window.FAM_PAINT = function (raiz) {
         </div>
       </div>
 
+      <!-- El pie repite el reparto del menu. Si aqui las cosas
+           estuvieran agrupadas de otra manera, habria que aprenderse
+           dos mapas del mismo sitio. -->
       <div class="footer-col">
-        <h3 class="footer-col-h" data-i18n="footer.explore">Explore</h3>
+        <h3 class="footer-col-h" data-i18n="part.about">Who we are</h3>
         <ul>
+          <li><a href="#cerca"       data-i18n="nav.near">Near you</a></li>
+          <li><a href="#quienes"     data-i18n="nav.about">About us</a></li>
           <li><a href="#testimonios" data-i18n="nav.stories">Stories</a></li>
-          <li><a href="#cristo"      data-i18n="nav.christ">Jesus Christ</a></li>
-          <li><a href="#unirse"      data-i18n="nav.join">Join us</a></li>
-          <li><a href="#libro"       data-i18n="nav.book">Free book</a></li>
-          <li><a href="#creencias"   data-i18n="nav.beliefs">Beliefs</a></li>
-          <li><a href="#sabado"      data-i18n="nav.sabbath">Sabbath</a></li>
-          <li><a href="#estudios"    data-i18n="nav.studies">Bible studies</a></li>
           <li><a href="#ministerios" data-i18n="nav.ministries">Ministries</a></li>
+          <li><a href="#unirse"      data-i18n="nav.join">Join us</a></li>
           <li hidden><a href="#misiones"    data-i18n="nav.missions">Missions</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h3 class="footer-col-h" data-i18n="footer.connect">Connect</h3>
+        <h3 class="footer-col-h" data-i18n="part.faith">Jesus and our faith</h3>
+        <ul>
+          <li><a href="#cristo"    data-i18n="nav.christ">Jesus Christ</a></li>
+          <li><a href="#creencias" data-i18n="nav.beliefs">Beliefs</a></li>
+          <li><a href="#sabado"    data-i18n="nav.sabbath">Sabbath</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="footer-col-h" data-i18n="part.free">Free resources</h3>
+        <ul>
+          <li><a href="#libro"    data-i18n="nav.book">Free book</a></li>
+          <li><a href="#estudios" data-i18n="nav.studies">Bible studies</a></li>
+          <li><a href="#recursos" data-i18n="nav.resources">Resources</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3 class="footer-col-h" data-i18n="part.connect">Talk to us</h3>
         <ul>
           <li><a href="#oracion"  data-i18n="nav.prayer">Prayer</a></li>
-          <li><a href="#recursos" data-i18n="nav.resources">Resources</a></li>
-          <li><a href="#donar"    data-i18n="nav.give">Give</a></li>
           <li><a href="#faq"      data-i18n="nav.faq">FAQ</a></li>
+          <li><a href="#donar"    data-i18n="nav.give">Give</a></li>
           <li><a href="#contacto" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </div>

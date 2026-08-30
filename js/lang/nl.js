@@ -228,8 +228,6 @@
     "contact.langs": "EN · ES · FR · HT · PT · DE · NL · RU · UK",
     "footer.disclaimer": "Florida Advent Missionaries Inc. is een onafhankelijke 501(c)(3)-lekenzendingsorganisatie. Wij delen het geloof van de Kerk der Zevendedagsadventisten en werken samen met plaatselijke gemeenten, maar we zijn geen conferentiekantoor en spreken niet namens het kerkgenootschap.",
     "footer.tag": "Florida wijzen op Jezus Christus — gids, Redder en komende Koning. Gratis bijbelstudies, boeken en gebed, in negen talen.",
-    "footer.explore": "Ontdek",
-    "footer.connect": "Verbinden",
     "footer.rights": "© {year} Florida Advent Missionaries Inc. · EIN 81-1180614",
     "footer.made": "Site door dr. Mauricio Rodríguez Herrera · Soli Deo gloria",
     "wa.general": "Hallo! Ik heb uw website gevonden en wil graag meer weten over Florida Advent Missionaries.",
@@ -489,7 +487,12 @@
     "lib.g.jesus": "Het leven van Jezus",
     "lib.g.story": "Het hele verhaal, vanaf het begin",
     "lib.g.daily": "Voor het dagelijks leven",
-    "lib.g.other": "Niet alleen Ellen G. White"
+    "lib.g.other": "Niet alleen Ellen G. White",
+    "part.about": "Over ons",
+    "part.faith": "Jezus en ons geloof",
+    "part.free": "Gratis materiaal",
+    "part.connect": "Schrijf ons",
+    "nav.near": "Bij u in de buurt"
   };
 
 })();

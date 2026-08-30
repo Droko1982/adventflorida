@@ -99,8 +99,59 @@ pintado** con un script inline, asi que no hay parpadeo blanco. Se recuerda en
 
 ## Estructura
 
+### Las cuatro partes
+
+Las 17 secciones no se ven de una vez: van repartidas en cuatro partes y solo
+una esta en pantalla. Antes eran 15.000 px de desplazamiento en el movil, y
+quien llegaba buscando el libro pasaba por delante de la oracion, del sabado y
+de los ministerios para encontrarlo.
+
+| Parte | Ancla | Secciones |
+|---|---|---|
+| Quienes somos | `#inicio` | inicio, cerca, quienes, testimonios, ministerios, unirse, misiones |
+| Jesus y lo que creemos | `#cristo` | cristo, creencias, sabado |
+| Recursos gratis | `#libro` | libro, biblioteca, estudios, recursos |
+| Contacto y apoyo | `#oracion` | oracion, faq, donar, contacto |
+
+El reparto se declara **una sola vez**, en `window.FAM_PARTES`, dentro de un
+script inline de la cabecera de `index.html`. Esta arriba porque la parte hay
+que elegirla antes del primer fotograma: si se decidiera en `main.js` se veria
+la pagina entera un instante antes de encogerse. `js/main.js` lee ese mismo
+reparto para abrir la parte que toca al pulsar un enlace, al entrar por una
+direccion con ancla y al usar el boton de atras.
+
+Quien lo pinta es el atributo `data-parte` del `<html>`, con cuatro reglas en
+`css/styles.css`. **Sin JavaScript el atributo no existe, las reglas no
+enganchan y la pagina se ve entera y seguida**, que es lo que sale al imprimir
+y lo que ven los rastreadores que no ejecutan JavaScript — entre ellos el de
+WhatsApp y el de Facebook, que son los que montan la vista previa del enlace.
+
+Googlebot **si** ejecuta JavaScript, asi que no ve eso: ve lo mismo que una
+persona, una parte pintada y tres en `display:none`. Son 27.730 de 36.699
+caracteres, el 76 % del texto. Google lo indexa igual —su politica sobre
+contenido en pestanas es explicita desde la indexacion movil primero— pero
+conviene tenerlo apuntado: si algun dia baja el trafico de una seccion
+concreta, esto es lo primero que hay que mirar.
+
+El reparto tiene que funcionar con **solo el script de la cabecera**. Ese
+script esconde tres cuartas partes del sitio, asi que si lo unico capaz de
+volver a ensenarlas fuera `js/main.js` —el ultimo archivo del cuerpo— bastaria
+con que no cargara para que diez secciones dejaran de existir. Medido en un
+movil a 400 kbps, el boton del hero se puede pulsar a los 7,5 s y `main.js` no
+termina hasta los 10,5. Por eso el script de la cabecera escucha `hashchange`
+y abre la parte por su cuenta; `main.js`, cuando llega, se adelanta con
+`pushState`, que no dispara `hashchange`, y los dos no se pisan.
+`tools/test-browser.js` prueba el sitio con `js/main.js` bloqueado.
+
+Para mover una seccion de parte hay que tocar tres sitios: la lista de
+`FAM_PARTES`, el `<div class="part">` en el que vive en el HTML, y su enlace en
+el menu movil y en el pie. `node tools/test-rhythm.js` avisa si al moverla
+quedan dos fondos iguales pegados dentro de una parte.
+
+### Los archivos
+
 ```
-index.html          Pagina unica con todas las secciones
+index.html          Pagina unica, en cuatro partes
 404.html            Pagina de error con versiculo
 css/styles.css      Sistema de diseno completo (tokens, componentes, responsive)
 js/i18n.js          Lista de los 9 idiomas y enlaces del libro

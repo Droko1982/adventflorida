@@ -228,8 +228,6 @@
     "contact.langs": "EN · ES · FR · HT · PT · DE · NL · RU · UK",
     "footer.disclaimer": "Florida Advent Missionaries Inc. is an independent 501(c)(3) lay missionary organisation. We share the faith of the Seventh-day Adventist Church and work alongside local congregations, but we are not a conference office and we do not speak on behalf of the denomination.",
     "footer.tag": "Pointing Florida to Jesus Christ — guide, Saviour and coming King. Free Bible studies, free books, free prayer, in nine languages.",
-    "footer.explore": "Explore",
-    "footer.connect": "Connect",
     "footer.rights": "© {year} Florida Advent Missionaries Inc. · EIN 81-1180614",
     "footer.made": "Site by Dr. Mauricio Rodríguez Herrera · Soli Deo gloria",
     "wa.general": "Hello! I found your website and I would like to know more about Florida Advent Missionaries.",
@@ -489,7 +487,12 @@
     "lib.g.jesus": "The life of Jesus",
     "lib.g.story": "The whole story, from the beginning",
     "lib.g.daily": "For everyday life",
-    "lib.g.other": "Beyond Ellen G. White"
+    "lib.g.other": "Beyond Ellen G. White",
+    "part.about": "Who we are",
+    "part.faith": "Jesus and our faith",
+    "part.free": "Free resources",
+    "part.connect": "Talk to us",
+    "nav.near": "Near you"
   };
 
 })();

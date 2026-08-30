@@ -40,41 +40,8 @@ function regla(cls) {
   return css.slice(i, css.indexOf("}", i));
 }
 
-/* Reglas que solo aplican con la seccion de misiones oculta, que es el
-   estado en el que vive la pagina mientras js/events.js este vacio.
-   Devuelve BASE o ALT si hay una anulacion para esa seccion. */
-const SIN_MIS = (() => {
-  /* Un mapa selector -> banda con todas las reglas .no-missions */
-  const mapa = new Map();
-  /* Sin comentarios: si no, el bloque de arriba se pega al primer
-     selector de la regla y ese selector deja de reconocerse. */
-  const limpio = css.replace(/\/\*[\s\S]*?\*\//g, "");
-  const re = /([^{}]*\.no-missions[^{}]*)\{([^{}]*)\}/g;
-  let m;
-  while ((m = re.exec(limpio))) {
-    const decl = /background:\s*([\s\S]*?);/.exec(m[2]);
-    if (!decl) continue;
-    const b = /var\(--bg-alt\)/.test(decl[1]) ? "ALT" : "BASE";
-    m[1].split(",").forEach((sel) => {
-      const s = sel.trim().replace(/^\.no-missions\s+/, "");
-      if (s) mapa.set(s, b);
-    });
-  }
-  return mapa;
-})();
-
-function anulacion(sec) {
-  if (sec.id && SIN_MIS.has("#" + sec.id)) return SIN_MIS.get("#" + sec.id);
-  for (const c of sec.classList) if (SIN_MIS.has("." + c)) return SIN_MIS.get("." + c);
-  return null;
-}
-
 /* Que banda pinta una seccion: BASE, ALT, o hereda del body (BASE) */
-function banda(sec, sinMisiones) {
-  if (sinMisiones) {
-    const a = anulacion(sec);
-    if (a) return a;
-  }
+function banda(sec) {
   if (sec.classList.contains("section-alt")) return "ALT";
   for (const c of sec.classList) {
     const r = regla(c);
@@ -96,17 +63,91 @@ function tieneDegradado(sec) {
   return false;
 }
 
-console.log("\n=== Alternancia de bandas ===\n");
+/* La alternancia se mide DENTRO de cada parte. Antes se medía de punta
+   a punta porque la pagina era un solo desplazamiento; ahora dos partes
+   distintas no llegan a verse juntas nunca, asi que exigir que la
+   ultima seccion de una case con la primera de la siguiente seria pedir
+   algo que nadie va a ver. */
+console.log("\n=== Alternancia de bandas, parte por parte ===\n");
 const secciones = [...doc.querySelectorAll("section")];
-let previa = null, repetidas = [], conDegradado = [];
+const partes = [...doc.querySelectorAll(".part")];
+ok(partes.length >= 3 && partes.length <= 4, "la pagina va en 3 o 4 partes",
+  partes.map((p) => p.id.replace("parte-", "")).join(", "));
+ok(secciones.every((s) => s.closest(".part")), "ninguna seccion fuera de su parte",
+  secciones.length + " secciones repartidas");
 
-for (const s of secciones) {
-  const b = banda(s);
-  const id = s.id || "(sin id)";
-  if (previa !== null && b === previa) repetidas.push(id);
-  if (tieneDegradado(s)) conDegradado.push(id);
-  console.log("   " + id.padEnd(14) + b + (previa !== null && b === previa ? "   <-- igual que la anterior" : ""));
-  previa = b;
+/* El reparto vive en dos sitios que pueden separarse sin que nadie se entere:
+   la lista window.FAM_PARTES del <head>, que es quien elige la parte antes del
+   primer pintado, y los <div class="part"> del cuerpo, que es donde estan de
+   verdad las secciones. Si alguien mueve una seccion de div y se olvida de la
+   lista, el enlace del menu abre la parte equivocada y la seccion no aparece:
+   nada peta, simplemente no esta. Esto es lo que lo vigila. */
+{
+  const m = /window\.FAM_PARTES\s*=\s*\[([\s\S]*?)\];/.exec(html);
+  const declarado = new Map();
+  if (m) {
+    const re = /id:\s*"([^"]+)"[\s\S]*?secs:\s*\[([^\]]*)\]/g;
+    let d;
+    while ((d = re.exec(m[1]))) {
+      declarado.set(d[1], (d[2].match(/"([^"]+)"/g) || []).map((x) => x.slice(1, -1)));
+    }
+  }
+  ok(declarado.size > 0, "el <head> declara el reparto", declarado.size + " partes en FAM_PARTES");
+
+  /* Toda ancla declarada tiene que existir en el HTML */
+  const anclas = [...declarado.values()].flat();
+  const fantasmas = anclas.filter((id) => !doc.getElementById(id));
+  ok(fantasmas.length === 0, "el reparto no nombra anclas que no existen",
+    fantasmas.length ? "no existen: " + fantasmas.join(", ") : anclas.length + " anclas resuelven");
+
+  /* Y cada seccion tiene que estar declarada en la parte donde de verdad vive */
+  const desviadas = [];
+  for (const [parte, secs] of declarado) {
+    for (const id of secs) {
+      const el = doc.getElementById(id);
+      if (!el) continue;
+      const caja = el.closest(".part");
+      if (!caja || caja.id !== "parte-" + parte) {
+        desviadas.push(id + " (declarada en " + parte + ", vive en " + (caja ? caja.id : "ninguna parte") + ")");
+      }
+    }
+  }
+  /* Y al reves: ninguna seccion puede quedarse fuera de la lista */
+  const olvidadas = secciones.filter((s) => s.id && !anclas.includes(s.id)).map((s) => s.id);
+  ok(desviadas.length === 0, "cada ancla declarada vive donde dice",
+    desviadas.length ? desviadas.join(" · ") : "las " + declarado.size + " partes cuadran");
+  ok(olvidadas.length === 0, "ninguna seccion se queda fuera del reparto",
+    olvidadas.length ? "sin declarar: " + olvidadas.join(", ") : "las " + secciones.length + " estan");
+
+  /* Cada enlace del menu de cabecera es la puerta de una parte, y una
+     puerta se abre por el principio: tiene que apuntar a la PRIMERA
+     seccion de su parte. Si apuntara a una de en medio, quien pulsase
+     "Recursos gratis" entraria con el libro ya pasado y sin nada arriba
+     que le dijera que se ha saltado algo. */
+  const puertas = [...doc.querySelectorAll(".main-nav a[data-parte]")];
+  const torcidas = puertas.filter((a) => {
+    const secs = declarado.get(a.getAttribute("data-parte"));
+    return !secs || a.getAttribute("href") !== "#" + secs[0];
+  }).map((a) => a.getAttribute("data-parte") + " -> " + a.getAttribute("href"));
+  ok(puertas.length === declarado.size, "una puerta por parte en el menu",
+    puertas.length + " enlaces para " + declarado.size + " partes");
+  ok(torcidas.length === 0, "cada puerta abre por el principio de su parte",
+    torcidas.length ? torcidas.join(" · ") : "las " + puertas.length + " apuntan a su primera seccion");
+}
+
+const repetidas = [], conDegradado = [];
+for (const parte of partes) {
+  console.log("   " + parte.id);
+  let previa = null;
+  for (const s of parte.querySelectorAll("section")) {
+    const b = banda(s);
+    const id = s.id || "(sin id)";
+    const igual = previa !== null && b === previa;
+    if (igual) repetidas.push(id);
+    if (tieneDegradado(s)) conDegradado.push(id);
+    console.log("     " + id.padEnd(14) + b + (igual ? "   <-- igual que la anterior" : ""));
+    previa = b;
+  }
 }
 
 console.log();
@@ -115,23 +156,23 @@ ok(repetidas.length === 0, "sin dos bandas iguales seguidas",
 ok(conDegradado.length <= 4, "el degradado de acento es escaso",
   conDegradado.length + ": " + conDegradado.join(", "));
 
-/* Y ahora el estado en el que la pagina esta HOY: js/events.js vacio,
-   asi que #misiones no se muestra. Al quitar una banda de en medio, las
-   de abajo quedaban al reves y Ministerios y Oracion salian pegadas con
-   el mismo fondo. Esta segunda pasada es la que lo vigila. */
+/* El estado en el que la pagina esta HOY: js/events.js vacio, asi que
+   #misiones no se muestra. Ahora cierra su parte, de modo que quitarla
+   no puede descolocar a nadie; esta pasada lo comprueba en vez de
+   darlo por supuesto. */
 console.log("\n=== Alternancia con #misiones oculta ===\n");
-const visibles = secciones.filter((s) => s.id !== "misiones");
-let prev2 = null; const rep2 = [];
-for (const s of visibles) {
-  const b = banda(s, true);
-  const id = s.id || "(sin id)";
-  if (prev2 !== null && b === prev2) rep2.push(id);
-  console.log("   " + id.padEnd(14) + b + (prev2 !== null && b === prev2 ? "   <-- igual que la anterior" : ""));
-  prev2 = b;
+const rep2 = [];
+for (const parte of partes) {
+  let prev2 = null;
+  for (const s of parte.querySelectorAll("section")) {
+    if (s.id === "misiones") continue;
+    const b = banda(s);
+    if (prev2 !== null && b === prev2) rep2.push(s.id || "(sin id)");
+    prev2 = b;
+  }
 }
-console.log();
 ok(rep2.length === 0, "el ritmo aguanta sin misiones",
-  rep2.length ? rep2.join(", ") : visibles.length + " secciones");
+  rep2.length ? rep2.join(", ") : "las " + partes.length + " partes alternan igual");
 
 /* =========================================================
    Cada seccion tiene que distinguirse de la de al lado

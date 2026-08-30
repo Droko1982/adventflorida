@@ -228,8 +228,6 @@
     "contact.langs": "EN · ES · FR · HT · PT · DE · NL · RU · UK",
     "footer.disclaimer": "Florida Advent Missionaries Inc. se yon òganizasyon misyonè layik endepandan 501(c)(3). Nou pataje lafwa Legliz Adventis Setyèm Jou a epi nou travay bò kote kongregasyon lokal yo, men nou pa yon biwo federasyon epi nou pa pale nan non denominasyon an.",
     "footer.tag": "N ap montre Florid Jezikri — gid, Sovè ak Wa k ap vini an. Etid biblik, liv ak lapriyè gratis, nan nèf lang.",
-    "footer.explore": "Eksplore",
-    "footer.connect": "Konekte",
     "footer.rights": "© {year} Florida Advent Missionaries Inc. · EIN 81-1180614",
     "footer.made": "Sit la fèt pa Dr. Mauricio Rodríguez Herrera · Soli Deo gloria",
     "wa.general": "Bonjou! Mwen jwenn sitwèb nou an epi mwen ta renmen konnen plis sou Florida Advent Missionaries.",
@@ -489,7 +487,12 @@
     "lib.g.jesus": "Lavi Jezi",
     "lib.g.story": "Tout istwa a, depi nan kòmansman",
     "lib.g.daily": "Pou lavi chak jou",
-    "lib.g.other": "Pa sèlman Ellen G. White"
+    "lib.g.other": "Pa sèlman Ellen G. White",
+    "part.about": "Ki moun nou ye",
+    "part.faith": "Jezi ak lafwa nou",
+    "part.free": "Resous gratis",
+    "part.connect": "Pale ak nou",
+    "nav.near": "Toupre w"
   };
 
 })();

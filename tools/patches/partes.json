@@ -1,0 +1,83 @@
+{
+  "en": {
+    "part.about": "Who we are",
+    "part.faith": "Jesus and our faith",
+    "part.free": "Free resources",
+    "part.connect": "Talk to us",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Near you"
+  },
+  "es": {
+    "part.about": "Quiénes somos",
+    "part.faith": "Jesús y nuestra fe",
+    "part.free": "Recursos gratis",
+    "part.connect": "Escríbenos",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Cerca de ti"
+  },
+  "fr": {
+    "part.about": "Qui sommes-nous",
+    "part.faith": "Jésus et la foi",
+    "part.free": "Ressources gratuites",
+    "part.connect": "Écrivez-nous",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Près de chez vous"
+  },
+  "ht": {
+    "part.about": "Ki moun nou ye",
+    "part.faith": "Jezi ak lafwa nou",
+    "part.free": "Resous gratis",
+    "part.connect": "Pale ak nou",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Toupre w"
+  },
+  "pt": {
+    "part.about": "Quem somos",
+    "part.faith": "Jesus e nossa fé",
+    "part.free": "Recursos gratuitos",
+    "part.connect": "Fale conosco",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Perto de você"
+  },
+  "de": {
+    "part.about": "Über uns",
+    "part.faith": "Jesus und Glaube",
+    "part.free": "Gratis-Material",
+    "part.connect": "Schreiben Sie uns",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "In Ihrer Nähe"
+  },
+  "nl": {
+    "part.about": "Over ons",
+    "part.faith": "Jezus en ons geloof",
+    "part.free": "Gratis materiaal",
+    "part.connect": "Schrijf ons",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Bij u in de buurt"
+  },
+  "ru": {
+    "part.about": "О нас",
+    "part.faith": "Иисус и вера",
+    "part.free": "Бесплатные ресурсы",
+    "part.connect": "Напишите нам",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Рядом с вами"
+  },
+  "uk": {
+    "part.about": "Про нас",
+    "part.faith": "Ісус і наша віра",
+    "part.free": "Безкоштовні ресурси",
+    "part.connect": "Напишіть нам",
+    "footer.explore": null,
+    "footer.connect": null,
+    "nav.near": "Поруч із вами"
+  }
+}

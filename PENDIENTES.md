@@ -337,3 +337,155 @@ mia. Cuando el bloque de "a donde ir" tenga datos de tres ciudades, merece la
 pena revisar si el boton generico de la seccion de contacto y el del menu movil
 siguen haciendo falta, y si la burbuja flotante debe seguir apareciendo encima
 del bloque principal.
+
+
+## 14. Revision de una persona que uso la pagina (30 de agosto de 2026)
+
+Llego por WhatsApp una lista de seis cosas. Tres ya estan hechas, tres no.
+Se apuntan aqui las tres que faltan para que no se pierdan, con lo que hay que
+tocar en cada una.
+
+### Ya hecho
+
+- **"Que cuando entre a la pagina me abra en el inicio, que no me baje solo."**
+  Se abre en la parte 1, arriba del todo. Solo baja si la direccion trae un
+  ancla, que es cuando se ha pedido expresamente.
+- **"Que seccione las cosas, al menos en 3, que esta muy larga esa landing."**
+  Hecho, en cuatro partes. Sigue siendo una sola landing: no hay paginas
+  nuevas, se ve una parte cada vez. Ver la seccion "Las cuatro partes" del
+  README.
+- **"Que verifique que toda la pagina este adaptada a PC y celular."**
+  Comprobado de 320 a 1440 px en las cuatro partes con
+  `node tools/test-browser.js`. Falta lo de la orientacion vertical, que va
+  abajo con el punto del logotipo.
+
+### Pendiente 14.a — El rotulo del logotipo se corta con puntos suspensivos
+
+> *"Que el logo no se corte o quede a medias sin puntos suspensivos, sino que
+> se adapte a la pantalla para que siempre quede visible y completo, mas que
+> todo en orientaciones verticales."*
+
+Ahora mismo, en `css/styles.css`:
+
+```css
+.brand-name, .brand-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 620px) { .brand-sub { display: none; } }
+```
+
+Es decir: por debajo de 620 px el subtitulo "MISSIONARIES" **desaparece**, y el
+nombre se recorta con puntos suspensivos si no cabe. Se hizo asi para que en un
+telefono de 320 px el boton de menu no se saliera de la pantalla, pero la
+persona tiene razon en que el emblema es lo que identifica al ministerio y no
+deberia ser lo primero que se sacrifica.
+
+- [ ] Que el rotulo se adapte en vez de recortarse: bajar el tamano con
+      `clamp()` y dejar que el nombre parta en dos lineas si hace falta, en
+      lugar de `text-overflow: ellipsis`.
+- [ ] Recuperar "MISSIONARIES" por debajo de 620 px, aunque sea mas pequeno.
+- [ ] Comprobarlo en vertical de verdad: 320, 360 y 390 px de ancho, en los
+      nueve idiomas (el aleman y el ucraniano son los que mas ocupan).
+
+### Pendiente 14.b — Quitar la pildora del hero
+
+> *"Que en el inicio quite esas 2 cosas que seleccione en la imagen, que para
+> mi siento que sobran."*
+
+Lo que rodeo en la captura es la pildora que hay encima del titular:
+
+```html
+<span class="hero-badge"><span class="dot"></span><span data-i18n="hero.badge">Grupo misionero laico · Toda la Florida</span></span>
+```
+
+Son las dos cosas: **"Grupo misionero laico"** y **"Toda la Florida"**, en la
+misma pildora con el punto verde.
+
+- [ ] Decidir con el equipo si se quita entera o solo se acorta. Ojo: "Toda la
+      Florida" es de lo poco que dice de entrada el alcance geografico, y
+      "grupo misionero laico" es lo que aclara que no es una iglesia oficial
+      (lo mismo que repite el aviso legal del pie). Si se quita, conviene que
+      esa informacion aparezca en otro sitio visible sin bajar.
+- [ ] Si se quita: borrar el `<span class="hero-badge">` de `index.html`, la
+      regla `.hero-badge` de `css/styles.css` y la clave `hero.badge` de los
+      nueve diccionarios con
+      `node tools/patch-i18n.js` usando `"hero.badge": null`.
+
+### Pendiente 14.c — La burbuja de WhatsApp aparece y desaparece
+
+> *"El boton de WhatsApp aparece y desaparece en el inicio, asi que dejar que
+> siempre aparezca en la pagina."*
+
+No es un fallo, es a proposito. En `js/main.js`, `wireFloat()` esconde la
+burbuja mientras el hero esta a la vista, porque ahi ya hay dos botones grandes
+y la burbuja les robaba el toque:
+
+```js
+obs = new IntersectionObserver(function (e) {
+  burbuja.classList.toggle("is-tapada", e[0].isIntersecting);
+}, { threshold: 0.25 });
+```
+
+Pero quien lo uso lo leyo como que el boton se le escapaba, y eso pesa mas que
+la teoria. Esto tambien contesta la duda que quedaba abierta en el punto 13 de
+esta misma lista.
+
+- [ ] Quitar `wireFloat()` y la regla `.wa-float.is-tapada`, de modo que la
+      burbuja este siempre.
+- [ ] Comprobar entonces que en el hero de un movil de 320 px la burbuja no
+      tapa ninguno de los dos botones principales. Si los tapa, la salida es
+      moverla, no volver a esconderla.
+
+
+## 15. Lo que dejo abierto partir la pagina en cuatro
+
+Al repartir las 17 secciones en cuatro partes se auditó el cambio en siete
+frentes (ejecucion, SEO, enlaces, accesibilidad, correccion del codigo,
+estados degradados y contenido), y cada hallazgo se paso por un revisor que
+intentaba tumbarlo. Lo que bloqueaba se arreglo antes de publicar; esto es lo
+que sobrevivio y no bloquea.
+
+### 15.a — Tres de las cuatro partes no tienen `h1`
+
+El unico `<h1>` del sitio es el titular del hero, que vive en la parte 1. Quien
+entra por un enlace a `#sabado`, `#libro` o `#oracion` ve una pagina cuyo
+encabezado de nivel mas alto es un `h2`. Comprobado leyendo el arbol de
+accesibilidad real de Chrome: con `?lang=uk#sabado` salen 18 encabezados,
+3 de nivel 2 y 15 de nivel 3, y ninguno de nivel 1.
+
+Para Google no cambia nada —los rastreadores no usan el fragmento, asi que
+siempre renderizan la parte 1 con su `h1`—, pero para quien navega con lector
+de pantalla y llega por un enlace compartido, si.
+
+- [ ] Dar a cada parte su propio `h1`, oculto a la vista con la clase `sr-only`
+      que ya existe, reusando las claves `part.about`, `part.faith`,
+      `part.free` y `part.connect`: no hace falta escribir texto nuevo ni
+      traducir nada.
+- [ ] Ojo al publicarlo: eso deja cuatro `h1` en el documento servido. Es HTML5
+      valido y solo uno se pinta cada vez, pero conviene mirar antes si
+      `tools/test-seo.js` da por supuesto que hay uno solo.
+
+### 15.b — Al abrir una parte se revelan de golpe todas sus animaciones
+
+`abrirParte()` llama a `revelar()` sobre la parte entera para que no se vea en
+blanco el primer fotograma. El efecto secundario es que marca como visibles
+**todos** los `.reveal` de esa parte, tambien los que estan a 10.000 px de
+distancia. Medido: al entrar en la parte "fe" se revelan 41 de 41, y 39 de
+ellos estaban fuera de pantalla.
+
+No se rompe nada: simplemente, la aparicion suave al ir bajando ya no existe en
+tres cuartas partes del sitio.
+
+- [ ] Revelar solo lo que cabe en la primera pantalla de la parte y dejar que
+      el observador se encargue del resto segun se baja.
+
+### 15.c — Los enlaces con fragmento de texto dejan de funcionar
+
+Google ofrece a veces enlaces del tipo
+`...#:~:text=A%20day%20God%20gave%20away`, y los navegadores tienen "Copiar
+enlace al fragmento destacado". Si el texto senalado vive en una parte que no
+es la primera, el navegador no lo encuentra: cuando lo busca, esa parte todavia
+esta en `display:none`.
+
+- [ ] Si alguna vez importa, se arregla en el script de la cabecera: leer
+      tambien `#:~:text=` y abrir la parte que contenga ese texto antes de que
+      el navegador lo busque. Es rebuscado y de momento no compensa; queda
+      apuntado por si aparece en Search Console.

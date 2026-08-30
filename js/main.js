@@ -274,6 +274,43 @@
     return VERSES[currentLang] || VERSES[DEFAULT_LANG] || [];
   }
 
+  /* La tarjeta del versiculo cambiaba de alto en cada vuelta. Entre el mas
+     corto y el mas largo hay 56 px en un movil de 390, y 37 en escritorio:
+     dos lineas. Cada ocho segundos, sin tocar nada, todo lo que quedaba
+     debajo pegaba ese salto bajo el dedo de quien estaba leyendo.
+
+     Y de rebote se llevaba por delante los saltos del menu: al pulsar
+     "Unete", la pagina aterrizaba bien y el versiculo rotaba justo despues,
+     empujando la seccion 55 px hacia abajo. Salia el mismo "le doy y no me
+     lleva" de siempre, pero por un camino distinto. Medido: uno de cada
+     tres saltos del menu movil.
+
+     No vale poner un numero en la hoja de estilo: el alto depende del
+     idioma (el ucraniano no ocupa lo que el criollo) y del ancho. Hay que
+     medir los versiculos que de verdad se van a mostrar. */
+  var altoVersoPara = "";
+  function reservarAltoVerso() {
+    var txt = $("#verseText"), list = verseList();
+    if (!txt || !list.length) return;
+    var ancho = txt.clientWidth;
+    /* Ancho cero = su parte esta cerrada. No se puede medir todavia, y
+       sobre todo no se puede dar por medido: se reintenta al abrirla. */
+    if (!ancho) return;
+    var firma = currentLang + "|" + Math.round(ancho);
+    if (firma === altoVersoPara) return;
+
+    var guardado = txt.textContent;
+    txt.style.minHeight = "";
+    var max = 0;
+    list.forEach(function (v) {
+      txt.textContent = v.t;
+      if (txt.offsetHeight > max) max = txt.offsetHeight;
+    });
+    txt.textContent = guardado;
+    txt.style.minHeight = max + "px";
+    altoVersoPara = firma;
+  }
+
   function renderVerse(i) {
     var list = verseList();
     if (!list.length) return;
@@ -281,6 +318,7 @@
     var txt = $("#verseText"), ref = $("#verseRef"), dots = $("#verseDots");
     if (txt) txt.textContent = list[verseIndex].t;
     if (ref) ref.textContent = list[verseIndex].r;
+    reservarAltoVerso();
 
     if (dots) {
       if (dots.children.length !== list.length) {
@@ -301,6 +339,14 @@
       });
     }
   }
+
+  /* Al girar el telefono o cambiar el ancho de la ventana, el versiculo
+     mas largo ya no ocupa lo mismo. Se vuelve a medir, sin prisa. */
+  var relojAncho = null;
+  window.addEventListener("resize", function () {
+    if (relojAncho) clearTimeout(relojAncho);
+    relojAncho = setTimeout(function () { altoVersoPara = ""; reservarAltoVerso(); }, 200);
+  });
 
   function restartVerses() {
     if (verseTimer) clearInterval(verseTimer);
@@ -1198,8 +1244,6 @@
     if (!sec) return;
     var hay = EVENTS.length > 0;
     sec.hidden = !hay;
-    /* Al quitar una banda de en medio, las de abajo quedan al reves */
-    document.documentElement.classList.toggle("no-missions", !hay);
     $$('a[href="#misiones"]').forEach(function (a) {
       var li = a.closest ? a.closest("li") : a.parentNode;
       (li || a).hidden = !hay;
@@ -1276,8 +1320,15 @@
        exactamente la sensacion de "le doy y no me lleva".
 
        Ahora: los saltos cortos siguen deslizandose, que se agradece y
-       ayuda a situarse; los largos van directos. */
-    var SALTO_LARGO = 2.5;          /* en pantallas de alto */
+       ayuda a situarse; los largos van directos.
+
+       El umbral bajo de 2,5 pantallas a 1 al partir la pagina en cuatro.
+       Aquel numero se penso para un desplazamiento de 15.000 px; dentro
+       de una parte no se cruzaba nunca, y saltos como el de Oracion a
+       Preguntas se iban deslizando mas de medio segundo. Ahora solo se
+       desliza lo que cabe en una pantalla, que es cuando el movimiento
+       de verdad ayuda a situarse. */
+    var SALTO_LARGO = 1;            /* en pantallas de alto */
 
     function suave() {
       try {
@@ -1291,6 +1342,48 @@
     function revelar(sec) {
       if (sec.classList.contains("reveal")) sec.classList.add("is-visible");
       $$(".reveal", sec).forEach(function (el) { el.classList.add("is-visible"); });
+    }
+
+    /* ---- Las cuatro partes ----
+       El reparto lo declara el script de la cabecera, que es quien tiene
+       que conocerlo antes del primer fotograma. Aqui no se repite: si
+       hubiera dos listas acabarian diciendo cosas distintas. */
+    var PARTES = window.FAM_PARTES || [];
+    var parteDe = window.FAM_PARTE_DE || function () { return null; };
+
+    function parteAbierta() {
+      return document.documentElement.getAttribute("data-parte") ||
+             (PARTES[0] && PARTES[0].id) || null;
+    }
+
+    function abrirParte(p) {
+      /* Sin parte no se toca nada. Hay anclas que no son de ninguna, como
+         el #main del enlace de saltar al contenido, y apagar por su culpa
+         la marca del menu dejaba la cabecera sin decir donde esta uno. */
+      if (!p) return false;
+      if (p === parteAbierta()) { marcarParte(p); return false; }
+      document.documentElement.setAttribute("data-parte", p);
+      marcarParte(p);
+      /* La parte acaba de pasar de display:none a visible. El observador
+         del reveal se entera, pero un fotograma tarde, y ese fotograma
+         es justo el que la persona ve al llegar: en blanco. */
+      var caja = document.getElementById("parte-" + p);
+      if (caja) revelar(caja);
+      /* El versiculo no se puede medir con su parte cerrada. En cuanto se
+         abre si, y hay que hacerlo ahora: esperar a la siguiente vuelta del
+         carrusel serian ocho segundos con la reserva sin poner, y el primer
+         cambio de versiculo daria el salto que acabamos de quitar. */
+      reservarAltoVerso();
+      return true;
+    }
+
+    function marcarParte(p) {
+      $$("a[data-parte]").forEach(function (a) {
+        var suya = a.getAttribute("data-parte") === p;
+        a.classList.toggle("is-active", suya);
+        if (suya) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
     }
 
     /* Salta de golpe y comprueba que ha aterrizado donde tocaba, hasta
@@ -1311,21 +1404,48 @@
       window.scrollTo(0, y);
       document.documentElement.style.scrollBehavior = antes;
       if (intentos <= 0) return;
+
+      /* La comprobacion se pedia SOLO por requestAnimationFrame, y solo se
+         caia al temporizador si el navegador no conocia esa funcion. Pero
+         el riesgo nunca fue que no existiera: es que un navegador que no
+         esta pintando —pestana de fondo, movil ahorrando bateria, o
+         simplemente ocupado— la retrasa todo lo que quiera, y entonces la
+         correccion no llega nunca y la persona se queda a medio camino.
+
+         Aviso al que lea esto: NO es lo que causaba el desvio de 55 px que
+         perseguimos en agosto de 2026. Aquello era la tarjeta del
+         versiculo cambiando de alto sola, y se arreglo arriba, en
+         reservarAltoVerso(). Esto de aqui es solo cinturon: la unica via
+         de aviso dependia de que el navegador estuviera pintando, y no
+         tenia por que.
+
+         Se piden las dos a la vez y vale la que llegue antes; la otra se
+         encuentra el trabajo hecho y no hace nada. */
+      var yaMirado = false;
       var otra = function () {
+        if (yaMirado) return;
+        yaMirado = true;
         if (Math.abs(destino.getBoundingClientRect().top - 92) > 2) {
           aterrizar(destino, intentos - 1);
         }
       };
       if (window.requestAnimationFrame) window.requestAnimationFrame(otra);
-      else setTimeout(otra, 16);
+      setTimeout(otra, 32);
     }
 
     function irA(destino, id) {
+      /* Si el destino vive en otra parte, primero se abre esa parte: de
+         lo contrario el enlace apunta a algo que esta en display:none y
+         no lleva a ningun sitio. */
+      var cambio = abrirParte(parteDe(id));
       revelar(destino);
       var alto = window.innerHeight || 800;
       var lejos = Math.abs(destino.getBoundingClientRect().top) > alto * SALTO_LARGO;
 
-      if (lejos || !suave()) {
+      /* Cambiar de parte no es desplazarse por la pagina, es llegar a
+         otra: deslizarse hasta alli seria un vuelo por encima de un
+         contenido que ya no esta. Va de golpe. */
+      if (cambio || lejos || !suave()) {
         aterrizar(destino, 4);
       } else {
         var y = Math.max(0, destino.getBoundingClientRect().top + window.pageYOffset - 92);
@@ -1356,6 +1476,28 @@
       irA(destino, id);
     });
 
+    /* El boton de atras del navegador. Cada salto deja un estado en el
+       historial, asi que sin esto atras cambiaba la direccion pero
+       dejaba en pantalla la parte anterior. */
+    window.addEventListener("popstate", function () {
+      var id = (window.location.hash || "").replace(/^#/, "");
+      var p = parteDe(id) || (PARTES[0] && PARTES[0].id);
+      abrirParte(p);
+      var destino = id && document.getElementById(id);
+      if (destino && !destino.hidden) { revelar(destino); aterrizar(destino, 2); }
+      else window.scrollTo(0, 0);
+    });
+
+    /* Al cargar: la parte ya la eligio la cabecera, aqui solo se marca
+       en el menu. Y si la direccion traia un ancla, el salto que hizo el
+       navegador solo se quedo debajo de la cabecera pegajosa. */
+    marcarParte(parteAbierta());
+    var anclaInicial = (window.location.hash || "").replace(/^#/, "");
+    if (anclaInicial) {
+      var alLlegar = document.getElementById(anclaInicial);
+      if (alLlegar && !alLlegar.hidden) { revelar(alLlegar); aterrizar(alLlegar, 3); }
+    }
+
     window.addEventListener("scroll", function () {
       if (header) header.classList.toggle("is-stuck", window.scrollY > 8);
     }, { passive: true });
@@ -1381,20 +1523,9 @@
       }
     });
 
-    /* Enlace activo en el menu */
-    var links = $$(".main-nav a");
-    var sections = links.map(function (a) { return $(a.getAttribute("href")); }).filter(Boolean);
-    if ("IntersectionObserver" in window && sections.length) {
-      var navObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          if (!en.isIntersecting) return;
-          links.forEach(function (a) {
-            a.classList.toggle("is-active", a.getAttribute("href") === "#" + en.target.id);
-          });
-        });
-      }, { rootMargin: "-45% 0px -50% 0px" });
-      sections.forEach(function (s) { navObs.observe(s); });
-    }
+    /* El menu ya no persigue la seccion visible con un observador: sus
+       cuatro enlaces son las cuatro partes, y cual esta abierta se sabe
+       con certeza, sin tener que adivinarlo por donde va el scroll. */
   }
 
   /* La burbuja de WhatsApp se retira mientras la accion principal del

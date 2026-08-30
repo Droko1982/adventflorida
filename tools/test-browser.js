@@ -37,7 +37,24 @@ const CHROME = CANDIDATOS.find((p) => fs.existsSync(p));
 if (!CHROME) { console.error("No encuentro Chrome ni Edge."); process.exit(2); }
 
 const ROOT = path.resolve(__dirname, "..");
-const URL = "file:///" + path.join(ROOT, "index.html").replace(/\\/g, "/");
+
+/* ENVIVO se usaba en el filtro de la consola pero no se declaraba en ninguna
+   parte. Como el archivo va en modo estricto, leerlo lanzaba un
+   ReferenceError DENTRO del manejador de page.on("console"), asi que el
+   error se perdia por el camino y no llegaba a contarse nunca: la
+   comprobacion "sin errores de JavaScript" solo pillaba las excepciones no
+   atrapadas, y ni un solo console.error en toda la suite. Comprobado
+   inyectando uno a mano: cero capturados.
+
+   Ya que estaba, la variable pasa a significar lo que decia querer decir:
+   se puede apuntar la suite a una direccion de verdad y probar lo que hay
+   desplegado, no solo el arbol de trabajo.
+
+     node tools/test-browser.js
+     node tools/test-browser.js https://droko1982.github.io/adventflorida/ */
+const DESTINO = process.argv[2];
+const URL = DESTINO || "file:///" + path.join(ROOT, "index.html").replace(/\\/g, "/");
+const ENVIVO = /^https?:/i.test(URL);
 const IDIOMAS = ["en", "es", "fr", "ht", "pt", "de", "nl", "ru", "uk"];
 
 let fallos = 0;
@@ -55,6 +72,13 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
   async function abrir(vista) {
     const page = await browser.newPage();
+    /* Sin esto, al probar por http la suite podia estar mirando una copia
+       vieja del sitio guardada por Chrome de una vuelta anterior, y darla
+       por buena. Costo un rato: un arreglo del index.html ya aplicado
+       seguia fallando aqui porque el navegador servia el HTML de antes.
+       Importa el doble cuando se apunta al sitio desplegado, que es
+       precisamente cuando hay que estar seguro de que se mira lo nuevo. */
+    await page.setCacheEnabled(false);
     await page.setViewport(vista);
     const errores = [];
     page.on("pageerror", (e) => errores.push(String(e).slice(0, 120)));
@@ -70,6 +94,20 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
     await page.goto(URL, { waitUntil: "domcontentloaded" });
     await esperar(900);
     return { page, errores };
+  }
+
+  /* La pagina va en cuatro partes y solo una esta en pantalla. Casi todo
+     lo que se prueba aqui abajo vive en una parte que no es la primera,
+     asi que antes hay que abrirla. Se pone el atributo a mano en vez de
+     pulsar el menu para que un fallo del menu no se lleve por delante la
+     prueba del formulario, que no tiene nada que ver: el menu se prueba
+     por su cuenta en su propio apartado. */
+  async function verParte(page, parte) {
+    await page.evaluate((p) => {
+      document.documentElement.setAttribute("data-parte", p);
+      document.querySelectorAll(".reveal").forEach((e) => e.classList.add("is-visible"));
+    }, parte);
+    await esperar(250);
   }
 
   /* =======================================================
@@ -163,6 +201,7 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
     }
 
     /* Formularios: validar sin enviar nada a la red */
+    await verParte(page, "contacto");
     await page.evaluate(() => { window.fetch = () => new Promise(() => {}); });
     await page.evaluate(() => { document.querySelector("#cMsg").value = ""; });
     await page.click("#cSend"); await esperar(300);
@@ -227,6 +266,138 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
   }
 
   /* =======================================================
+     3 bis. Las cuatro partes
+     ======================================================= */
+  console.log("\n=== La pagina en cuatro partes ===\n");
+  {
+    const { page, errores } = await abrir({ width: 1280, height: 900 });
+
+    const partes = await page.evaluate(() =>
+      [...document.querySelectorAll(".part")].map((p) => p.id.replace("parte-", "")));
+    ok(partes.length >= 3 && partes.length <= 4, "la pagina va en 3 o 4 partes", partes.join(", "));
+
+    const alCargar = await page.evaluate(() => ({
+      abierta: document.documentElement.getAttribute("data-parte"),
+      aLaVista: [...document.querySelectorAll(".part")]
+        .filter((p) => getComputedStyle(p).display !== "none").map((p) => p.id),
+    }));
+    ok(alCargar.abierta === partes[0], "al entrar se abre la primera", alCargar.abierta);
+    ok(alCargar.aLaVista.length === 1, "y solo se ve una a la vez", alCargar.aLaVista.join(", "));
+
+    /* Lo que pidio el usuario: el emblema lleva a quienes somos. */
+    await page.evaluate(() => document.documentElement.setAttribute("data-parte", "contacto"));
+    await esperar(200);
+    await page.click(".site-header .brand"); await esperar(500);
+    const trasLogo = await page.evaluate(() => ({
+      abierta: document.documentElement.getAttribute("data-parte"),
+      top: Math.round(document.querySelector("#quienes").getBoundingClientRect().top),
+      hash: location.hash,
+    }));
+    ok(trasLogo.abierta === "quienes", "el emblema abre Quienes somos", trasLogo.abierta);
+    ok(Math.abs(trasLogo.top - 92) <= 12, "y aterriza en la seccion, no encima",
+      trasLogo.top + "px bajo la cabecera");
+    ok(trasLogo.hash === "#quienes", "dejando la direccion compartible", trasLogo.hash);
+
+    /* Una direccion con ancla tiene que abrir SU parte, no la primera:
+       es la mitad de los enlaces que circulan por WhatsApp. */
+    for (const [ancla, parte] of [["#sabado", "fe"], ["#libro", "recursos"], ["#donar", "contacto"]]) {
+      const p2 = await browser.newPage();
+      await p2.setCacheEnabled(false);
+      await p2.setViewport({ width: 1280, height: 900 });
+      await p2.goto(URL + ancla, { waitUntil: "domcontentloaded" });
+      await esperar(900);
+      const d = await p2.evaluate((a) => ({
+        abierta: document.documentElement.getAttribute("data-parte"),
+        seVe: document.querySelector(a).getBoundingClientRect().height > 0,
+        top: Math.round(document.querySelector(a).getBoundingClientRect().top),
+      }), ancla);
+      ok(d.abierta === parte && d.seVe && Math.abs(d.top - 92) <= 14,
+        "entrar por " + ancla + " abre su parte",
+        d.abierta + " · a " + d.top + "px");
+      await p2.close();
+    }
+
+    /* Cada salto deja un estado en el historial: atras tiene que
+       devolver la parte, no solo la direccion. */
+    await page.click('.main-nav a[data-parte="fe"]'); await esperar(500);
+    const enFe = await page.evaluate(() => document.documentElement.getAttribute("data-parte"));
+    await page.goBack(); await esperar(600);
+    const atras = await page.evaluate(() => document.documentElement.getAttribute("data-parte"));
+    ok(enFe === "fe" && atras === "quienes", "el boton de atras devuelve la parte",
+      enFe + " -> atras -> " + atras);
+
+    /* Ninguna seccion puede quedar sin puerta: si a una parte no se
+       llega desde el menu, su contenido deja de existir para todos. */
+    const huerfanas = await page.evaluate(() => {
+      const enMenu = new Set([...document.querySelectorAll("#mobileNav a[href^='#'], .main-nav a[href^='#']")]
+        .map((a) => a.getAttribute("href").slice(1)));
+      return [...document.querySelectorAll(".part section")]
+        .filter((s) => !s.hidden && !enMenu.has(s.id) && s.id !== "inicio")
+        .map((s) => s.id);
+    });
+    ok(huerfanas.length === 0, "toda seccion tiene su enlace en el menu",
+      huerfanas.length ? "sin enlace: " + huerfanas.join(", ") : "ninguna huerfana");
+
+    ok(errores.length === 0, "sin errores de JavaScript", errores.join(" | "));
+    await page.close();
+  }
+
+  /* =======================================================
+     3 ter. Si js/main.js no llega
+     =======================================================
+     El script de la cabecera esconde tres cuartas partes del sitio. Si lo
+     unico capaz de volver a ensenarlas fuera main.js —que es el ultimo
+     archivo del cuerpo— bastaria con que no cargara, o con que la persona
+     pulsara antes de que termine, para que diez secciones dejaran de
+     existir. Medido a 400 kbps: el hero se puede pulsar a los 7,5 s y
+     main.js no acaba hasta los 10,5.
+
+     Por eso el reparto tiene que funcionar con SOLO el script de la
+     cabecera. Esto es lo que lo vigila; si alguien quita el hashchange de
+     ahi, esta prueba se cae. */
+  console.log("\n=== Sin js/main.js la pagina sigue siendo navegable ===\n");
+  {
+    const page = await browser.newPage();
+    await page.setCacheEnabled(false);
+    await page.setRequestInterception(true);
+    page.on("request", (r) => (/\/js\/main\.js(\?|$)/.test(r.url()) ? r.abort() : r.continue()));
+    await page.setViewport({ width: 390, height: 844, isMobile: true, hasTouch: true });
+    await page.goto(URL, { waitUntil: "domcontentloaded" });
+    await esperar(1200);
+
+    const aLaVista = () => {
+      const secs = [...document.querySelectorAll("section")];
+      return secs.filter((x) => x.getBoundingClientRect().height > 0).map((x) => x.id);
+    };
+    const alcanzadas = new Set(await page.evaluate(aLaVista));
+    const partes = await page.evaluate(() =>
+      [...document.querySelectorAll(".main-nav a[data-parte]")].map((a) => a.getAttribute("data-parte")));
+
+    for (const parte of partes) {
+      await page.evaluate((k) => document.querySelector('.main-nav a[data-parte="' + k + '"]').click(), parte);
+      await esperar(600);
+      (await page.evaluate(aLaVista)).forEach((x) => alcanzadas.add(x));
+    }
+    const totales = await page.evaluate(() =>
+      [...document.querySelectorAll("section")].filter((x) => !x.hidden).length);
+    ok(alcanzadas.size >= totales, "las cuatro partes se abren sin main.js",
+      alcanzadas.size + " de " + totales + " secciones alcanzables");
+
+    /* Y el boton del hero, que apunta a otra parte, tiene que llevar */
+    await page.evaluate(() => document.querySelector('.hero-actions a[href="#estudios"]').click());
+    await esperar(700);
+    const est = await page.evaluate(() => {
+      const r = document.querySelector("#estudios").getBoundingClientRect();
+      return { alto: Math.round(r.height), top: Math.round(r.top),
+               parte: document.documentElement.getAttribute("data-parte") };
+    });
+    ok(est.alto > 0 && Math.abs(est.top - 92) <= 14,
+      "el boton del hero lleva de verdad sin main.js",
+      "parte " + est.parte + ", #estudios a " + est.top + "px");
+    await page.close();
+  }
+
+  /* =======================================================
      4. Navegar a una seccion
      ======================================================= */
   console.log("\n=== Ir a una seccion desde el menu ===\n");
@@ -275,7 +446,15 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
     const { page } = await abrir({ width: w, height: 800 });
     await page.evaluate(() => document.querySelectorAll(".reveal").forEach((e) => e.classList.add("is-visible")));
     await esperar(300);
-    const d = await page.evaluate((ancho) => {
+    /* Sin esto solo se medía la primera parte: lo que esta en
+       display:none mide cero y pasaba por bueno sin haberse mirado. */
+    const partes = await page.evaluate(() =>
+      [...document.querySelectorAll(".part")].map((p) => p.id.replace("parte-", "")));
+    const culpablesDeTodas = [];
+    let anchoMax = 0;
+    for (const parte of partes) {
+      await verParte(page, parte);
+      const dp = await page.evaluate((ancho) => {
       const culpables = [];
       document.querySelectorAll("body *").forEach((el) => {
         const r = el.getBoundingClientRect();
@@ -289,9 +468,14 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
         }
       });
       return { ancho: document.documentElement.scrollWidth, culpables: [...new Set(culpables)].slice(0, 4) };
-    }, w);
+      }, w);
+      anchoMax = Math.max(anchoMax, dp.ancho);
+      dp.culpables.forEach((c) => culpablesDeTodas.push(parte + ":" + c));
+    }
+    const d = { ancho: anchoMax, culpables: [...new Set(culpablesDeTodas)].slice(0, 4) };
     ok(d.ancho <= w && d.culpables.length === 0, w + " px",
-      d.culpables.length ? "se salen: " + d.culpables.join(", ") : "documento " + d.ancho + " px");
+      d.culpables.length ? "se salen: " + d.culpables.join(", ")
+                         : "documento " + d.ancho + " px, las " + partes.length + " partes");
     await page.close();
   }
 
