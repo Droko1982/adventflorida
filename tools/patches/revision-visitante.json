@@ -1,0 +1,47 @@
+{
+  "en": {
+    "part.about": "Home",
+    "part.connect": "Contact us",
+    "hero.badge": null
+  },
+  "es": {
+    "part.about": "Inicio",
+    "part.connect": "Contáctenos",
+    "hero.badge": null
+  },
+  "fr": {
+    "part.about": "Accueil",
+    "part.connect": "Contactez-nous",
+    "hero.badge": null
+  },
+  "ht": {
+    "part.about": "Akèy",
+    "part.connect": "Kontakte nou",
+    "hero.badge": null
+  },
+  "pt": {
+    "part.about": "Início",
+    "part.connect": "Fale conosco",
+    "hero.badge": null
+  },
+  "de": {
+    "part.about": "Start",
+    "part.connect": "Kontakt",
+    "hero.badge": null
+  },
+  "nl": {
+    "part.about": "Start",
+    "part.connect": "Neem contact op",
+    "hero.badge": null
+  },
+  "ru": {
+    "part.about": "Главная",
+    "part.connect": "Свяжитесь с нами",
+    "hero.badge": null
+  },
+  "uk": {
+    "part.about": "Головна",
+    "part.connect": "Зв'яжіться з нами",
+    "hero.badge": null
+  }
+}

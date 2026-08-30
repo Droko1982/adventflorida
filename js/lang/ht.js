@@ -36,7 +36,6 @@
     "nav.faq": "Kesyon",
     "nav.contact": "Kontak",
     "cta.whatsapp": "Ekri nou sou WhatsApp",
-    "hero.badge": "Gwoup misyonè layik · Tout Florid",
     "hero.title": "Jezikri, <em>gid ou ak Sovè ou</em>",
     "hero.sub": "Nou se moun senp nan Florid ki jwenn lapè nan Jezi e ki pa ka kenbe sa pou tèt nou. Kèlkeswa kote ou rete nan eta sa a, kèlkeswa lang ou pale, n ap kontan ouvè Bib la avèk ou. Tout sa nou ofri gratis — toujou.",
     "hero.cta1": "Mande yon etid biblik gratis",
@@ -488,10 +487,10 @@
     "lib.g.story": "Tout istwa a, depi nan kòmansman",
     "lib.g.daily": "Pou lavi chak jou",
     "lib.g.other": "Pa sèlman Ellen G. White",
-    "part.about": "Ki moun nou ye",
+    "part.about": "Akèy",
     "part.faith": "Jezi ak lafwa nou",
     "part.free": "Resous gratis",
-    "part.connect": "Pale ak nou",
+    "part.connect": "Kontakte nou",
     "nav.near": "Toupre w"
   };
 

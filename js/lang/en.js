@@ -36,7 +36,6 @@
     "nav.faq": "FAQ",
     "nav.contact": "Contact",
     "cta.whatsapp": "Chat on WhatsApp",
-    "hero.badge": "Lay missionary group · All of Florida",
     "hero.title": "Jesus Christ, your <em>guide and Saviour</em>",
     "hero.sub": "We are ordinary people from Florida who found peace in Jesus and cannot keep it to ourselves. Wherever you live in this state, and whatever language you speak, we would love to open the Bible with you. Everything we offer is free — always.",
     "hero.cta1": "Request a free Bible study",
@@ -488,10 +487,10 @@
     "lib.g.story": "The whole story, from the beginning",
     "lib.g.daily": "For everyday life",
     "lib.g.other": "Beyond Ellen G. White",
-    "part.about": "Who we are",
+    "part.about": "Home",
     "part.faith": "Jesus and our faith",
     "part.free": "Free resources",
-    "part.connect": "Talk to us",
+    "part.connect": "Contact us",
     "nav.near": "Near you"
   };
 

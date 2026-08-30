@@ -339,101 +339,69 @@ siguen haciendo falta, y si la burbuja flotante debe seguir apareciendo encima
 del bloque principal.
 
 
-## 14. Revision de una persona que uso la pagina (30 de agosto de 2026)
+## 14. Revision de una persona que uso la pagina (30 de agosto de 2026) — HECHO
 
-Llego por WhatsApp una lista de seis cosas. Tres ya estan hechas, tres no.
-Se apuntan aqui las tres que faltan para que no se pierdan, con lo que hay que
-tocar en cada una.
+Llego por WhatsApp una lista de seis cosas. Las seis estan hechas y medidas.
+Se deja escrito el detalle porque en dos de ellas la decision no era obvia.
 
-### Ya hecho
+**1. "Que cuando entre a la pagina me abra en el inicio, que no me baje."**
+Se abre en la parte 1, arriba del todo. Y el emblema, que durante unos dias
+llevaba a la seccion "Quienes somos", vuelve a llevar al principio: un
+emblema es el boton de volver a casa, y la casa es arriba.
 
-- **"Que cuando entre a la pagina me abra en el inicio, que no me baje solo."**
-  Se abre en la parte 1, arriba del todo. Solo baja si la direccion trae un
-  ancla, que es cuando se ha pedido expresamente.
-- **"Que seccione las cosas, al menos en 3, que esta muy larga esa landing."**
-  Hecho, en cuatro partes. Sigue siendo una sola landing: no hay paginas
-  nuevas, se ve una parte cada vez. Ver la seccion "Las cuatro partes" del
-  README.
-- **"Que verifique que toda la pagina este adaptada a PC y celular."**
-  Comprobado de 320 a 1440 px en las cuatro partes con
-  `node tools/test-browser.js`. Falta lo de la orientacion vertical, que va
-  abajo con el punto del logotipo.
+**2. "Que seccione las cosas, al menos en 3."**
+Hecho, en cuatro partes. Sigue siendo una sola landing. Ver "Las cuatro
+partes" en el README.
 
-### Pendiente 14.a — El rotulo del logotipo se corta con puntos suspensivos
+**3. "Que verifique que toda la pagina este adaptada a PC y celular."**
+Comprobado de 320 a 1440 px en las cuatro partes, y ademas en vertical
+(320x568, 360x740, 390x844, 414x896, 768x1024) y en apaisado (844x390).
 
-> *"Que el logo no se corte o quede a medias sin puntos suspensivos, sino que
-> se adapte a la pantalla para que siempre quede visible y completo, mas que
-> todo en orientaciones verticales."*
+**4. "Que el logo no se corte ni quede a medias con puntos suspensivos."**
+Tenia `text-overflow: ellipsis`, y por debajo de 620 px el subtitulo
+desaparecia del todo: en un movil en vertical el nombre salia como
+"Florida Adve..." y sin "MISSIONARIES". Ahora el emblema, la separacion y el
+nombre encogen con `clamp()` en vez de recortarse, y el subtitulo no
+desaparece a ningun ancho.
 
-Ahora mismo, en `css/styles.css`:
+Para que "MISSIONARIES" cupiera a 320 px hacian falta 22 px que no habia. En
+vez de encoger la letra hasta lo ilegible —se probo, salian 7,5 px y
+`tools/test-responsive.js` lo rechazo con razon— el sitio se le quito a los
+mandos de la derecha: los botones de tema e idioma bajan de 40 a 36 px, muy
+por encima de los 24 que pide la WCAG 2.5.8. Verificado entero en las 7
+pantallas x los 9 idiomas.
 
-```css
-.brand-name, .brand-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-@media (max-width: 620px) { .brand-sub { display: none; } }
-```
+**5. "Que en el inicio quite esas 2 cosas que seleccione en la imagen."**
+Era la pildora "Grupo misionero laico · Toda la Florida". Fuera, con su punto
+verde y su clave de los nueve diccionarios.
 
-Es decir: por debajo de 620 px el subtitulo "MISSIONARIES" **desaparece**, y el
-nombre se recorta con puntos suspensivos si no cabe. Se hizo asi para que en un
-telefono de 320 px el boton de menu no se saliera de la pantalla, pero la
-persona tiene razon en que el emblema es lo que identifica al ministerio y no
-deberia ser lo primero que se sacrifica.
+No se perdio informacion, y se comprobo: "en toda la Florida" ya lo dice la
+barra superior, justo encima; y "grupo misionero laico adventista del septimo
+dia" abre la seccion Quienes somos.
 
-- [ ] Que el rotulo se adapte en vez de recortarse: bajar el tamano con
-      `clamp()` y dejar que el nombre parta en dos lineas si hace falta, en
-      lugar de `text-overflow: ellipsis`.
-- [ ] Recuperar "MISSIONARIES" por debajo de 620 px, aunque sea mas pequeno.
-- [ ] Comprobarlo en vertical de verdad: 320, 360 y 390 px de ancho, en los
-      nueve idiomas (el aleman y el ucraniano son los que mas ocupan).
+**6. "El boton de WhatsApp aparece y desaparece; que este siempre."**
+Era a proposito: `wireFloat()` lo retiraba mientras se veia el hero porque le
+robaba el toque al boton principal, y estaba medido. Pero un atajo que va y
+viene no se aprende, asi que se quita el escondite.
 
-### Pendiente 14.b — Quitar la pildora del hero
+El motivo por el que se escondia era real, asi que en vez de ignorarlo se
+resolvio apartando: en pantallas estrechas la burbuja baja de 58 a 50 px y se
+mete mas en el rincon. Medido en las 7 pantallas: **el centro de todos los
+botones queda libre siempre**; en el peor caso (360 px con los textos
+ucranianos, que son los mas largos) la burbuja tapa un 7 % de la punta de un
+boton. Una burbuja fija en la esquina siempre va a solaparse con algo: es el
+precio de que este siempre, y es el que se eligio a sabiendas. Esto contesta
+tambien la duda que quedaba abierta en el punto 13.
 
-> *"Que en el inicio quite esas 2 cosas que seleccione en la imagen, que para
-> mi siento que sobran."*
+**Ademas, de propina:** el reparto en partes dejaba un solo enlace del menu
+—"Cerca de ti"— deslizandose mientras los otros 18 saltaban en seco, y encima
+llegaba tarde (100 px a los 350 ms). El umbral de `SALTO_LARGO` baja de 1
+pantalla a 0,5 y los 19 se comportan igual.
 
-Lo que rodeo en la captura es la pildora que hay encima del titular:
-
-```html
-<span class="hero-badge"><span class="dot"></span><span data-i18n="hero.badge">Grupo misionero laico · Toda la Florida</span></span>
-```
-
-Son las dos cosas: **"Grupo misionero laico"** y **"Toda la Florida"**, en la
-misma pildora con el punto verde.
-
-- [ ] Decidir con el equipo si se quita entera o solo se acorta. Ojo: "Toda la
-      Florida" es de lo poco que dice de entrada el alcance geografico, y
-      "grupo misionero laico" es lo que aclara que no es una iglesia oficial
-      (lo mismo que repite el aviso legal del pie). Si se quita, conviene que
-      esa informacion aparezca en otro sitio visible sin bajar.
-- [ ] Si se quita: borrar el `<span class="hero-badge">` de `index.html`, la
-      regla `.hero-badge` de `css/styles.css` y la clave `hero.badge` de los
-      nueve diccionarios con
-      `node tools/patch-i18n.js` usando `"hero.badge": null`.
-
-### Pendiente 14.c — La burbuja de WhatsApp aparece y desaparece
-
-> *"El boton de WhatsApp aparece y desaparece en el inicio, asi que dejar que
-> siempre aparezca en la pagina."*
-
-No es un fallo, es a proposito. En `js/main.js`, `wireFloat()` esconde la
-burbuja mientras el hero esta a la vista, porque ahi ya hay dos botones grandes
-y la burbuja les robaba el toque:
-
-```js
-obs = new IntersectionObserver(function (e) {
-  burbuja.classList.toggle("is-tapada", e[0].isIntersecting);
-}, { threshold: 0.25 });
-```
-
-Pero quien lo uso lo leyo como que el boton se le escapaba, y eso pesa mas que
-la teoria. Esto tambien contesta la duda que quedaba abierta en el punto 13 de
-esta misma lista.
-
-- [ ] Quitar `wireFloat()` y la regla `.wa-float.is-tapada`, de modo que la
-      burbuja este siempre.
-- [ ] Comprobar entonces que en el hero de un movil de 320 px la burbuja no
-      tapa ninguno de los dos botones principales. Si los tapa, la salida es
-      moverla, no volver a esconderla.
-
+**Nombres de las partes:** la cuarta se llamaba "Escribenos" y pasa a
+"Contactenos", que es lo que se pidio. La primera se llamaba "Quienes somos",
+igual que uno de los enlaces de dentro; pasa a "Inicio", que ademas es la
+palabra que uso quien reviso el sitio.
 
 ## 15. Lo que dejo abierto partir la pagina en cuatro
 
@@ -489,3 +457,21 @@ esta en `display:none`.
       tambien `#:~:text=` y abrir la parte que contenga ese texto antes de que
       el navegador lo busque. Es rebuscado y de momento no compensa; queda
       apuntado por si aparece en Search Console.
+
+
+### 15.d — En Windows el selector de idioma dice "ES ES"
+
+Visto en una captura de Chrome sobre Windows a 1280 px: el boton de idioma
+muestra la bandera y el codigo, pero **Windows no tiene glifo para las
+banderas emoji**. En vez de dibujar la bandera, el navegador escribe las dos
+letras del par de indicadores regionales, que son justo las mismas del codigo.
+Resultado: "ES ES", "EN EN", "FR FR".
+
+No lo trae este cambio, viene de antes, pero se ve en cualquier PC con Windows,
+que es una parte grande de quien entra desde un ordenador. En Mac, Android e
+iOS si se ve la bandera.
+
+- [ ] Decidir cual de las dos se queda. Lo mas simple y lo que no depende de
+      la tipografia del sistema es quitar `.lang-flag` y dejar solo el codigo;
+      dentro del desplegable ya va el nombre del idioma escrito.
+- [ ] Si se quiere conservar la bandera, tiene que ser en SVG, no en emoji.

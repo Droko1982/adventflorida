@@ -36,7 +36,6 @@
     "nav.faq": "Vragen",
     "nav.contact": "Contact",
     "cta.whatsapp": "Schrijf ons op WhatsApp",
-    "hero.badge": "Lekenzendingsgroep · Heel Florida",
     "hero.title": "Jezus Christus, jouw <em>gids en Redder</em>",
     "hero.sub": "Wij zijn gewone mensen uit Florida die vrede vonden in Jezus en dat niet voor onszelf kunnen houden. Waar u in deze staat ook woont en welke taal u ook spreekt, we zouden graag samen met u de Bijbel openslaan. Alles wat we aanbieden is gratis — altijd.",
     "hero.cta1": "Vraag een gratis bijbelstudie aan",
@@ -488,10 +487,10 @@
     "lib.g.story": "Het hele verhaal, vanaf het begin",
     "lib.g.daily": "Voor het dagelijks leven",
     "lib.g.other": "Niet alleen Ellen G. White",
-    "part.about": "Over ons",
+    "part.about": "Start",
     "part.faith": "Jezus en ons geloof",
     "part.free": "Gratis materiaal",
-    "part.connect": "Schrijf ons",
+    "part.connect": "Neem contact op",
     "nav.near": "Bij u in de buurt"
   };
 

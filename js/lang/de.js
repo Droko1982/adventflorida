@@ -36,7 +36,6 @@
     "nav.faq": "Fragen",
     "nav.contact": "Kontakt",
     "cta.whatsapp": "Schreiben Sie uns auf WhatsApp",
-    "hero.badge": "Laien-Missionsgruppe · Ganz Florida",
     "hero.title": "Jesus Christus, dein <em>Wegweiser und Retter</em>",
     "hero.sub": "Wir sind ganz normale Menschen aus Florida, die in Jesus Frieden gefunden haben und ihn nicht für sich behalten können. Wo immer Sie in diesem Bundesstaat leben und welche Sprache Sie auch sprechen — wir würden gern die Bibel mit Ihnen aufschlagen. Alles, was wir anbieten, ist kostenlos — immer.",
     "hero.cta1": "Kostenlose Bibelstunde anfragen",
@@ -488,10 +487,10 @@
     "lib.g.story": "Die ganze Geschichte, von Anfang an",
     "lib.g.daily": "Für den Alltag",
     "lib.g.other": "Über Ellen G. White hinaus",
-    "part.about": "Über uns",
+    "part.about": "Start",
     "part.faith": "Jesus und Glaube",
     "part.free": "Gratis-Material",
-    "part.connect": "Schreiben Sie uns",
+    "part.connect": "Kontakt",
     "nav.near": "In Ihrer Nähe"
   };
 

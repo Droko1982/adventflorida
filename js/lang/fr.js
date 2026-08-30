@@ -36,7 +36,6 @@
     "nav.faq": "Questions",
     "nav.contact": "Contact",
     "cta.whatsapp": "Écrivez-nous sur WhatsApp",
-    "hero.badge": "Groupe missionnaire laïc · Toute la Floride",
     "hero.title": "Jésus-Christ, ton <em>guide et Sauveur</em>",
     "hero.sub": "Nous sommes des gens ordinaires de Floride qui ont trouvé la paix en Jésus et ne peuvent pas la garder pour eux. Où que vous viviez dans cet État, quelle que soit votre langue, nous serions heureux d'ouvrir la Bible avec vous. Tout ce que nous offrons est gratuit — toujours.",
     "hero.cta1": "Demander une étude biblique gratuite",
@@ -488,10 +487,10 @@
     "lib.g.story": "Toute l'histoire, depuis le début",
     "lib.g.daily": "Pour le quotidien",
     "lib.g.other": "Au-delà d'Ellen G. White",
-    "part.about": "Qui sommes-nous",
+    "part.about": "Accueil",
     "part.faith": "Jésus et la foi",
     "part.free": "Ressources gratuites",
-    "part.connect": "Écrivez-nous",
+    "part.connect": "Contactez-nous",
     "nav.near": "Près de chez vous"
   };
 

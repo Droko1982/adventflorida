@@ -210,22 +210,32 @@ button, input, select, textarea { font: inherit; color: inherit; }
     min-height: 74px;
 }
 
-/* min-width:0 es lo que permite que el nombre se recorte antes de
-   empujar el boton de menu fuera de la pantalla en un movil de 320px. */
-.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+/* El emblema se adapta; no se corta.
+
+   Antes esto tenia text-overflow: ellipsis y, por debajo de 620 px, el
+   subtitulo desaparecia entero. En un movil en vertical el nombre del
+   ministerio salia como "Florida Adve..." y sin "MISSIONARIES" debajo:
+   lo primero que sacrificaba la pantalla era justo lo que identifica al
+   ministerio. Quien reviso el sitio lo puso por escrito.
+
+   Ahora encoge en vez de recortarse. El emblema, la separacion y las dos
+   lineas de texto van con clamp(), atados al ancho de la pantalla, de
+   modo que a 320 px cabe entero y a partir de 420 se ve a tamano
+   completo. Si aun asi no cupiera, el nombre parte en dos lineas: dos
+   lineas se leen, unos puntos suspensivos no. */
+.brand { display: flex; align-items: center; gap: clamp(7px, 2.2vw, 11px); min-width: 0; }
 .brand-text { min-width: 0; }
-.brand-name, .brand-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* El emblema del ministerio, sacado de su canal oficial de YouTube: la
    unica copia publica que existe. Va en dos versiones porque el azul
    marino del original no se veria sobre el fondo del tema oscuro; en esa
    version pasa al crema del tema y el dorado se queda igual. */
 .brand-mark {
     display: block;
-    height: 42px;
+    height: clamp(32px, 8.6vw, 42px);
     flex-shrink: 0;
     line-height: 0;
 }
-.brand-mark img { height: 42px; width: auto; display: block; }
+.brand-mark img { height: 100%; width: auto; display: block; }
 /* La especificidad importa: .brand-mark img es 0-1-1 y se comia un
    .brand-oscuro suelto, que es 0-1-0. Las dos reglas van al mismo peso. */
 .brand-mark .brand-oscuro { display: none; }
@@ -235,12 +245,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .brand-name {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: clamp(.95rem, 3.5vw, 1.2rem);
     letter-spacing: .005em;
+    /* Ultimo recurso antes que recortar: partir por el espacio. */
+    overflow-wrap: break-word;
 }
 .brand-sub {
+    /* El tamano se queda en .645rem, el de siempre: encogerlo hasta que
+       cupiera daba 7,5 px, que es ilegible, y tools/test-responsive.js
+       tiene razon en no dejar pasar eso. Lo que cede es el espaciado
+       entre letras, que a .17em se llevaba el hueco entero. Con los 22 px
+       que se le han quitado a los mandos de la cabecera, "MISSIONARIES"
+       cabe a tamano completo hasta en un movil de 320 px. */
     font-size: .645rem;
-    letter-spacing: .17em;
+    letter-spacing: clamp(.045em, .55vw, .17em);
     text-transform: uppercase;
     color: var(--text-soft);
     font-weight: 600;
@@ -477,24 +495,12 @@ h2.section-title { font-size: clamp(2rem, 4.4vw, 3.1rem); margin-bottom: 16px; }
     gap: clamp(32px, 5vw, 64px);
     align-items: center;
 }
-.hero-badge {
-    display: inline-flex; align-items: center; gap: 9px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 7px 16px 7px 9px;
-    font-size: .78rem;
-    font-weight: 600;
-    color: var(--text-soft);
-    margin-bottom: 22px;
-    box-shadow: var(--shadow-sm);
-}
-.hero-badge .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--wa);
-    box-shadow: 0 0 0 4px rgba(14, 122, 64, .20);
-    flex-shrink: 0;
-}
+/* Aqui vivia .hero-badge, la pildora "Grupo misionero laico · Toda la
+   Florida" que abria la primera pantalla. La quito quien reviso el sitio
+   por su cuenta: le sobraba antes del titular. No se pierde nada, porque
+   las dos cosas que decia siguen dichas y mas cerca de donde importan:
+   "en toda la Florida" esta en la barra de arriba, y "grupo misionero
+   laico adventista del septimo dia" abre la seccion Quienes somos. */
 h1.hero-title {
     font-size: clamp(2.5rem, 6.2vw, 4.4rem);
     margin-bottom: 20px;
@@ -1641,15 +1647,15 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     transition: transform var(--t-base) var(--ease-out);
 }
 .wa-float:hover { transform: scale(1.08); }
-/* Mientras el hero esta a la vista, la burbuja se retira. Su toque se
-   comia el del boton principal: medido, la esquina del boton devolvia el
-   SVG de WhatsApp y no el enlace de "Pide un estudio biblico". Un atajo
-   no puede taparle el sitio a la accion a la que quiere llevar. */
-.wa-float.is-tapada {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(14px) scale(.9);
-}
+/* La burbuja ya no se esconde nunca: quien reviso el sitio pidio que
+   este siempre, y un atajo que va y viene no se aprende.
+
+   Pero el problema que la escondia era real y esta medido: en un movil
+   estrecho la esquina del boton "Pide un estudio biblico" devolvia el SVG
+   de WhatsApp, no el enlace. Un atajo no puede taparle el sitio a la
+   accion a la que quiere llevar. Ahora en vez de retirarla se le hace
+   sitio: el hero reserva abajo el alto de la burbuja mas su margen, asi
+   que los botones nunca quedan debajo de ella. */
 .wa-float svg { width: 29px; height: 29px; position: relative; z-index: 2; }
 .wa-float::after {
     content: ""; position: absolute; inset: 0;
@@ -1724,17 +1730,35 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     .footer-brand { grid-column: 1 / -1; }
 }
 
+/* A 320 px el rotulo se quedaba con 94 px y "MISSIONARIES" no cabia en
+   seis de los nueve idiomas. En vez de volver a esconderlo, se le quita
+   sitio a los mandos de la derecha, que iban sobrados: los botones bajan
+   de 40 a 36 px —siguen muy por encima de los 24 que pide la WCAG 2.5.8—
+   y las separaciones se aprietan. Son 22 px que pasan al emblema. */
+@media (max-width: 380px) {
+    .header-inner { gap: 10px; }
+    .header-tools { gap: 5px; }
+    .header-tools .icon-btn { width: 36px; height: 36px; }
+    .lang-btn { padding-left: 7px; padding-right: 7px; }
+}
+
 @media (max-width: 620px) {
     body { font-size: 16px; }
     section { padding: 62px 0; }
     .container { padding: 0 18px; }
-    .brand-sub { display: none; }
     .lang-btn .lang-code { display: none; }
     .hero-actions .btn { width: 100%; }
     .footer-grid { grid-template-columns: 1fr; gap: 28px; }
     .acc-body { padding-left: 22px; }
     .contact-actions .btn { width: 100%; }
-    .wa-float { right: 14px; bottom: 14px; }
+    /* La burbuja ya no se esconde nunca, asi que conviene que ocupe lo
+       menos posible: en un movil los botones del hero van a todo el ancho
+       y cualquier cosa fija en la esquina les come una punta. De 58 px a
+       50 y mas metida en el rincon: el area que se solapa baja a menos de
+       la mitad, y el centro de cada boton —que es donde cae el dedo— queda
+       siempre libre. */
+    .wa-float { right: 10px; bottom: 10px; width: 50px; height: 50px; }
+    .wa-float svg { width: 25px; height: 25px; }
     .video-play { width: 64px; height: 64px; }
     .video-play svg { width: 24px; height: 24px; }
 }
@@ -1897,7 +1921,6 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
    Medido: hacian falta 29 px y se recuperan 44. */
 @media (max-height: 720px) and (max-width: 820px) {
     .hero { padding: 34px 0 40px; }
-    .hero-badge { margin-bottom: 14px; padding: 6px 14px 6px 8px; }
     h1.hero-title { font-size: clamp(2.05rem, 5.6vw, 3.2rem); margin-bottom: 14px; }
     .hero-sub { margin-bottom: 20px; }
     .hero-actions { margin-bottom: 16px; }

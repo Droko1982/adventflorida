@@ -284,19 +284,25 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
     ok(alCargar.abierta === partes[0], "al entrar se abre la primera", alCargar.abierta);
     ok(alCargar.aLaVista.length === 1, "y solo se ve una a la vez", alCargar.aLaVista.join(", "));
 
-    /* Lo que pidio el usuario: el emblema lleva a quienes somos. */
-    await page.evaluate(() => document.documentElement.setAttribute("data-parte", "contacto"));
+    /* El emblema devuelve al principio del todo. Estuvo un tiempo llevando
+       a la seccion "Quienes somos", y quien reviso el sitio se quejo de que
+       le bajaba: un emblema es el boton de volver a casa, y la casa es
+       arriba. */
+    await page.evaluate(() => {
+      document.documentElement.setAttribute("data-parte", "contacto");
+      window.scrollTo(0, 2000);
+    });
     await esperar(200);
-    await page.click(".site-header .brand"); await esperar(500);
+    await page.click(".site-header .brand"); await esperar(600);
     const trasLogo = await page.evaluate(() => ({
       abierta: document.documentElement.getAttribute("data-parte"),
-      top: Math.round(document.querySelector("#quienes").getBoundingClientRect().top),
+      top: Math.round(document.querySelector("#inicio").getBoundingClientRect().top),
+      y: Math.round(window.pageYOffset),
       hash: location.hash,
     }));
-    ok(trasLogo.abierta === "quienes", "el emblema abre Quienes somos", trasLogo.abierta);
-    ok(Math.abs(trasLogo.top - 92) <= 12, "y aterriza en la seccion, no encima",
-      trasLogo.top + "px bajo la cabecera");
-    ok(trasLogo.hash === "#quienes", "dejando la direccion compartible", trasLogo.hash);
+    ok(trasLogo.abierta === "quienes", "el emblema devuelve a la primera parte", trasLogo.abierta);
+    ok(trasLogo.y <= 120, "y sube al principio, no a media pagina", "scroll " + trasLogo.y + "px");
+    ok(trasLogo.hash === "#inicio", "dejando la direccion compartible", trasLogo.hash);
 
     /* Una direccion con ancla tiene que abrir SU parte, no la primera:
        es la mitad de los enlaces que circulan por WhatsApp. */

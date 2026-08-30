@@ -36,7 +36,6 @@
     "nav.faq": "Preguntas",
     "nav.contact": "Contacto",
     "cta.whatsapp": "Escríbenos por WhatsApp",
-    "hero.badge": "Grupo misionero laico · Toda la Florida",
     "hero.title": "Jesucristo, tu <em>guía y salvador</em>",
     "hero.sub": "Somos gente sencilla de la Florida que encontró paz en Jesús y no puede quedarse callada. Vivas donde vivas en este estado, y hables el idioma que hables, nos encantaría abrir la Biblia contigo. Todo lo que ofrecemos es gratuito — siempre.",
     "hero.cta1": "Quiero un estudio bíblico gratis",
@@ -488,10 +487,10 @@
     "lib.g.story": "La historia entera, desde el principio",
     "lib.g.daily": "Para la vida de cada día",
     "lib.g.other": "Más allá de Ellen G. White",
-    "part.about": "Quiénes somos",
+    "part.about": "Inicio",
     "part.faith": "Jesús y nuestra fe",
     "part.free": "Recursos gratis",
-    "part.connect": "Escríbenos",
+    "part.connect": "Contáctenos",
     "nav.near": "Cerca de ti"
   };
 

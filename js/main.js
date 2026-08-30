@@ -1322,13 +1322,20 @@
        Ahora: los saltos cortos siguen deslizandose, que se agradece y
        ayuda a situarse; los largos van directos.
 
-       El umbral bajo de 2,5 pantallas a 1 al partir la pagina en cuatro.
-       Aquel numero se penso para un desplazamiento de 15.000 px; dentro
-       de una parte no se cruzaba nunca, y saltos como el de Oracion a
-       Preguntas se iban deslizando mas de medio segundo. Ahora solo se
-       desliza lo que cabe en una pantalla, que es cuando el movimiento
-       de verdad ayuda a situarse. */
-    var SALTO_LARGO = 1;            /* en pantallas de alto */
+       El umbral bajo de 2,5 pantallas a 0,5 al partir la pagina en cuatro.
+       Aquel numero se penso para un desplazamiento de 15.000 px y dentro
+       de una parte no se cruzaba nunca.
+
+       Con 1 pantalla quedaba una incoherencia rara: de los 19 enlaces del
+       menu movil, 18 saltaban en seco y solo "Cerca de ti" se deslizaba,
+       porque era el unico salto mas corto que la pantalla. Y encima
+       llegaba tarde: medido, 100 px a los 350 ms y los 92 buenos a los
+       1.200. Que un enlace de cada diecinueve se comporte distinto y
+       ademas sea el lento no es una atencion, es un despiste.
+
+       A 0,5 se desliza solo lo que de verdad esta a un palmo, que es
+       cuando el movimiento ayuda a situarse en vez de hacerse esperar. */
+    var SALTO_LARGO = 0.5;          /* en pantallas de alto */
 
     function suave() {
       try {
@@ -1528,17 +1535,17 @@
        con certeza, sin tener que adivinarlo por donde va el scroll. */
   }
 
-  /* La burbuja de WhatsApp se retira mientras la accion principal del
-     hero esta a la vista, porque le robaba el toque. */
-  function wireFloat() {
-    var burbuja = $(".wa-float"), hero = $("#inicio");
-    if (!burbuja || !hero) return;
-    if (!("IntersectionObserver" in window)) return;
-    var obs = new IntersectionObserver(function (e) {
-      burbuja.classList.toggle("is-tapada", e[0].isIntersecting);
-    }, { threshold: 0.25 });
-    obs.observe(hero);
-  }
+  /* Aqui vivia wireFloat(), que retiraba la burbuja de WhatsApp mientras
+     el hero estaba a la vista. Quien reviso el sitio lo leyo como que el
+     boton se le escapaba —"aparece y desaparece"— y pidio que este
+     siempre. Tenia razon: un atajo que va y viene no se aprende, y quien
+     no entiende por que desaparecio no vuelve a buscarlo.
+
+     El motivo por el que se escondia era real y esta medido: la burbuja
+     se comia el toque del boton "Pide un estudio biblico". Eso no se
+     arregla escondiendola, se arregla apartandola; la hoja de estilo le
+     deja ahora sitio propio debajo de los botones del hero en las
+     pantallas estrechas. tools/test-browser.js comprueba que no se pisan. */
 
   /* ---------------- Reveal ---------------- */
   function wireReveal() {
@@ -1590,6 +1597,5 @@
     wireNear();
     wireMissions();
     wireReveal();
-    wireFloat();
   });
 })();

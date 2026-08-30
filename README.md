@@ -106,12 +106,17 @@ una esta en pantalla. Antes eran 15.000 px de desplazamiento en el movil, y
 quien llegaba buscando el libro pasaba por delante de la oracion, del sabado y
 de los ministerios para encontrarlo.
 
-| Parte | Ancla | Secciones |
-|---|---|---|
-| Quienes somos | `#inicio` | inicio, cerca, quienes, testimonios, ministerios, unirse, misiones |
-| Jesus y lo que creemos | `#cristo` | cristo, creencias, sabado |
-| Recursos gratis | `#libro` | libro, biblioteca, estudios, recursos |
-| Contacto y apoyo | `#oracion` | oracion, faq, donar, contacto |
+| Parte (id) | Se lee | Puerta | Secciones |
+|---|---|---|---|
+| `parte-quienes` | Inicio | `#inicio` | inicio, cerca, quienes, testimonios, ministerios, unirse, misiones |
+| `parte-fe` | Jesus y nuestra fe | `#cristo` | cristo, creencias, sabado |
+| `parte-recursos` | Recursos gratis | `#libro` | libro, biblioteca, estudios, recursos |
+| `parte-contacto` | Contactenos | `#oracion` | oracion, faq, donar, contacto |
+
+El nombre que se lee sale de las claves `part.about`, `part.faith`, `part.free`
+y `part.connect`, asi que cambia con el idioma; el id no. La "puerta" es la
+primera seccion de cada parte, que es a donde apunta su enlace del menu:
+`tools/test-rhythm.js` comprueba que no se desemparejen.
 
 El reparto se declara **una sola vez**, en `window.FAM_PARTES`, dentro de un
 script inline de la cabecera de `index.html`. Esta arriba porque la parte hay
