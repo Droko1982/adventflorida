@@ -22,7 +22,6 @@
     "a11y.skip": "Naar de inhoud",
     "a11y.heroArt": "Een opengeslagen Bijbel onder een zonsopgang en een kruis",
     "a11y.bookArt": "Het boek Schreden naar Christus",
-    "topbar": "Gratis bijbelstudies · Gratis gebed · Het boek Schreden naar Christus kosteloos — overal in Florida",
     "brand.sub": "Zendelingen",
     "nav.about": "Over ons",
     "nav.christ": "Jezus Christus",

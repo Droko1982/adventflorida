@@ -64,6 +64,30 @@ function ok(cond, etiqueta, detalle) {
 }
 const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/* Donde tiene que quedar una seccion despues de un salto de ancla.
+
+   Durante mucho tiempo aqui habia un 92 a pelo, que es el
+   scroll-padding-top del sitio. Funcionaba por casualidad: encima de la
+   cabecera habia una franja de promesas, asi que SIEMPRE quedaban pixeles
+   por encima que gastar, y el navegador podia retroceder los 92.
+
+   Al quitar la franja, la primera seccion de cada parte empieza a 75 px del
+   documento — justo debajo de la cabecera pegajosa — y no hay 92 px que
+   retroceder: el desplazamiento se topa con el 0. La seccion aterriza a 75
+   y las tres comprobaciones se ponian rojas sin que al lector le pasara
+   nada. Medido: el titulo queda a la misma distancia de la cabecera que
+   antes, y 17 px MAS ARRIBA en pantalla.
+
+   Asi que el destino no es 92, es lo mas cerca de 92 que el documento
+   permite llegar. Como el salto hace scrollTo(max(0, docTop - 92)), la
+   seccion acaba en min(92, docTop). Eso es lo que se comprueba. */
+const AJUSTE = 92;
+const TOLERANCIA = 14;
+function aterriza(top, scrollY) {
+  const docTop = top + scrollY;
+  return Math.abs(top - Math.min(AJUSTE, docTop)) <= TOLERANCIA;
+}
+
 (async () => {
   const browser = await puppeteer.launch({
     executablePath: CHROME, headless: "new",
@@ -316,8 +340,9 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
         abierta: document.documentElement.getAttribute("data-parte"),
         seVe: document.querySelector(a).getBoundingClientRect().height > 0,
         top: Math.round(document.querySelector(a).getBoundingClientRect().top),
+        y: Math.round(window.pageYOffset),
       }), ancla);
-      ok(d.abierta === parte && d.seVe && Math.abs(d.top - 92) <= 14,
+      ok(d.abierta === parte && d.seVe && aterriza(d.top, d.y),
         "entrar por " + ancla + " abre su parte",
         d.abierta + " · a " + d.top + "px");
       await p2.close();
@@ -395,9 +420,10 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
     const est = await page.evaluate(() => {
       const r = document.querySelector("#estudios").getBoundingClientRect();
       return { alto: Math.round(r.height), top: Math.round(r.top),
+               y: Math.round(window.pageYOffset),
                parte: document.documentElement.getAttribute("data-parte") };
     });
-    ok(est.alto > 0 && Math.abs(est.top - 92) <= 14,
+    ok(est.alto > 0 && aterriza(est.top, est.y),
       "el boton del hero lleva de verdad sin main.js",
       "parte " + est.parte + ", #estudios a " + est.top + "px");
     await page.close();
@@ -435,9 +461,11 @@ const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
       }
       await page.click((movil ? "#mobileNav" : ".main-nav") + " a[href='" + href + "']");
       await esperar(350);        /* si tarda mas que esto, es demasiado */
-      const top = await page.evaluate((h) =>
-        Math.round(document.querySelector(h).getBoundingClientRect().top), href);
-      if (Math.abs(top - 92) > 12) mal.push(href + " (" + top + "px)");
+      const pos = await page.evaluate((h) => ({
+        top: Math.round(document.querySelector(h).getBoundingClientRect().top),
+        y: Math.round(window.pageYOffset),
+      }), href);
+      if (!aterriza(pos.top, pos.y)) mal.push(href + " (" + pos.top + "px)");
     }
     ok(mal.length === 0, vista.n + ": el menu lleva a la seccion",
       mal.length ? "no llega: " + mal.join(", ") : enlaces.length + " enlaces, todos en 350 ms");

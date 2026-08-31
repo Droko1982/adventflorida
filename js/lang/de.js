@@ -22,7 +22,6 @@
     "a11y.skip": "Zum Inhalt springen",
     "a11y.heroArt": "Eine aufgeschlagene Bibel unter einem Sonnenaufgang und einem Kreuz",
     "a11y.bookArt": "Das Buch Der bessere Weg",
-    "topbar": "Kostenlose Bibelstunden · Gebet · Das Buch Der bessere Weg gratis — überall in Florida",
     "brand.sub": "Missionare",
     "nav.about": "Über uns",
     "nav.christ": "Jesus Christus",

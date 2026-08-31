@@ -341,7 +341,8 @@ del bloque principal.
 
 ## 14. Revision de una persona que uso la pagina (30 de agosto de 2026) — HECHO
 
-Llego por WhatsApp una lista de seis cosas. Las seis estan hechas y medidas.
+Llego por WhatsApp una lista de seis cosas, y despues una septima. Todas
+estan hechas y medidas.
 Se deja escrito el detalle porque en dos de ellas la decision no era obvia.
 
 **1. "Que cuando entre a la pagina me abra en el inicio, que no me baje."**
@@ -375,9 +376,12 @@ pantallas x los 9 idiomas.
 Era la pildora "Grupo misionero laico · Toda la Florida". Fuera, con su punto
 verde y su clave de los nueve diccionarios.
 
-No se perdio informacion, y se comprobo: "en toda la Florida" ya lo dice la
-barra superior, justo encima; y "grupo misionero laico adventista del septimo
-dia" abre la seccion Quienes somos.
+No se perdio informacion, y se comprobo. Aviso para quien lea esto luego: en
+su momento se justifico diciendo que "en toda la Florida" seguia en la barra
+superior — y esa barra se quito poco despues (punto 7 de aqui abajo). Donde
+esta ahora, y donde estaba ya entonces, es en el propio texto del hero: "Somos
+gente sencilla de la Florida... Vivas donde vivas en este estado". Y "grupo
+misionero laico adventista del septimo dia" abre la seccion Quienes somos.
 
 **6. "El boton de WhatsApp aparece y desaparece; que este siempre."**
 Era a proposito: `wireFloat()` lo retiraba mientras se veia el hero porque le
@@ -397,6 +401,49 @@ tambien la duda que quedaba abierta en el punto 13.
 —"Cerca de ti"— deslizandose mientras los otros 18 saltaban en seco, y encima
 llegaba tarde (100 px a los 350 ms). El umbral de `SALTO_LARGO` baja de 1
 pantalla a 0,5 y los 19 se comportan igual.
+
+**7. La franja de promesas de encima de la cabecera.** Decia "Estudios
+biblicos gratis · Oracion gratuita · El libro El Camino a Cristo sin costo — en
+toda la Florida". Fuera, con su CSS y su clave en los nueve diccionarios.
+
+No repetia por enfasis, repetia por inercia: el hero, dos dedos mas abajo y en
+letra que se lee, ya dice que somos de Florida, que da igual donde vivas en
+este estado y que todo es gratuito. Comprobado en los nueve idiomas ANTES de
+quitarla.
+
+Lo que se gana no son solo pixeles. Medido comparando contra la version
+anterior en un servidor local: **en un movil de 320x568 el boton principal
+pasa de no verse sin desplazarse a verse**, en siete de los ocho idiomas
+medidos (el aleman sigue sin entrar, por lo largo de su texto). Son 86 px en
+320, 64 en 360 y 390.
+
+**Y rompio tres comprobaciones, que es la parte que merece quedar escrita.**
+`tools/test-browser.js` se puso rojo en tres sitios: al entrar por `#libro` y
+al usar el menu, las secciones aterrizaban a 75 px en vez de a los 92 que la
+prueba exigia.
+
+Lo primero fue mirar si al lector le pasaba algo. No le pasa. Medido con el
+navegador, comparando la version de antes contra la de ahora: la distancia
+entre el titulo de la seccion y el borde de la cabecera es identica en las dos
+(58 px en el hero, 161 px en las demas), porque `section` ya trae 84 px de
+relleno propio. Lo unico que cambia es que la pagina ya no gasta 47 px de
+desplazamiento en tragarse la franja: se queda en 0 y **el titulo aparece 17 px
+mas arriba**. Es una mejora, no un fallo.
+
+Lo que estaba mal era la prueba. Tenia un 92 a pelo — el `scroll-padding-top`
+del sitio — y acertaba de casualidad: mientras hubo franja, siempre sobraban
+pixeles por encima que retroceder. Sin franja, la primera seccion de cada parte
+empieza a 75 px del documento y no hay 92 que retroceder; el desplazamiento se
+topa con el 0.
+
+Ahora la prueba calcula el destino en vez de darlo por sabido. Como el salto
+hace `scrollTo(max(0, docTop - 92))`, la seccion acaba en `min(92, docTop)`, y
+eso es lo que compara la funcion `aterriza()`.
+
+Comprobado que no se ha ablandado la prueba, que era el riesgo: pasa con la
+franja y sin ella, y contra un arbol roto a proposito (el salto movido de 92 a
+400 px) sigue cantando 4 fallos. Solo afloja donde el documento fisicamente no
+puede subir mas.
 
 **Nombres de las partes:** la cuarta se llamaba "Escribenos" y pasa a
 "Contactenos", que es lo que se pidio. La primera se llamaba "Quienes somos",

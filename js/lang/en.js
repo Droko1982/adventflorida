@@ -22,7 +22,6 @@
     "a11y.skip": "Skip to content",
     "a11y.heroArt": "An open Bible beneath a rising sun and a cross",
     "a11y.bookArt": "The book Steps to Christ",
-    "topbar": "Free Bible studies · Free prayer · The book Steps to Christ at no cost — anywhere in Florida",
     "brand.sub": "Missionaries",
     "nav.about": "About us",
     "nav.christ": "Jesus Christ",

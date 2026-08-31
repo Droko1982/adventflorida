@@ -22,7 +22,6 @@
     "a11y.skip": "Ale nan kontni an",
     "a11y.heroArt": "Yon Bib ouvè anba yon solèy k ap leve ak yon kwa",
     "a11y.bookArt": "Liv Vin Jwenn Kris la",
-    "topbar": "Etid biblik gratis · Lapriyè gratis · Liv Vin Jwenn Kris la san peye — toupatou nan Florid",
     "brand.sub": "Misyonè",
     "nav.about": "Ki moun nou ye",
     "nav.christ": "Jezikri",

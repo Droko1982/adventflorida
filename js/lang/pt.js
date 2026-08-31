@@ -22,7 +22,6 @@
     "a11y.skip": "Ir para o conteúdo",
     "a11y.heroArt": "Uma Bíblia aberta sob um nascer do sol e uma cruz",
     "a11y.bookArt": "O livro Caminho a Cristo",
-    "topbar": "Estudos bíblicos gratuitos · Oração gratuita · O livro Caminho a Cristo sem custo — em toda a Flórida",
     "brand.sub": "Missionários",
     "nav.about": "Quem somos",
     "nav.christ": "Jesus Cristo",

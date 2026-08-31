@@ -22,7 +22,6 @@
     "a11y.skip": "Aller au contenu",
     "a11y.heroArt": "Une Bible ouverte sous un lever de soleil et une croix",
     "a11y.bookArt": "Le livre Vers Jésus",
-    "topbar": "Études bibliques gratuites · Prière gratuite · Le livre Vers Jésus offert — partout en Floride",
     "brand.sub": "Missionnaires",
     "nav.about": "Qui sommes-nous",
     "nav.christ": "Jésus-Christ",

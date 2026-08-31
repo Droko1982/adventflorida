@@ -22,7 +22,6 @@
     "a11y.skip": "Ir al contenido",
     "a11y.heroArt": "Una Biblia abierta bajo un amanecer y una cruz",
     "a11y.bookArt": "El libro El Camino a Cristo",
-    "topbar": "Estudios bíblicos gratis · Oración gratuita · El libro El Camino a Cristo sin costo — en toda la Florida",
     "brand.sub": "Misioneros",
     "nav.about": "Quiénes somos",
     "nav.christ": "Jesucristo",

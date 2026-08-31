@@ -173,17 +173,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .btn-block    { width: 100%; }
 
 /* ---------- Topbar ---------- */
-.topbar {
-    background: var(--deep);
-    color: var(--deep-ink);
-    font-size: .84rem;
-    text-align: center;
-    padding: 9px 20px;
-    letter-spacing: .015em;
-    position: relative;
-    z-index: 60;
-}
-[data-theme="dark"] .topbar { background: var(--bg-alt); color: var(--accent); border-bottom: 1px solid var(--line); }
+/* Aqui vivia .topbar, la franja de promesas de encima de la cabecera.
+   Se quito porque repetia lo que el hero ya dice mejor y mas abajo, y en un
+   movil se comia hasta 70 px de la unica pantalla que casi todo el mundo
+   llega a ver. */
 
 /* ---------- Header ---------- */
 .site-header {
@@ -1764,7 +1757,7 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
 }
 
 @media print {
-    .site-header, .topbar, .wa-float, .mobile-nav, .video-wrap, .hero-actions, .contact-actions { display: none !important; }
+    .site-header, .wa-float, .mobile-nav, .video-wrap, .hero-actions, .contact-actions { display: none !important; }
     /* En papel no hay menu con el que cambiar de parte, asi que se
        imprimen las cuatro. */
     html[data-parte] .part { display: block !important; }
