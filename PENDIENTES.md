@@ -3,6 +3,14 @@
 Lo que sigue **no bloquea** el sitio: ya esta publicado y funcional. Son mejoras y
 verificaciones que dependen de informacion que solo tiene el equipo de la organizacion.
 
+> **Esta lista tambien se ejecuta.** `node tools/test-listo.js` recorre lo que una
+> maquina si puede comprobar de aqui —el correo, las donaciones, las ciudades, los
+> eventos y el dominio— y dice en dos segundos que sigue vacio. Las otras trece
+> pruebas miran si el sitio esta **bien hecho**; esa mira si esta **lleno**, que no
+> es lo mismo: el codigo puede estar impecable y la pagina seguir sin decir a donde
+> ir un sabado. Lo que no se puede saber desde una prueba lo dice por su nombre al
+> final, para que no parezca comprobado.
+
 ## 0. Contacto en linea — falta UN clic
 
 El correo ya esta puesto: **fladventmissionaries@gmail.com**. El formulario de

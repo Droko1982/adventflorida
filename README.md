@@ -178,6 +178,7 @@ Sin dependencias, sin build, sin framework. HTML + CSS + JS vanilla.
 ## Herramientas
 
 ```
+node tools/test-listo.js                     QUE FALTA PARA PUBLICAR: lo que esta vacio, no lo que esta mal
 node tools/test-sunset.js                    comprueba el calculo del ocaso
 node tools/test-i18n.js                      cruza el HTML contra los 9 idiomas
 node tools/test-page.js                      carga la pagina en un DOM y la prueba entera
