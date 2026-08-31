@@ -14,6 +14,12 @@
 (function () {
   "use strict";
 
+  /* 'flag' ya NO se pinta en ningun sitio. Windows no trae glifo para
+     los pares de indicadores regionales: en vez de la bandera escribe
+     sus dos letras, y el boton de idioma salia "ES ES", "FR FR",
+     "US EN". Se conserva el dato porque guarda que pais se eligio para
+     cada lengua (pt->BR, en->US); el dia que se pongan banderas de
+     verdad tienen que ser SVG, que no dependen de la tipografia. */
   window.FAM_LANGS = [
     { code: "en", native: "English", label: "EN", flag: "🇺🇸", locale: "en_US",
       book: { title: "Steps to Christ", pdf: "https://media4.egwwritings.org/pdf/en_SC.pdf", read: "https://text.egwwritings.org/book/b108" } },

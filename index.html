@@ -309,8 +309,7 @@ window.FAM_PAINT = function (raiz) {
   var L = window.FAM_LANGS || [], i, m = null;
   for (i = 0; i < L.length; i++) if (L[i].code === c) m = L[i];
   if (m) {
-    var f = document.getElementById("langFlag"), k = document.getElementById("langCode");
-    if (f) f.textContent = m.flag;
+    var k = document.getElementById("langCode");
     if (k) k.textContent = m.label;
   }
 
@@ -942,7 +941,6 @@ window.FAM_PAINT = function (raiz) {
     <div class="header-tools">
       <div class="lang" id="langWrap">
         <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" data-i18n-aria="a11y.changeLang" aria-label="Change language">
-          <span class="lang-flag" id="langFlag">🇺🇸</span>
           <span class="lang-code" id="langCode">EN</span>
           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
@@ -1272,6 +1270,14 @@ window.FAM_PAINT = function (raiz) {
      ============================================================ -->
 <div class="part" id="parte-fe">
 
+<!-- Esta parte necesita su propio h1: quien llega por un enlace
+     compartido solo ve esta, y sin el su encabezado de nivel mas alto
+     seria un h2. No se pinta -- es para quien navega con lector de
+     pantalla -- y reusa la clave que ya nombra la parte en el menu.
+     Las cuatro partes tienen uno; solo se muestra una cada vez, asi
+     que la pagina servida sigue teniendo un h1 a la vista. -->
+<h1 class="sr-only" data-i18n="part.faith">Jesus and our faith</h1>
+
 <!-- ============ CRISTO (EL EVANGELIO) ============ -->
 <section class="gospel" id="cristo">
   <div class="container">
@@ -1582,6 +1588,8 @@ window.FAM_PAINT = function (raiz) {
      ============================================================ -->
 <div class="part" id="parte-recursos">
 
+<h1 class="sr-only" data-i18n="part.free">Free resources</h1>
+
 <!-- ============ LIBRO: STEPS TO CHRIST ============ -->
 <section id="libro">
   <div class="container">
@@ -1766,6 +1774,8 @@ window.FAM_PAINT = function (raiz) {
      PARTE 4 · CONTACTO Y APOYO
      ============================================================ -->
 <div class="part" id="parte-contacto">
+
+<h1 class="sr-only" data-i18n="part.connect">Contact us</h1>
 
 <!-- ============ ORACIÓN ============ -->
 <section id="oracion">

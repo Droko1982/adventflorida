@@ -91,7 +91,15 @@ for (const t of ["Organization", "FAQPage", "WebSite"]) ok(tipos.includes(t), "h
 
 console.log("\n=== Estructura de encabezados ===\n");
 const h1 = doc.querySelectorAll("h1");
-ok(h1.length === 1, "exactamente un h1", h1.length + (h1.length ? ': "' + h1[0].textContent.trim().slice(0, 42) + '"' : ""));
+const partes = [...doc.querySelectorAll(".part")];
+/* Un h1 por parte, no uno en todo el documento: solo se pinta una
+   parte cada vez, asi que quien lee la pagina sigue viendo un solo
+   h1. Sin esto, quien entra por #sabado veia un h2 como encabezado
+   de nivel mas alto. */
+const malH1 = partes.filter(p => p.querySelectorAll("h1").length !== 1);
+ok(malH1.length === 0, "cada parte con un solo h1",
+  malH1.length ? malH1.map(p => p.id).join(", ") : "las " + partes.length + " partes");
+ok(h1.length === partes.length, "sin h1 fuera de las partes", h1.length + " h1");
 const niveles = [...doc.querySelectorAll("h1,h2,h3,h4")].map(h => +h.tagName[1]);
 let saltos = 0;
 for (let i = 1; i < niveles.length; i++) if (niveles[i] - niveles[i - 1] > 1) saltos++;

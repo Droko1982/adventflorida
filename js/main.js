@@ -179,8 +179,7 @@
     }
 
     /* Boton de idioma */
-    var flag = $("#langFlag"), lcode = $("#langCode");
-    if (flag)  flag.textContent  = meta.flag;
+    var lcode = $("#langCode");
     if (lcode) lcode.textContent = meta.label;
     $$("#langMenu button").forEach(function (b) {
       b.setAttribute("aria-current", b.getAttribute("data-lang") === code ? "true" : "false");
@@ -237,8 +236,7 @@
       var b  = document.createElement("button");
       b.type = "button";
       b.setAttribute("data-lang", l.code);
-      b.innerHTML = '<span class="lang-flag">' + l.flag + '</span>' +
-                    '<span class="lang-native"></span>' +
+      b.innerHTML = '<span class="lang-native"></span>' +
                     '<span class="lang-code">' + l.label + '</span>';
       var nat = $(".lang-native", b);
       nat.textContent = l.native;
@@ -1345,10 +1343,40 @@
     }
 
     /* Al aterrizar de golpe, lo que hay debajo no puede estar en blanco:
-       el observador tarda un fotograma en revelarlo. */
+       el observador tarda un fotograma en revelarlo. Se revela la seccion
+       de destino entera —es donde caen los ojos— y ademas lo que asome
+       por debajo de ella en esa misma pantalla, que si no aparece
+       tarde. Mas abajo ya no: de eso se encarga el observador.
+
+       Las medidas se toman antes del salto, pero se comparan unas con
+       otras, asi que la distancia entre bloques es la misma antes y
+       despues de desplazarse. */
     function revelar(sec) {
       if (sec.classList.contains("reveal")) sec.classList.add("is-visible");
       $$(".reveal", sec).forEach(function (el) { el.classList.add("is-visible"); });
+      var caja = sec.closest ? sec.closest(".part") : null;
+      if (!caja || caja === sec) return;
+      var alto = window.innerHeight || 800;
+      var top  = sec.getBoundingClientRect().top;
+      $$(".reveal", caja).forEach(function (el) {
+        var y = el.getBoundingClientRect().top;
+        if (y >= top && y < top + alto) el.classList.add("is-visible");
+      });
+    }
+
+    /* Abrir una parte no es aterrizar en mitad de ella: se entra por
+       arriba. Revelarla entera marcaba de una vez los 41 bloques de la
+       parte "fe", 39 de ellos a pantallas de distancia, y con eso la
+       aparicion suave al ir bajando dejaba de existir en tres cuartas
+       partes del sitio. Lo que hacia falta era que no se viera el
+       primer fotograma en blanco, y para eso basta la primera pantalla. */
+    function revelarPortada(caja) {
+      if (caja.classList.contains("reveal")) caja.classList.add("is-visible");
+      var alto = window.innerHeight || 800;
+      var top  = caja.getBoundingClientRect().top;
+      $$(".reveal", caja).forEach(function (el) {
+        if (el.getBoundingClientRect().top < top + alto) el.classList.add("is-visible");
+      });
     }
 
     /* ---- Las cuatro partes ----
@@ -1375,7 +1403,7 @@
          del reveal se entera, pero un fotograma tarde, y ese fotograma
          es justo el que la persona ve al llegar: en blanco. */
       var caja = document.getElementById("parte-" + p);
-      if (caja) revelar(caja);
+      if (caja) revelarPortada(caja);
       /* El versiculo no se puede medir con su parte cerrada. En cuanto se
          abre si, y hay que hacerlo ahora: esperar a la siguiente vuelta del
          carrusel serian ocho segundos con la reserva sin poner, y el primer

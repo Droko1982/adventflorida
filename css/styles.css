@@ -305,7 +305,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
 .lang-btn .chev { width: 13px; height: 13px; transition: transform var(--t-base) var(--ease-out); }
 .lang.is-open .lang-btn .chev { transform: rotate(180deg); }
-.lang-flag { font-size: 1.05rem; line-height: 1; }
 
 .lang-menu {
     position: absolute;
@@ -1739,7 +1738,6 @@ h1.hero-title em { font-style: normal; color: var(--accent); }
     body { font-size: 16px; }
     section { padding: 62px 0; }
     .container { padding: 0 18px; }
-    .lang-btn .lang-code { display: none; }
     .hero-actions .btn { width: 100%; }
     .footer-grid { grid-template-columns: 1fr; gap: 28px; }
     .acc-body { padding-left: 22px; }

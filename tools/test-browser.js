@@ -550,6 +550,78 @@ function aterriza(top, scrollY) {
     await page.close();
   }
 
+  /* =======================================================
+     7. La aparicion suave sigue existiendo (PENDIENTES 15.b)
+
+     abrirParte() revelaba la parte ENTERA para que no se viera en
+     blanco el primer fotograma. El precio era que marcaba de golpe
+     los 41 bloques de la parte "fe" —39 de ellos a pantallas de
+     distancia— y la aparicion al ir bajando dejaba de existir en
+     tres cuartas partes del sitio.
+
+     Aqui se vigilan las dos mitades, porque arreglar una rompiendo
+     la otra es justo lo que paso:
+       - al abrir NO puede revelarse la parte entera;
+       - y bajando, nada que este metido en pantalla puede seguir en
+         blanco. Ojo con el criterio: un bloque que aun no ha entrado
+         DEBE estar sin revelar, y uno que solo asoma por el borde
+         tambien, que el observador pide un 12 %. Solo cuenta lo que
+         tiene medio alto o mas a la vista y sigue apagado al final.
+         Lo que vive dentro de un <details> cerrado no cuenta: nadie
+         lo ve, y al abrir el fold se revela solo.
+     ======================================================= */
+  console.log("\n=== La aparicion suave al ir bajando ===\n");
+  {
+    const { page, errores } = await abrir({ width: 390, height: 844 });
+    await page.evaluate(() => { document.documentElement.style.scrollBehavior = "auto"; });
+    for (const parte of ["fe", "recursos", "contacto"]) {
+      const d = await page.evaluate(async (p) => {
+        const enlace = document.querySelector('a[data-parte="' + p + '"]');
+        if (enlace) enlace.click();
+        await new Promise((r) => setTimeout(r, 350));
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(0, 0);
+        await new Promise((r) => setTimeout(r, 250));
+
+        const caja = document.getElementById("parte-" + p);
+        const todos = [...caja.querySelectorAll(".reveal")];
+        const alAbrir = todos.filter((e) => e.classList.contains("is-visible")).length;
+
+        const sospechosos = new Set();
+        const paso = Math.round(innerHeight * 0.35);
+        for (let y = 0; y <= document.documentElement.scrollHeight; y += paso) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 120));
+          for (const e of todos) {
+            if (e.classList.contains("is-visible")) continue;
+            const r = e.getBoundingClientRect();
+            if (!r.height) continue;
+            const dentro = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+            if (dentro >= r.height * 0.5 || dentro >= innerHeight * 0.9) sospechosos.add(e);
+          }
+        }
+        await new Promise((r) => setTimeout(r, 400));
+        const cerrado = (e) => {
+          for (let n = e.parentElement; n; n = n.parentElement)
+            if (n.tagName === "DETAILS" && !n.open) return true;
+          return false;
+        };
+        const enBlanco = [...sospechosos]
+          .filter((e) => !e.classList.contains("is-visible") && !cerrado(e))
+          .map((e) => (e.className || "").replace("reveal", "").trim().slice(0, 20) || e.tagName.toLowerCase());
+        window.scrollTo(0, 0);
+        return { total: todos.length, alAbrir, enBlanco };
+      }, parte);
+
+      ok(d.alAbrir < d.total, "parte " + parte + ": no se revela entera al abrir",
+        d.alAbrir + " de " + d.total + (d.alAbrir < d.total ? "" : "  <-- se revelo todo"));
+      ok(d.enBlanco.length === 0, "parte " + parte + ": nada en blanco a la vista",
+        d.enBlanco.length ? d.enBlanco.join(", ") : "bajando entera");
+    }
+    ok(errores.length === 0, "sin errores de JavaScript", errores.join(" | "));
+    await page.close();
+  }
+
   await browser.close();
   console.log(fallos === 0 ? "\nTodo responde en un navegador de verdad.\n"
                            : "\n*** " + fallos + " problema(s) ***\n");

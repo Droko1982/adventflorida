@@ -220,7 +220,13 @@ buenas en nueve idiomas:
 
 ## 8. Idiomas: dos decisiones pendientes
 
-- [ ] **La bandera del ruso.** El selector usa 🇷🇺 para el ruso. Buena parte de
+- [x] **La bandera del ruso: resuelto de rebote.** Al quitar las banderas del
+      selector (punto 15.d) esta decision se queda sin objeto: ya no hay
+      ninguna bandera que pueda leerse mal, ni la rusa ni las otras ocho. Se
+      deja escrito lo que se penso en su momento, por si alguien vuelve a
+      proponer ponerlas:
+
+- [ ] ~~**La bandera del ruso.**~~ El selector usaba 🇷🇺 para el ruso. Buena parte de
       quienes leen en ruso en Florida son ucranianos, moldavos o centroasiaticos,
       y desde 2022 una bandera de Estado puede leerse mal. Es una decision suya:
       se puede dejar, cambiar por un icono neutro o quitar las banderas del ruso
@@ -470,13 +476,19 @@ Para Google no cambia nada —los rastreadores no usan el fragmento, asi que
 siempre renderizan la parte 1 con su `h1`—, pero para quien navega con lector
 de pantalla y llega por un enlace compartido, si.
 
-- [ ] Dar a cada parte su propio `h1`, oculto a la vista con la clase `sr-only`
-      que ya existe, reusando las claves `part.about`, `part.faith`,
-      `part.free` y `part.connect`: no hace falta escribir texto nuevo ni
-      traducir nada.
-- [ ] Ojo al publicarlo: eso deja cuatro `h1` en el documento servido. Es HTML5
-      valido y solo uno se pinta cada vez, pero conviene mirar antes si
-      `tools/test-seo.js` da por supuesto que hay uno solo.
+- [x] **Hecho.** Cada parte tiene ya su `h1`. Las partes 2, 3 y 4 lo llevan
+      oculto con la clase `sr-only` que ya existia, reusando `part.faith`,
+      `part.free` y `part.connect`: ni una palabra nueva que traducir. La
+      parte 1 **no** lleva uno nuevo, porque ya tiene el titular del hero,
+      que ademas es visible y es el que sostiene el titulo de la pagina;
+      por eso `part.about` se queda sin usar aqui.
+- [x] **El aviso era bueno: `tools/test-seo.js` daba por supuesto que habia
+      un solo `h1`** y se ponia rojo con los cuatro. La prueba no se ha
+      ablandado, se ha afinado: ahora comprueba que **cada parte tiene
+      exactamente uno**, que es lo que de verdad importa, porque solo se
+      pinta una parte cada vez y quien lee la pagina sigue viendo un unico
+      `h1`. Comprobado que sigue cantando: metiendo un `h1` de mas en una
+      parte, la prueba falla y dice en cual.
 
 ### 15.b — Al abrir una parte se revelan de golpe todas sus animaciones
 
@@ -489,8 +501,27 @@ ellos estaban fuera de pantalla.
 No se rompe nada: simplemente, la aparicion suave al ir bajando ya no existe en
 tres cuartas partes del sitio.
 
-- [ ] Revelar solo lo que cabe en la primera pantalla de la parte y dejar que
-      el observador se encargue del resto segun se baja.
+- [x] **Hecho.** `abrirParte()` llama ahora a `revelarPortada()`, que solo
+      enciende lo que cabe en la primera pantalla de la parte; del resto se
+      encarga el observador segun se baja, que es para lo que esta. Y
+      `revelar()`, la que se usa al aterrizar en una seccion concreta,
+      revela esa seccion entera **mas lo que asome por debajo en esa misma
+      pantalla**, que si no aparecia tarde.
+
+      Medido en Chrome a 390x844: la parte "fe" pasa de revelar **41 de 41**
+      a **7 de 41**; "recursos" de 17 a 3; "contacto" de 12 a 3.
+
+      Lo que no podia romperse —y por poco— es que no se quede nada en
+      blanco delante de los ojos. Vigilado ahora por `tools/test-browser.js`
+      (bloque 7): baja la parte entera y no admite ni un bloque con medio
+      alto o mas a la vista que siga apagado al final. Ojo al criterio, que
+      cuesta un rato entenderlo: un bloque que **aun no ha entrado** DEBE
+      estar sin revelar, y uno que solo asoma por el borde tambien, porque
+      el observador pide un 12 % a proposito. Y lo que vive dentro de un
+      `<details>` cerrado no cuenta: nadie lo ve, y al abrir el fold se
+      revela solo -- comprobado abriendo uno, 4 de 4 encendidos.
+      La prueba no es blanda: contra el codigo de antes falla en las tres
+      partes.
 
 ### 15.c — Los enlaces con fragmento de texto dejan de funcionar
 
@@ -518,7 +549,19 @@ No lo trae este cambio, viene de antes, pero se ve en cualquier PC con Windows,
 que es una parte grande de quien entra desde un ordenador. En Mac, Android e
 iOS si se ve la bandera.
 
-- [ ] Decidir cual de las dos se queda. Lo mas simple y lo que no depende de
-      la tipografia del sistema es quitar `.lang-flag` y dejar solo el codigo;
-      dentro del desplegable ya va el nombre del idioma escrito.
-- [ ] Si se quiere conservar la bandera, tiene que ser en SVG, no en emoji.
+- [x] **Hecho: se queda el codigo y se va la bandera**, en el boton y en el
+      desplegable, que ya lleva el nombre del idioma escrito. Confirmado en
+      una captura de Chrome sobre Windows: el boton decia literalmente
+      **"US EN"** y ahora dice "EN".
+
+      **Cuidado si alguien deshace esto**, que es la trampa que no estaba
+      escrita aqui: por debajo de 620 px la hoja escondia el codigo
+      (`.lang-btn .lang-code { display: none; }`) justo porque quedaba la
+      bandera. Quitar la bandera sin quitar tambien esa regla deja el boton
+      **vacio** en el movil. Se ha quitado con ella. Medido: el boton pasa
+      de 88 a 65 px a 1280, y de 52 a 53 px a 360 -- un pixel, asi que el
+      sitio que costo ganar para "MISSIONARIES" en el punto 14.4 sigue ahi.
+- [x] El dato `flag` se conserva en `js/i18n.js`, comentado y sin pintarse,
+      porque guarda que pais se eligio para cada lengua (pt->BR, en->US). Si
+      algun dia se quieren banderas de verdad, **tienen que ser SVG**: el
+      emoji depende de la tipografia del sistema y en Windows no existe.
