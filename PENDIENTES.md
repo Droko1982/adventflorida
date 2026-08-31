@@ -531,10 +531,40 @@ enlace al fragmento destacado". Si el texto senalado vive en una parte que no
 es la primera, el navegador no lo encuentra: cuando lo busca, esa parte todavia
 esta en `display:none`.
 
-- [ ] Si alguna vez importa, se arregla en el script de la cabecera: leer
-      tambien `#:~:text=` y abrir la parte que contenga ese texto antes de que
-      el navegador lo busque. Es rebuscado y de momento no compensa; queda
-      apuntado por si aparece en Search Console.
+- [x] **Probado: el arreglo que se apuntaba aqui NO se puede escribir.** Decia
+      "leer tambien `#:~:text=` en el script de la cabecera", y esa premisa
+      es falsa: **el navegador borra el fragmento de texto antes de que
+      JavaScript pueda verlo.** Medido en Chrome, entrando a
+      `/#:~:text=A%20day%20God%20gave%20away`:
+
+      | Lo que se mira | Lo que devuelve |
+      |---|---|
+      | `location.hash` | `""` — vacia |
+      | `location.href` | `http://.../` — sin el fragmento |
+      | `document.fragmentDirective` | existe, pero `Object.keys()` da `[]` |
+
+      No es un fallo de Chrome: lo pide el estandar (Fragment Directive). Se
+      quita de la URL que ve el script **para que una pagina no pueda saber
+      que texto venia buscando quien entra**, que es justo lo que habria que
+      leer para arreglarlo. Se escribio el arreglo, se probo, no disparaba
+      nunca, y se retiro: era codigo muerto.
+
+      El fallo si es real, y se midio aparte para no confundir una cosa con
+      la otra: un texto que vive **dentro de la parte ya abierta** si hace
+      scroll (4.132 px y 5.367 px en dos pruebas), y los dos que viven en
+      otra parte se quedan en la portada. O sea que el mecanismo funciona y
+      lo que lo rompe es el `display:none`, como decia esta nota.
+
+      **Lo que ve la persona no es una pagina rota**: aterriza en la portada,
+      parte 1, arriba del todo. Pierde el resaltado, no el sitio.
+
+- [ ] La unica salida de verdad es **una pagina por parte** en vez de cuatro
+      partes dentro de un mismo HTML. No es poca cosa, pero de paso
+      resolveria otras dos que ya estan apuntadas: cada parte tendria su URL
+      propia y su `h1` sin trucos (15.a), y los eventos podrian dar
+      resultado enriquecido en Google, que hoy no lo dan por vivir en una
+      pagina de listado (punto 10). Solo merece la pena si Search Console
+      llega a enseñar que alguien entra por estos enlaces.
 
 
 ### 15.d — En Windows el selector de idioma dice "ES ES"
