@@ -154,9 +154,32 @@ ese idioma no tenia NADA propio en toda la pagina. Ahora tiene la Biblia
 completa, las lecciones de Escuela Sabatica y un texto de Elena White
 publicado por su propio Estate.
 
-- [ ] **Si algun enlace se cae**, quitarlo de `js/library.js` y la obra
-      desaparece sola de ese idioma. Si desaparece de todos, desaparece la
-      obra. No hay que tocar nada mas.
+- [x] **Ya no hay que enterarse por casualidad de que un enlace se cayo.**
+      `node tools/test-enlaces.js` pide las 217 direcciones externas de la
+      biblioteca y del libro, y dice cuales fallan y en que archivo estan.
+      No se conforma con el codigo HTTP, que es la trampa de siempre: de un
+      PDF pide los primeros bytes y comprueba que empiece por `%PDF`; de una
+      pagina, que no sea un 404 disfrazado de 200.
+
+      **Y a la primera pillo siete**, todos de la misma obra: los PDF de
+      *Oracion de la mensajera del Senor* (`egw-prayer-1903`) en sus siete
+      idiomas. El bucket de whiteestate.org dejo de servirlos: responden
+      `AccessDenied`. Comprobado que no era culpa del robot — se probo sin
+      cabecera `Range`, con User-Agent de navegador y con Referer del propio
+      sitio, y siempre 403 con el XML del error de S3.
+
+      **La obra NO se quito**, y esto importa: sus enlaces de *leer en linea*
+      siguen vivos, asi que se borro solo el campo `pdf` de las siete
+      ediciones. La interfaz ya lo contemplaba (`if (ed.pdf)`), asi que
+      simplemente deja de pintar ese boton. Si se hubiera borrado la obra
+      entera, **el kreyol ayisyen se habria quedado con dos recursos en vez
+      de tres**, que es justo lo que mas costo conseguir.
+
+- [ ] Cuando se caiga algo mas: si la edicion conserva `leer`, quitar solo el
+      `pdf`. Si no le queda ninguno de los dos, quitar la edicion entera y la
+      obra desaparece sola de ese idioma; si desaparece de todos, desaparece
+      la obra. Despues, `node tools/gen-biblioteca-jsonld.js` y
+      `node tools/test-seo.js`, que cuenta los titulos declarados.
 - [ ] Las lecciones de Escuela Sabatica en kreyol son del trimestre de
       **julio-septiembre de 2021**: es lo ultimo que hay traducido. Conviene
       mirar de vez en cuando si sale uno nuevo.

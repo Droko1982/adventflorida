@@ -737,37 +737,30 @@ window.FAM_LIBRARY = [
     "ed": {
       "ht": {
         "t": "Lapriyè Mesajè Senyè a",
-        "pdf": "https://whiteestate.org/documents/46/Prayer_DIGITAL_HAITIAN_CREOLE.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-ht/"
       },
       "en": {
         "t": "Prayer of the Lord's Messenger",
-        "pdf": "https://whiteestate.org/documents/39/Prayer_DIGITAL_ENGLISH.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-en/"
       },
       "es": {
         "t": "Oración de la mensajera del Señor",
-        "pdf": "https://whiteestate.org/documents/58/Prayer_DIGITAL_SPANISH.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-es/"
       },
       "fr": {
         "t": "Prière de la messagère du Seigneur",
-        "pdf": "https://whiteestate.org/documents/44/Prayer_DIGITAL_FRENCH.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-fr/"
       },
       "pt": {
         "t": "Oração da Mensageira do Senhor",
-        "pdf": "https://whiteestate.org/documents/53/Prayer_DIGITAL_PORTUGUESE.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-pt/"
       },
       "de": {
         "t": "Ein Gebet von Ellen White, der Botin Gottes",
-        "pdf": "https://whiteestate.org/documents/45/Prayer_DIGITAL_GERMAN.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-de/"
       },
       "ru": {
         "t": "Молитва вестницы Божьей",
-        "pdf": "https://whiteestate.org/documents/55/Prayer_DIGITAL_RUSSIAN.pdf",
         "leer": "https://whiteestate.org/resources/gc-session/egw-prayer/gc-prayer-ru/"
       }
     }
