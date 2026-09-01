@@ -459,7 +459,18 @@ function aterriza(top, scrollY) {
         });
         await esperar(400);
       }
-      await page.click((movil ? "#mobileNav" : ".main-nav") + " a[href='" + href + "']");
+      const sel = (movil ? "#mobileNav" : ".main-nav") + " a[href='" + href + "']";
+      /* Apuntando a un sitio de la red, los 400 ms de arriba no siempre dan
+         tiempo a que el menu movil termine de abrirse, y el clic reventaba
+         entero con "Node is either not clickable or not an Element": la
+         suite moria a media pasada en vez de contar un fallo. Se espera a
+         que el enlace este de verdad ahi.
+
+         Esto NO afloja la medida. Lo que se mide son los 350 ms de DESPUES
+         del clic; lo de antes es llegar a poder pulsarlo, que en local
+         ocurre en el primer fotograma y no cambia nada. */
+      await page.waitForSelector(sel, { visible: true, timeout: 5000 });
+      await page.click(sel);
       await esperar(350);        /* si tarda mas que esto, es demasiado */
       const pos = await page.evaluate((h) => ({
         top: Math.round(document.querySelector(h).getBoundingClientRect().top),
